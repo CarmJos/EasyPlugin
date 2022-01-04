@@ -159,7 +159,7 @@ public class GUI {
 		if (this.type == GUIType.CANCEL) throw new NullPointerException("被取消或不存在的GUI");
 
 		Inventory inv = Bukkit.createInventory(null, this.type.getSize(), this.name);
-		IntStream.range(0, this.inv.getSize()).forEach(index -> inv.setItem(index, new ItemStack(Material.AIR)));
+		IntStream.range(0, inv.getSize()).forEach(index -> inv.setItem(index, new ItemStack(Material.AIR)));
 		getItems().forEach((index, item) -> inv.setItem(index, item.getDisplay()));
 
 		setOpenedGUI(player, this);

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easyplugin-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,7 +21,7 @@
 
 
     <name>EasyPlugin-Configuration</name>
-    <description>轻松插件配置，可以方便快捷的将配置文件作为静态参数使用。</description>
+    <description>轻松插件配置模块，可以方便快捷的将配置文件作为静态参数使用。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 
     <developers>

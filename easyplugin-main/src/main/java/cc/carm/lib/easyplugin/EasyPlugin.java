@@ -1,6 +1,6 @@
 package cc.carm.lib.easyplugin;
 
-import cc.carm.lib.easyplugin.utils.ColorParser;
+import cc.carm.lib.easyplugin.i18n.EasyPluginMessageProvider;
 import cc.carm.lib.easyplugin.utils.SchedulerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -18,47 +18,57 @@ import java.util.Map;
 
 public abstract class EasyPlugin extends JavaPlugin {
 
+	protected EasyPluginMessageProvider messageProvider;
+
+	public EasyPlugin() {
+		this(new EasyPluginMessageProvider.en_US());
+	}
+
+	public EasyPlugin(EasyPluginMessageProvider messageProvider) {
+		this.messageProvider = messageProvider;
+	}
 
 	private SchedulerUtils scheduler;
 	private boolean initialized = false;
 
 	@Override
-	public void onLoad() {
+	public final void onLoad() {
 		scheduler = new SchedulerUtils(this);
+		if (!hasOverride("load")) return;
 
-		if (!isOverride("load")) return;
-
-		log(getName() + " " + getDescription().getVersion() + " &7开始加载...");
 		long startTime = System.currentTimeMillis();
+
+		log(messageProvider.loading(this));
 		load();
-		log("加载完成 ，共耗时 " + (System.currentTimeMillis() - startTime) + " ms 。");
+		log(messageProvider.loaded(this, startTime));
 	}
 
 	@Override
-	public void onEnable() {
+	public final void onEnable() {
+		outputInfo();
 
-		log(getName() + " " + getDescription().getVersion() + " &7开始启动...");
+		log(messageProvider.enabling(this));
 		long startTime = System.currentTimeMillis();
 
-		this.initialized = initialize();
-
-		if (!isInitialized()) {
+		if (!(this.initialized = initialize())) {
 			setEnabled(false);
+			log(messageProvider.enableFailure(this, startTime));
 			return;
 		}
 
-		log("启用完成 ，共耗时 " + (System.currentTimeMillis() - startTime) + " ms 。");
+		log(messageProvider.enableSuccess(this, startTime));
 	}
 
 
 	@Override
-	public void onDisable() {
-		if (!isOverride("shutdown")) return;
+	public final void onDisable() {
+		if (!hasOverride("shutdown") || !isInitialized()) return;
+		outputInfo();
 
-		log(getName() + " " + getDescription().getVersion() + " 开始卸载...");
+		log(messageProvider.disabling(this));
 		long startTime = System.currentTimeMillis();
 		shutdown();
-		log("卸载完成 ，共耗时 " + (System.currentTimeMillis() - startTime) + " ms 。");
+		log(messageProvider.disabled(this, startTime));
 	}
 
 	public void load() {
@@ -67,6 +77,12 @@ public abstract class EasyPlugin extends JavaPlugin {
 	public abstract boolean initialize();
 
 	public void shutdown() {
+	}
+
+	/**
+	 * 重写以展示插件的相关信息，如插件横幅、下载地址等。
+	 */
+	public void outputInfo() {
 	}
 
 	public boolean isInitialized() {
@@ -99,16 +115,12 @@ public abstract class EasyPlugin extends JavaPlugin {
 		if (tabCompleter != null) command.setTabCompleter(tabCompleter);
 	}
 
+	public void print(@Nullable String prefix, @Nullable String... messages) {
+		messageProvider.print(this, prefix, messages);
+	}
 
 	public void log(@Nullable String... messages) {
 		print(null, messages);
-	}
-
-	public void print(@Nullable String prefix, @Nullable String... messages) {
-		Arrays.stream(messages)
-				.map(message -> "[" + getName() + "] " + (prefix == null ? "" : prefix) + message)
-				.map(ColorParser::parse)
-				.forEach(message -> Bukkit.getConsoleSender().sendMessage(message));
 	}
 
 	public void error(String... messages) {
@@ -116,11 +128,12 @@ public abstract class EasyPlugin extends JavaPlugin {
 	}
 
 	public void debug(@Nullable String... messages) {
-		if (isDebugging()) print("&7[DEBUG] &r", messages);
+		if (isDebugging()) print("&8[DEBUG] &r", messages);
 	}
 
 
-	private boolean isOverride(String methodName) {
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+	private boolean hasOverride(String methodName) {
 		Map<Method, Method> methodMap = new HashMap<>();
 		Arrays.stream(EasyPlugin.class.getDeclaredMethods())
 				.filter(method -> method.getName().equals(methodName))
@@ -132,4 +145,5 @@ public abstract class EasyPlugin extends JavaPlugin {
 				);
 		return !methodMap.isEmpty();
 	}
+
 }
