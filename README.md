@@ -23,12 +23,16 @@
 - 轻便独立的功能模块，按需使用，避免大量打包！
 - 详细的Javadoc与使用文档，轻松上手，方便使用！
 - 持续的更新与优化，需求不止，更新不止！
-  - 如需新功能支持，请 [点击这里](https://github.com/CarmJos/EasyPlugin/issues/new?assignees=&labels=enhancement&template=feature_issues.md&title=) 提交功能需求。
+  -
+  如需新功能支持，请 [点击这里](https://github.com/CarmJos/EasyPlugin/issues/new?assignees=&labels=enhancement&template=feature_issues.md&title=)
+  提交功能需求。
 
 ## 内容
+
 项目初创不久，加 * 的仍在开发更新中...
 
 ### 集合部分
+
 - All [`easyplugin-all`](easyplugin-all)
 - Common [`easyplugin-common`](easyplugin-common)
 
@@ -41,6 +45,7 @@
 - GUI [`easyplugin-gui`](easyplugin-gui)
 
 ### 附属部分
+
 - [PlaceholderAPI](https://www.spigotmc.org/resources/6245/)* [`easyplugin-placeholderapi`](easyplugin-placeholderapi)
 - [Vault](https://github.com/MilkBowl/VaultAPI)* [`easyplugin-vault`](easyplugin-vault)
 - [LuckPerms](https://www.spigotmc.org/resources/luckperms.28140/)* [`easyplugin-lp`](easyplugin-lp)
@@ -55,32 +60,30 @@
 
 ### 依赖方式
 
-#### Maven 依赖
-
 <details>
-<summary>远程库配置</summary>
+<summary>展开查看 Maven 依赖方式</summary>
 
 ```xml
 
 <project>
     <repositories>
+
         <repository>
+            <!--采用github依赖库，安全稳定，但需要配置 (推荐)-->
             <id>EasyPlugin</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
         </repository>
+
+        <repository>
+            <!--采用我的私人依赖库，简单方便，但可能因为变故而无法使用-->
+            <id>carm-repo</id>
+            <name>Carm's Repo</name>
+            <url>https://repo.carm.cc/repository/maven-public/</url>
+        </repository>
+
     </repositories>
-</project>
-```
 
-</details>
-
-<details>
-<summary>原生依赖</summary>
-
-```xml
-
-<project>
     <dependencies>
         <!--大全集版本，包含项目内所有模块-->
         <dependency>
@@ -90,7 +93,15 @@
             <scope>compile</scope>
         </dependency>
 
-        <!--轻松插件主要接口集，包含方便的插件入口类与相关工具类。-->
+        <!--常用接口集，包含除附属插件模块外的所有模块-->
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easyplugin-common</artifactId>
+            <version>[LATEST RELEASE]</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--插件主要接口模块，包含方便的插件入口类与相关工具类-->
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>easyplugin-main</artifactId>
@@ -98,8 +109,40 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- 其他模块自行选择，详见 “内容”-->
+
     </dependencies>
 </project>
+```
+
+</details>
+
+<details>
+<summary>展开查看 Gradle 依赖方式</summary>
+
+```groovy
+repositories {
+    // 采用github依赖库，安全稳定，但需要配置 (推荐)
+    maven { url 'https://maven.pkg.github.com/CarmJos/EasyPlugin' }
+
+    // 采用我的私人依赖库，简单方便，但可能因为变故而无法使用
+    maven { url 'https://repo.carm.cc/repository/maven-public/' }
+}
+
+dependencies {
+
+    //大全集版本，包含项目内所有模块
+    compileOnly "cc.carm.lib:easyplugin-all:[LATEST RELEASE]"
+
+    //常用接口集，包含除附属插件模块外的所有模块
+    compileOnly "cc.carm.lib:easyplugin-common:[LATEST RELEASE]"
+
+    //插件主要接口模块，包含方便的插件入口类与相关工具类
+    compileOnly "cc.carm.lib:easyplugin-main:[LATEST RELEASE]"
+
+    // 其他模块自行选择，详见 “内容”
+
+}
 ```
 
 </details>
@@ -126,8 +169,8 @@
 > - 你可以自由使用，复制，修改，可以用于自己的项目。
 > - 可以免费分发或用来盈利。
 > - 唯一的限制是必须包含许可声明。
-> 
+>
 > MIT 协议是所有开源许可中最宽松的一个，除了必须包含许可声明外，再无任何限制。
-> 
+>
 > *以上文字来自 [五种开源协议GPL,LGPL,BSD,MIT,Apache](https://www.oschina.net/question/54100_9455) 。*
 </details>

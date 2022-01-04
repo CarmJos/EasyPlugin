@@ -20,7 +20,7 @@
     <packaging>jar</packaging>
 
     <name>02-EasyPlugin-Common</name>
-    <description>轻松插件常用接口集，包含除附属模块外的所有模块。</description>
+    <description>轻松插件常用接口集，包含除附属插件模块外的所有模块。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 
     <developers>

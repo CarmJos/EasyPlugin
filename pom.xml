@@ -73,12 +73,6 @@
     <repositories>
 
         <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
-        </repository>
-
-        <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
@@ -90,8 +84,9 @@
         </repository>
 
         <repository>
-            <id>nexus</id>
-            <url>https://mvn.lumine.io/repository/maven-public/</url>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
         </repository>
 
     </repositories>
