@@ -26,6 +26,7 @@
   - 如需新功能支持，请 [点击这里](https://github.com/CarmJos/EasyPlugin/issues/new?assignees=&labels=enhancement&template=feature_issues.md&title=) 提交功能需求。
 
 ## 内容
+项目初创不久，加 * 的仍在开发更新中...
 
 ### 集合部分
 - All [`easyplugin-all`](easyplugin-all)
@@ -34,15 +35,15 @@
 ### 主要部分
 
 - Main [`easyplugin-main`](easyplugin-main)
-- Command [`easyplugin-command`](easyplugin-command)
+- Command* [`easyplugin-command`](easyplugin-command)
 - Configuration [`easyplugin-configuration`](easyplugin-configuration)
-- Database [`easyplugin-database`](easyplugin-database)
+- Database* [`easyplugin-database`](easyplugin-database)
 - GUI [`easyplugin-gui`](easyplugin-gui)
 
 ### 附属部分
-- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) [`easyplugin-placeholderapi`](easyplugin-placeholderapi)
-- [Vault](https://github.com/MilkBowl/VaultAPI) [`easyplugin-vault`](easyplugin-vault)
-- [LuckPerms](https://www.spigotmc.org/resources/luckperms.28140/)  [`easyplugin-lp`](easyplugin-lp)
+- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/)* [`easyplugin-placeholderapi`](easyplugin-placeholderapi)
+- [Vault](https://github.com/MilkBowl/VaultAPI)* [`easyplugin-vault`](easyplugin-vault)
+- [LuckPerms](https://www.spigotmc.org/resources/luckperms.28140/)* [`easyplugin-lp`](easyplugin-lp)
 
 ## 开发
 
