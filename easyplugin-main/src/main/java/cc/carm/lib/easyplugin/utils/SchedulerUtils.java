@@ -22,6 +22,26 @@ public class SchedulerUtils {
 		return plugin;
 	}
 
+
+	/**
+	 * 在服务端主线程中执行一个任务
+	 *
+	 * @param runnable 需要执行的任务
+	 */
+	public void run(Runnable runnable) {
+		Bukkit.getScheduler().runTask(getPlugin(), runnable);
+	}
+
+
+	/**
+	 * 异步执行一个任务。
+	 *
+	 * @param runnable 需要执行的任务
+	 */
+	public void runAsync(Runnable runnable) {
+		Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), runnable);
+	}
+	
 	/**
 	 * 在主线程延时执行一个任务。
 	 *
@@ -43,21 +63,38 @@ public class SchedulerUtils {
 	}
 
 	/**
-	 * 异步执行一个任务。
+	 * 间隔一段时间按顺序执行列表中的任务
 	 *
-	 * @param runnable 需要执行的任务
+	 * @param interval 间隔时间
+	 * @param tasks    任务列表
 	 */
-	public void runAsync(Runnable runnable) {
-		Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), runnable);
+	public void runAtInterval(long interval, Runnable... tasks) {
+		runAtInterval(0L, interval, tasks);
 	}
 
+
 	/**
-	 * 在服务端主线程中执行一个任务
+	 * 间隔一段时间按顺序执行列表中的任务
 	 *
-	 * @param runnable 需要执行的任务
+	 * @param delay    延迟时间
+	 * @param interval 间隔时间
+	 * @param tasks    任务列表
 	 */
-	public void run(Runnable runnable) {
-		Bukkit.getScheduler().runTask(getPlugin(), runnable);
+	public void runAtInterval(long delay, long interval, Runnable... tasks) {
+		new BukkitRunnable() {
+			private int index;
+
+			@Override
+			public void run() {
+				if (this.index >= tasks.length) {
+					this.cancel();
+					return;
+				}
+
+				tasks[index].run();
+				index++;
+			}
+		}.runTaskTimer(getPlugin(), delay, interval);
 	}
 
 	/**
@@ -68,16 +105,6 @@ public class SchedulerUtils {
 	 */
 	public void runAtIntervalAsync(long interval, Runnable... tasks) {
 		runAtIntervalAsync(0L, interval, tasks);
-	}
-
-	/**
-	 * 间隔一段时间按顺序执行列表中的任务
-	 *
-	 * @param interval 间隔时间
-	 * @param tasks    任务列表
-	 */
-	public void runAtInterval(long interval, Runnable... tasks) {
-		runAtInterval(0L, interval, tasks);
 	}
 
 	/**
@@ -102,30 +129,6 @@ public class SchedulerUtils {
 				index++;
 			}
 		}.runTaskTimerAsynchronously(getPlugin(), delay, interval);
-	}
-
-	/**
-	 * 间隔一段时间按顺序执行列表中的任务
-	 *
-	 * @param delay    延迟时间
-	 * @param interval 间隔时间
-	 * @param tasks    任务列表
-	 */
-	public void runAtInterval(long delay, long interval, Runnable... tasks) {
-		new BukkitRunnable() {
-			private int index;
-
-			@Override
-			public void run() {
-				if (this.index >= tasks.length) {
-					this.cancel();
-					return;
-				}
-
-				tasks[index].run();
-				index++;
-			}
-		}.runTaskTimer(getPlugin(), delay, interval);
 	}
 
 	/**
