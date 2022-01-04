@@ -20,7 +20,7 @@
     <artifactId>easyplugin-main</artifactId>
     <packaging>jar</packaging>
 
-    <name>EasyPlugin-Main</name>
+    <name>10-EasyPlugin-Main</name>
     <description>轻松插件主要接口模块，包含方便的插件入口类与相关工具类。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 

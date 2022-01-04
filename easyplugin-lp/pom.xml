@@ -19,5 +19,7 @@
     <artifactId>easyplugin-lp</artifactId>
     <packaging>jar</packaging>
 
+    <name>23-EasyPlugin-LuckPerms</name>
+
 
 </project>

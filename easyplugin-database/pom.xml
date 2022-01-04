@@ -19,7 +19,7 @@
     <artifactId>easyplugin-database</artifactId>
     <packaging>jar</packaging>
 
-    <name>EasyPlugin-Database</name>
+    <name>14-EasyPlugin-Database</name>
     <description>轻松插件数据库模块，包含快速实现数据库功能的工具。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 

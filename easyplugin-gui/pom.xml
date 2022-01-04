@@ -19,7 +19,7 @@
     <artifactId>easyplugin-gui</artifactId>
     <packaging>jar</packaging>
 
-    <name>EasyPlugin-GUI</name>
+    <name>13-EasyPlugin-GUI</name>
     <description>轻松插件GUI接口模块，方便快捷的创建箱子GUI界面。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 

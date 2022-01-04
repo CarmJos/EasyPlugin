@@ -19,7 +19,7 @@
     <artifactId>easyplugin-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>EasyPlugin-Main</name>
+    <name>02-EasyPlugin-Common</name>
     <description>轻松插件常用接口集，包含除附属模块外的所有模块。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 

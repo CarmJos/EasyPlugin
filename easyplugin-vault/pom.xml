@@ -19,6 +19,8 @@
     <artifactId>easyplugin-vault</artifactId>
     <packaging>jar</packaging>
 
+    <name>22-EasyPlugin-Vault</name>
+
     <dependencies>
 
         <dependency>

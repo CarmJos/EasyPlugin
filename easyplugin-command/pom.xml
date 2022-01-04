@@ -17,6 +17,8 @@
     </properties>
 
     <artifactId>easyplugin-command</artifactId>
+    <packaging>jar</packaging>
 
+    <name>12-EasyPlugin-Command</name>
 
 </project>
