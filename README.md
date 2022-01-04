@@ -132,13 +132,13 @@ repositories {
 dependencies {
 
     //大全集版本，包含项目内所有模块
-    compileOnly "cc.carm.lib:easyplugin-all:[LATEST RELEASE]"
+    api "cc.carm.lib:easyplugin-all:[LATEST RELEASE]"
 
     //常用接口集，包含除附属插件模块外的所有模块
-    compileOnly "cc.carm.lib:easyplugin-common:[LATEST RELEASE]"
+    api "cc.carm.lib:easyplugin-common:[LATEST RELEASE]"
 
     //插件主要接口模块，包含方便的插件入口类与相关工具类
-    compileOnly "cc.carm.lib:easyplugin-main:[LATEST RELEASE]"
+    api "cc.carm.lib:easyplugin-main:[LATEST RELEASE]"
 
     // 其他模块自行选择，详见 “内容”
 
