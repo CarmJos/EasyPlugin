@@ -50,10 +50,12 @@
     </ciManagement>
 
     <repositories>
+
         <repository>
-            <id>EasySQL</id>
+            <id>github</id>
             <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
         </repository>
+
     </repositories>
 
     <dependencies>
