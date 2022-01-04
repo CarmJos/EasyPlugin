@@ -23,9 +23,7 @@
 - 轻便独立的功能模块，按需使用，避免大量打包！
 - 详细的Javadoc与使用文档，轻松上手，方便使用！
 - 持续的更新与优化，需求不止，更新不止！
-  -
-  如需新功能支持，请 [点击这里](https://github.com/CarmJos/EasyPlugin/issues/new?assignees=&labels=enhancement&template=feature_issues.md&title=)
-  提交功能需求。
+  - 如需新功能支持，请通过 [Issues](https://github.com/CarmJos/EasyPlugin/issues) 提交功能需求。
 
 ## 内容
 
