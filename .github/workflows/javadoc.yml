@@ -26,6 +26,9 @@ jobs:
 
       - name: Generate docs
         run: mvn clean package -DskipTests
+        env:
+          MAVEN_USERNAME: ${{ github.repository_owner }}
+          MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Copy to Location
         run: |

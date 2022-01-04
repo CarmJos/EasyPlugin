@@ -52,8 +52,21 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+    - uses: actions/checkout@v2
+    - name: "Set up JDK"
+      uses: actions/setup-java@v2
+      with:
+        cache: maven
+        java-version: '11'
+        distribution: 'adopt'
+        server-id: github
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_TOKEN
+    - name: "Package"
+      run: mvn -B package --file pom.xml -Dmaven.javadoc.skip=true
+      env:
+        MAVEN_USERNAME: ${{ github.repository_owner }}
+        MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
