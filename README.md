@@ -10,7 +10,7 @@
 # EasyPlugin
 
 [![version](https://img.shields.io/github/v/release/CarmJos/EasyPlugin)](https://github.com/CarmJos/EasyPlugin/releases)
-[![License](https://img.shields.io/github/license/CarmJos/EasyPlugin)](https://opensource.org/licenses/GPL-3.0)
+[![License](https://img.shields.io/github/license/CarmJos/EasyPlugin)](https://opensource.org/licenses/MIT)
 [![workflow](https://github.com/CarmJos/EasyPlugin/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/EasyPlugin/actions/workflows/maven.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/carmjos/EasyPlugin/badge)](https://www.codefactor.io/repository/github/carmjos/EasyPlugin)
 ![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/EasyPlugin)
