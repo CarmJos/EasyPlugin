@@ -49,15 +49,6 @@
         <url>https://github.com/CarmJos/EasyPlugin/actions/workflows/maven.yml</url>
     </ciManagement>
 
-    <repositories>
-
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
-        </repository>
-
-    </repositories>
-
     <dependencies>
 
         <dependency>
