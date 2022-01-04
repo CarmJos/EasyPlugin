@@ -21,6 +21,9 @@ jobs:
           cache: maven
           java-version: '11'
           distribution: 'adopt'
+          server-id: github
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_TOKEN
       - name: "Package"
         run: mvn -B package --file pom.xml -Dmaven.javadoc.skip=true
       - name: "Target Stage"
