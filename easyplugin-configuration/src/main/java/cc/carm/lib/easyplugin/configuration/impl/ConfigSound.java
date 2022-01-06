@@ -1,11 +1,14 @@
 package cc.carm.lib.easyplugin.configuration.impl;
 
+import cc.carm.lib.easyplugin.configuration.cast.ConfigStringCast;
 import cc.carm.lib.easyplugin.configuration.file.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 public class ConfigSound extends ConfigStringCast<ConfigSound.SoundData> {
 
@@ -18,30 +21,9 @@ public class ConfigSound extends ConfigStringCast<ConfigSound.SoundData> {
 		this(null, configSection, defaultValue);
 	}
 
-	public ConfigSound(@Nullable FileConfig source, @NotNull String configSection, @Nullable Sound defaultValue) {
-		super(source, configSection, string -> {
-			Sound finalSound = defaultValue;
-			float volume = 1;
-			float pitch = 1;
-
-			if (string != null) {
-				String[] args = string.contains(":") ? string.split(":") : new String[]{string};
-				try {
-					if (args.length >= 1) finalSound = Sound.valueOf(args[0]);
-					if (args.length >= 2) volume = Float.parseFloat(args[1]);
-					if (args.length >= 3) pitch = Float.parseFloat(args[2]);
-				} catch (Exception exception) {
-					Bukkit.getLogger().severe("声音 " + configSection + " 配置错误，不存在 " + string + " ，请检查。");
-					Bukkit.getLogger().severe("In " + configSection + " (" + string + ") doesn't match any sound name.");
-				}
-			}
-
-			if (finalSound != null) {
-				return new SoundData(finalSound, volume, pitch);
-			} else {
-				return null;
-			}
-		}, defaultValue == null ? null : new SoundData(defaultValue));
+	public ConfigSound(@Nullable FileConfig source, @NotNull String configSection,
+					   @Nullable Sound defaultValue) {
+		super(source, configSection, getSoundParser(), defaultValue == null ? null : new SoundData(defaultValue));
 	}
 
 	public void set(@Nullable SoundData value) {
@@ -73,12 +55,38 @@ public class ConfigSound extends ConfigStringCast<ConfigSound.SoundData> {
 		if (data != null) data.play(player);
 	}
 
-	public void save() {
-		if (getSource() != null) getSource().save();
+	public void playToAll() {
+		SoundData data = get();
+		if (data != null) {
+			Bukkit.getOnlinePlayers().forEach(data::play);
+		}
 	}
 
-	public @Nullable FileConfig getSource() {
-		return source == null ? FileConfig.getPluginConfiguration() : source;
+	public static @NotNull Function<@Nullable String, @Nullable SoundData> getSoundParser() {
+		return string -> {
+			if (string == null) return null;
+
+			Sound finalSound = null;
+			float volume = 1;
+			float pitch = 1;
+
+			String[] args = string.contains(":") ? string.split(":") : new String[]{string};
+			try {
+				if (args.length >= 1) finalSound = Sound.valueOf(args[0]);
+				if (args.length >= 2) volume = Float.parseFloat(args[1]);
+				if (args.length >= 3) pitch = Float.parseFloat(args[2]);
+			} catch (Exception exception) {
+				Bukkit.getLogger().severe("声音 " + string + " 配置错误，不存在同名声音，请检查。");
+				Bukkit.getLogger().severe("Sound " + string + " doesn't match any sound name.");
+			}
+
+
+			if (finalSound != null) {
+				return new SoundData(finalSound, volume, pitch);
+			} else {
+				return null;
+			}
+		};
 	}
 
 	public static class SoundData {

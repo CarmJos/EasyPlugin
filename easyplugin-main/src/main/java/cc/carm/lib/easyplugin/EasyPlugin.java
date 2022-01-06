@@ -71,12 +71,12 @@ public abstract class EasyPlugin extends JavaPlugin {
 		log(messageProvider.disabled(this, startTime));
 	}
 
-	public void load() {
+	protected void load() {
 	}
 
-	public abstract boolean initialize();
+	protected abstract boolean initialize();
 
-	public void shutdown() {
+	protected void shutdown() {
 	}
 
 	/**

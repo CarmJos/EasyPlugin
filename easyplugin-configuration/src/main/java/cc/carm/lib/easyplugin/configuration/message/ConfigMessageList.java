@@ -4,6 +4,7 @@ package cc.carm.lib.easyplugin.configuration.message;
 import cc.carm.lib.easyplugin.configuration.file.FileConfig;
 import cc.carm.lib.easyplugin.configuration.values.ConfigValueList;
 import cc.carm.lib.easyplugin.utils.MessageUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,22 +15,22 @@ public class ConfigMessageList extends ConfigValueList<String> {
 
 	@Nullable String[] messageParams;
 
-	public ConfigMessageList(String configSection) {
-		this(configSection, new String[0]);
+	public ConfigMessageList(String sectionName) {
+		this(sectionName, new String[0]);
 	}
 
-	public ConfigMessageList(@NotNull String configSection, @Nullable String[] defaultValue) {
-		this(configSection, defaultValue, null);
+	public ConfigMessageList(@NotNull String sectionName, @Nullable String[] defaultValue) {
+		this(sectionName, defaultValue, null);
 	}
 
-	public ConfigMessageList(@NotNull String configSection, @Nullable String[] defaultValue, String[] messageParams) {
-		super(null, configSection, String.class, defaultValue);
+	public ConfigMessageList(@NotNull String sectionName, @Nullable String[] defaultValue, String[] messageParams) {
+		super(null, sectionName, String.class, defaultValue);
 		this.messageParams = messageParams;
 	}
 
-	public ConfigMessageList(@Nullable FileConfig config, @NotNull String configSection,
+	public ConfigMessageList(@Nullable FileConfig source, @NotNull String sectionName,
 							 @Nullable String[] defaultValue, String[] messageParams) {
-		super(config, configSection, String.class, defaultValue);
+		super(source, sectionName, String.class, defaultValue);
 		this.messageParams = messageParams;
 	}
 
@@ -44,7 +45,6 @@ public class ConfigMessageList extends ConfigValueList<String> {
 			return get(sender);
 		}
 	}
-
 
 	public @NotNull List<String> get(@Nullable CommandSender sender, String[] params, Object[] values) {
 		return MessageUtils.setPlaceholders(sender, get(), params, values);
@@ -62,6 +62,22 @@ public class ConfigMessageList extends ConfigValueList<String> {
 		}
 	}
 
+	public void sendToAll(String[] params, Object[] values) {
+		Bukkit.getOnlinePlayers().forEach(pl -> MessageUtils.sendWithPlaceholders(pl, get(), params, values));
+	}
+
+	public void sendToAll() {
+		Bukkit.getOnlinePlayers().forEach(player -> MessageUtils.sendWithPlaceholders(player, get()));
+	}
+
+	public void sendToAll(Object[] values) {
+		if (messageParams != null) {
+			sendToAll(messageParams, values);
+		} else {
+			sendToAll();
+		}
+	}
+
 	public void send(@Nullable CommandSender sender, String[] params, Object[] values) {
 		MessageUtils.sendWithPlaceholders(sender, get(), params, values);
 	}
@@ -70,4 +86,5 @@ public class ConfigMessageList extends ConfigValueList<String> {
 	public @Nullable FileConfig getSource() {
 		return source == null ? FileConfig.getMessageConfiguration() : source;
 	}
+
 }
