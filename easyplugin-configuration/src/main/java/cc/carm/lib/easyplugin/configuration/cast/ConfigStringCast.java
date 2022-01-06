@@ -49,10 +49,7 @@ public class ConfigStringCast<V> extends FileConfigCachedValue<V> {
 	}
 
 	public void set(@Nullable String value) {
-		getSourceOptional().ifPresent(source -> {
-			source.getConfig().set(getSectionName(), value);
-			source.save();
-		});
+		setIfPresent(value, true);
 	}
 
 }

@@ -57,10 +57,7 @@ public class ConfigValueList<V> extends FileConfigValue {
 	}
 
 	public void set(@Nullable ArrayList<V> value) {
-		getSourceOptional().ifPresent(source -> {
-			source.getConfig().set(getSectionName(), value);
-			source.save();
-		});
+		setIfPresent(value, true);
 	}
 
 

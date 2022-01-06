@@ -32,8 +32,14 @@ public class ConfigValue<V> extends FileConfigValue {
 
 	public V get() {
 		return getConfigOptional()
-				.map(config -> castValue(config.get(getSectionName()), clazz, this.defaultValue))
-				.orElse(setDefault());    // 如果没有默认值，就把配置写进去，便于配置
+				.map(config -> {
+					if (config.contains(getSectionName())) {
+						return castValue(config.get(getSectionName()), clazz, this.defaultValue);
+					} else {
+						return setDefault(); // 如果没有默认值，就把配置写进去，便于配置
+					}
+				})
+				.orElse(defaultValue);
 	}
 
 	public @NotNull Optional<V> getOptional() {
@@ -41,10 +47,7 @@ public class ConfigValue<V> extends FileConfigValue {
 	}
 
 	public void set(@Nullable V value) {
-		getSourceOptional().ifPresent(source -> {
-			source.getConfig().set(getSectionName(), value);
-			source.save();
-		});
+		setIfPresent(value, true);
 	}
 
 	public V setDefault() {

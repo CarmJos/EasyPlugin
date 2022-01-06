@@ -50,10 +50,7 @@ public class ConfigValueMap<K, V> extends FileConfigCachedValue<Map<K, V>> {
 	}
 
 	public void set(@Nullable Map<K, V> valuesMap) {
-		getSourceOptional().ifPresent(source -> {
-			source.getConfig().createSection(getSectionName(), valuesMap);
-			source.save();
-		});
+		createSection(valuesMap);
 	}
 
 }

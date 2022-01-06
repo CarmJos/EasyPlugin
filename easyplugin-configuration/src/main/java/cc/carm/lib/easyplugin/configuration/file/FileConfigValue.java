@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Optional;
 
 public abstract class FileConfigValue {
@@ -25,7 +26,29 @@ public abstract class FileConfigValue {
 	}
 
 	public void save() {
-		getSourceOptional().ifPresent(FileConfig::save);
+		getSourceOptional().ifPresent(fileConfig -> {
+			try {
+				fileConfig.save();
+			} catch (Exception ex) {
+				fileConfig.getPlugin().getLogger().severe("Could not save the " + fileConfig.getFile() + " .");
+				ex.printStackTrace();
+			}
+		});
+	}
+
+	public void setIfPresent(@Nullable Object value, boolean save) {
+		getConfigOptional().ifPresent(configuration -> configuration.set(getSectionName(), value));
+		if (save) save();
+	}
+
+	public void createSection(Map<?, ?> values) {
+		getConfigOptional().ifPresent(configuration -> {
+			if (values == null) {
+				configuration.set(getSectionName(), null);
+			} else {
+				configuration.createSection(getSectionName(), values);
+			}
+		});
 	}
 
 	public @Nullable FileConfig getSource() {

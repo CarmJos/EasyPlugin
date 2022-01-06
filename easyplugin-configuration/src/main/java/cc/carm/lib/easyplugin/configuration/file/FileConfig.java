@@ -1,15 +1,17 @@
 package cc.carm.lib.easyplugin.configuration.file;
 
 
+import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.function.Supplier;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileConfig {
 
 	public static Supplier<FileConfig> pluginConfiguration = null;
@@ -28,32 +30,67 @@ public class FileConfig {
 	private long updateTime;
 
 	private final JavaPlugin plugin;
+	private final File fileFolder;
 	private final String fileName;
-
+	private final String resourcePath;
 
 	private File file;
 	private FileConfiguration config;
 
-	public FileConfig(final JavaPlugin plugin) {
+	public FileConfig(@NotNull JavaPlugin plugin) throws IOException {
 		this(plugin, "config.yml");
 	}
 
-	public FileConfig(final JavaPlugin plugin, final String name) {
+	public FileConfig(@NotNull JavaPlugin plugin,
+					  @NotNull String fileName) throws IOException {
+		this(plugin, fileName, fileName);
+	}
+
+	public FileConfig(@NotNull JavaPlugin plugin, @NotNull String resourcePath,
+					  @NotNull String fileName) throws IOException {
+		this(plugin, resourcePath, plugin.getDataFolder(), fileName);
+	}
+
+	public FileConfig(@NotNull JavaPlugin plugin, @NotNull String resourcePath,
+					  @NotNull File fileFolder, @NotNull String fileName) throws IOException {
 		this.plugin = plugin;
-		this.fileName = name;
+		this.resourcePath = resourcePath;
+		this.fileFolder = fileFolder;
+		this.fileName = fileName;
+
 		initFile();
 	}
 
-	private void initFile() {
-		this.updateTime = System.currentTimeMillis();
-		this.file = new File(plugin.getDataFolder(), fileName);
-		if (!this.file.exists()) {
-			if (!this.file.getParentFile().exists()) {
-				boolean success = this.file.getParentFile().mkdirs();
+	private void initFile() throws IOException {
+		if (!getFileFolder().exists()) getFileFolder().mkdirs();
+		this.file = new File(getFileFolder(), fileName);
+
+		if (!file.exists()) {
+			InputStream resourceStream = plugin.getResource(resourcePath);
+			if (resourceStream == null) {
+				throw new IOException("The resource " + resourcePath + " cannot find in " + plugin.getName() + " !");
 			}
-			plugin.saveResource(fileName, true);
+
+			OutputStream out = new FileOutputStream(file);
+			byte[] buffer = new byte[1024];
+
+			int readBytes;
+			while ((readBytes = resourceStream.read(buffer)) > 0) {
+				out.write(buffer, 0, readBytes);
+			}
+
+			out.close();
+			resourceStream.close();
+
+			ConfigUpdater.update(plugin, resourcePath, file); // Save comments
 		}
+
+		this.updateTime = System.currentTimeMillis();
 		this.config = YamlConfiguration.loadConfiguration(this.file);
+	}
+
+	public File getFileFolder() {
+		return fileFolder;
 	}
 
 	public File getFile() {
@@ -64,15 +101,16 @@ public class FileConfig {
 		return config;
 	}
 
-	public void save() {
-		try {
-			getConfig().save(getFile());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public JavaPlugin getPlugin() {
+		return plugin;
 	}
 
-	public void reload() {
+	public void save() throws IOException {
+		getConfig().save(getFile());
+		ConfigUpdater.update(plugin, resourcePath, file); // Save comments
+	}
+
+	public void reload() throws IOException {
 		this.updateTime = System.currentTimeMillis();
 		if (getFile().exists()) {
 			this.config = YamlConfiguration.loadConfiguration(getFile());
