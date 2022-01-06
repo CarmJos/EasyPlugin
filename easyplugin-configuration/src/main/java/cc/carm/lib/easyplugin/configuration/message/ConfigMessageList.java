@@ -62,6 +62,10 @@ public class ConfigMessageList extends ConfigValueList<String> {
 		}
 	}
 
+	public void send(@Nullable CommandSender sender, String[] params, Object[] values) {
+		MessageUtils.sendWithPlaceholders(sender, get(), params, values);
+	}
+
 	public void sendToAll(String[] params, Object[] values) {
 		Bukkit.getOnlinePlayers().forEach(pl -> MessageUtils.sendWithPlaceholders(pl, get(), params, values));
 	}
@@ -76,10 +80,6 @@ public class ConfigMessageList extends ConfigValueList<String> {
 		} else {
 			sendToAll();
 		}
-	}
-
-	public void send(@Nullable CommandSender sender, String[] params, Object[] values) {
-		MessageUtils.sendWithPlaceholders(sender, get(), params, values);
 	}
 
 	@Override
