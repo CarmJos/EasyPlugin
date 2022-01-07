@@ -85,16 +85,11 @@
             <name>Carm's Repo</name>
             <url>https://repo.carm.cc/repository/maven-public/</url>
         </repository>
-
-        <repository>
-            <id>EasySQL</id>
-            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
-        </repository>
-
+        
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
+            <url>https://maven.pkg.github.com/CarmJos/*</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
