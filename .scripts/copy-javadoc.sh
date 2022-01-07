@@ -1,7 +1,7 @@
 rm -rf docs
 mkdir -vp docs
 
-for i in ../easyplugin*; do
+for i in easyplugin*; do
   if test -e "$i/target/apidocs/"; then
     cp -vrf "$i/target/apidocs/*" "docs/$1/"
   fi
