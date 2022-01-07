@@ -3,15 +3,15 @@ mkdir -vp docs
 
 DOC_URL="target/site/apidocs"
 
-for FILE_NAME in easyplugin-*; do
+for FILE in easyplugin-*; do
 
-  if test -e "$FILE_NAME/$DOC_URL"; then
+  if test -e "$FILE/$DOC_URL"; then
 
-    MODULE_FILE="docs/${FILE_NAME:11}/"
+    MODULE_FILE="docs/${FILE:11}/"
 
     mkdir -vp "$MODULE_FILE"
 
-    cp -vrf "$FILE_NAME"/"$DOC_URL"/* "$MODULE_FILE"
+    cp -vrf "$FILE"/"$DOC_URL"/* "$MODULE_FILE"
 
   fi
 
