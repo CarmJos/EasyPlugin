@@ -1,10 +1,17 @@
 rm -rf docs
 mkdir -vp docs
 
-for i in easyplugin*; do
-  if test -e "$i/target/apidocs/"; then
-    cp -vrf "$i/target/apidocs/*" "docs/$1/"
+for FILE in easyplugin-*; do
+
+  if test -e "$FILE/target/apidocs/"; then
+
+    DOC_NAME="${FILE:11}"
+    mkdir -vp "docs/$DOC_NAME/"
+
+    cp -vrf "$FILE/target/apidocs/*" "docs/$DOC_NAME/"
+
   fi
+
 done
 
 cp -vrf .documentation/javadoc/JAVADOC-README.md docs/README.md
