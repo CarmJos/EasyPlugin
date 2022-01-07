@@ -12,6 +12,8 @@ for FILE in easyplugin-*; do
 
   fi
 
+  echo "$FILE"
+
 done
 
 cp -vrf .documentation/javadoc/JAVADOC-README.md docs/README.md
