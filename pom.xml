@@ -14,8 +14,13 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easyplugin-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.3</version>
+    <version>1.2.0</version>
     <modules>
+
+        <module>easyplugin-bom</module>
+        <module>easyplugin-all</module>
+        <module>easyplugin-common</module>
+
         <module>easyplugin-main</module>
 
         <module>easyplugin-database</module>
@@ -25,10 +30,8 @@
 
         <module>easyplugin-vault</module>
         <module>easyplugin-placeholderapi</module>
-
-        <module>easyplugin-all</module>
-        <module>easyplugin-common</module>
         <module>easyplugin-lp</module>
+
     </modules>
 
     <name>EasyPlugin</name>
@@ -46,8 +49,8 @@
 
     <licenses>
         <license>
-            <name>GNU General Public License v3.0</name>
-            <url>https://opensource.org/licenses/GPL-3.0</url>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
         </license>
     </licenses>
 

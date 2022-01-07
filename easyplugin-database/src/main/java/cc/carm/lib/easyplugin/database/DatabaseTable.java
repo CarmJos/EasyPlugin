@@ -1,8 +1,9 @@
 package cc.carm.lib.easyplugin.database;
 
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.api.builder.TableCreateBuilder;
-import cc.carm.lib.easysql.api.builder.TableQueryBuilder;
+import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
+import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.builder.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,8 @@ public class DatabaseTable {
 		this(tableName, columns, null);
 	}
 
-	public DatabaseTable(@NotNull String tableName, @NotNull String[] columns, @Nullable String tableSettings) {
+	public DatabaseTable(@NotNull String tableName, @NotNull String[] columns,
+						 @Nullable String tableSettings) {
 		this.tableName = tableName;
 		this.columns = columns;
 		this.tableSettings = tableSettings;
@@ -45,7 +47,31 @@ public class DatabaseTable {
 	}
 
 	public TableQueryBuilder createQuery(SQLManager sqlManager) {
-		return sqlManager.createQuery().inTable(tableName);
+		return sqlManager.createQuery().inTable(getTableName());
+	}
+
+	public DeleteBuilder createDelete(SQLManager sqlManager) {
+		return sqlManager.createDelete(getTableName());
+	}
+
+	public UpdateBuilder createUpdate(SQLManager sqlManager) {
+		return sqlManager.createUpdate(getTableName());
+	}
+
+	public InsertBuilder<PreparedSQLUpdateAction> createInsert(SQLManager sqlManager) {
+		return sqlManager.createInsert(getTableName());
+	}
+
+	public InsertBuilder<PreparedSQLUpdateBatchAction> createInsertBatch(SQLManager sqlManager) {
+		return sqlManager.createInsertBatch(getTableName());
+	}
+
+	public ReplaceBuilder<PreparedSQLUpdateAction> createReplace(SQLManager sqlManager) {
+		return sqlManager.createReplace(getTableName());
+	}
+
+	public ReplaceBuilder<PreparedSQLUpdateBatchAction> createReplaceBatch(SQLManager sqlManager) {
+		return sqlManager.createReplaceBatch(getTableName());
 	}
 
 }
