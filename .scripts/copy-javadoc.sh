@@ -1,22 +1,22 @@
 rm -rf docs
 mkdir -vp docs
 
-DOC_URL="target/site/apidocs/"
+DOC_URL="target/site/apidocs"
 
-for FILE in easyplugin-*; do
+for FILE_NAME in easyplugin-*; do
 
-  if test -e "$FILE/$DOC_URL"; then
-    ls -l "$FILE/*"
+  if test -e "$FILE_NAME/$DOC_URL"; then
+    ls -l "$FILE_NAME"
 
-    MODULE_FILE="docs/${FILE:11}/"
+    MODULE_FILE="docs/${FILE_NAME:11}/"
 
     mkdir -vp "$MODULE_FILE"
 
-    cp -vrf "$FILE/$DOC_URL*" "$MODULE_FILE"
+    cp -vrf "$FILE_NAME/$DOC_URL/*" "$MODULE_FILE"
 
   fi
 
-  echo "$FILE"
+  echo "$FILE_NAME"
 
 done
 
