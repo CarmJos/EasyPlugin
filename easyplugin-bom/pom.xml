@@ -18,7 +18,7 @@
 
     <artifactId>easyplugin-bom</artifactId>
     <packaging>pom</packaging>
-    
+
     <name>00-EasyPlugin-Bom</name>
     <description>轻松插件汇总导入模块，允许快捷导入相关的接口并避免版本不一致问题。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
@@ -102,6 +102,19 @@
             <artifactId>easyplugin-lp</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>

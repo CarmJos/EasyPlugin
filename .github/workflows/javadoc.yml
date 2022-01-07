@@ -25,7 +25,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate docs
-        run: mvn clean package -DskipTests
+        run: mvn javadoc:javadoc -DskipTests
         env:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -34,8 +34,9 @@ jobs:
         run: |
           rm -rf docs
           mkdir -vp docs
-          cp -vrf EasyPlugin-api/target/apidocs/* docs/
-          cp -vrf .documentation/JAVADOC-README.md docs/README.md
+          for i in ../easyplugin* ; do if test -e "$i/target/apidocs/"; then echo cp -vrf "$i/target/apidocs/*" "docs/$1/"; fi ;done;
+          cp -vrf .documentation/javadoc/JAVADOC-README.md docs/README.md
+          cp -vrf .documentation/javadoc/index.html docs/index.html
 
       - name: Generate the sitemap
         id: sitemap
