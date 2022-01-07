@@ -3,12 +3,12 @@ mkdir -vp docs
 
 for FILE in easyplugin-*; do
 
-  if test -e "$FILE/target/apidocs/"; then
+  if test -e "$FILE/target/site/apidocs/"; then
 
     DOC_NAME="${FILE:11}"
     mkdir -vp "docs/$DOC_NAME/"
 
-    cp -vrf "$FILE/target/apidocs/*" "docs/$DOC_NAME/"
+    cp -vrf "$FILE/target/site/apidocs/*" "docs/$DOC_NAME/"
 
   fi
 
