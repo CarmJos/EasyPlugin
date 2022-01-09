@@ -23,7 +23,10 @@ jobs:
           cache: maven
           java-version: '11'
           distribution: 'adopt'
-
+          server-id: github
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_TOKEN
+          
       - name: Generate docs
         run: mvn javadoc:javadoc -DskipTests
         env:
