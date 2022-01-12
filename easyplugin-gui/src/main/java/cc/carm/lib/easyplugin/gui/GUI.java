@@ -25,7 +25,6 @@ public class GUI {
 
 	public static void initialize(JavaPlugin plugin) {
 		GUI.plugin = plugin;
-
 	}
 
 	public static JavaPlugin getPlugin() {
@@ -36,8 +35,8 @@ public class GUI {
 		return openedGUIs;
 	}
 
-	GUIType type;
-	String name;
+	protected GUIType type;
+	protected String name;
 	public HashMap<Integer, GUIItem> items;
 	public Inventory inv;
 
