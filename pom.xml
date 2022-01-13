@@ -17,10 +17,6 @@
     <version>1.3.2</version>
     <modules>
 
-        <module>easyplugin-bom</module>
-        <module>easyplugin-all</module>
-        <module>easyplugin-common</module>
-
         <module>easyplugin-main</module>
 
         <module>easyplugin-database</module>
@@ -31,6 +27,10 @@
         <module>easyplugin-vault</module>
         <module>easyplugin-placeholderapi</module>
         <module>easyplugin-lp</module>
+
+        <module>easyplugin-bom</module>
+        <module>easyplugin-all</module>
+        <module>easyplugin-common</module>
 
     </modules>
 
@@ -84,6 +84,11 @@
         <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public</url>
         </repository>
 
         <repository>
