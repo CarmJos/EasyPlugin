@@ -1,7 +1,7 @@
 rm -rf docs
 mkdir -vp docs
 
-DOC_URL="target/site/apidocs"
+DOC_URL="target/apidocs"
 
 for FILE in easyplugin-*; do
 

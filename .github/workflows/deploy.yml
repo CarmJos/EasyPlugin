@@ -26,39 +26,18 @@ jobs:
           server-id: github
           server-username: MAVEN_USERNAME
           server-password: MAVEN_TOKEN
-      - name: "Deploy"
+
+      - name: "Maven Deploy"
         run: mvn -B deploy --file pom.xml -DskipTests
         env:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-  javadoc-website:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v2
-
-      - name: Set up the Java JDK
-        uses: actions/setup-java@v2
-        with:
-          cache: maven
-          java-version: '11'
-          distribution: 'adopt'
-          server-id: github
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_TOKEN
-
-      - name: Generate docs
-        run: mvn javadoc:javadoc -DskipTests
-        env:
-          MAVEN_USERNAME: ${{ github.repository_owner }}
-          MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Copy to Location
+      - name: "Copy Javadoc"
         run: |
           bash .scripts/copy-javadoc.sh
 
-      - name: Generate the sitemap
+      - name: "Generate Sitemap"
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
@@ -92,7 +71,8 @@ jobs:
           git checkout -b gh-pages
           git add -A
           git commit -m "API Document generated."
-      - name: Push javadocs
+
+      - name: Javadoc Website Push
         run: |
           cd docs
           git push origin HEAD:gh-pages --force
