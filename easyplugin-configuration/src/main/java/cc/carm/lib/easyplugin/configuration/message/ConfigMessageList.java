@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ConfigMessageList extends ConfigValueList<String> {
 
@@ -23,14 +24,20 @@ public class ConfigMessageList extends ConfigValueList<String> {
 		this(sectionName, defaultValue, null);
 	}
 
-	public ConfigMessageList(@NotNull String sectionName, @Nullable String[] defaultValue, String[] messageParams) {
-		super(null, sectionName, String.class, defaultValue);
-		this.messageParams = messageParams;
+	public ConfigMessageList(@NotNull String sectionName,
+							 @Nullable String[] defaultValue,
+							 String[] messageParams) {
+		this((Supplier<FileConfig>) null, sectionName, defaultValue, null);
 	}
 
 	public ConfigMessageList(@Nullable FileConfig source, @NotNull String sectionName,
 							 @Nullable String[] defaultValue, String[] messageParams) {
-		super(source, sectionName, String.class, defaultValue);
+		this(source == null ? null : () -> source, sectionName, defaultValue, messageParams);
+	}
+
+	public ConfigMessageList(@Nullable Supplier<FileConfig> provider, @NotNull String sectionName,
+							 @Nullable String[] defaultValue, String[] messageParams) {
+		super(provider, sectionName, String.class, defaultValue);
 		this.messageParams = messageParams;
 	}
 
@@ -83,8 +90,7 @@ public class ConfigMessageList extends ConfigValueList<String> {
 	}
 
 	@Override
-	public @Nullable FileConfig getSource() {
-		return source == null ? FileConfig.getMessageConfiguration() : source;
+	public FileConfig defaultSource() {
+		return FileConfig.getMessageConfiguration();
 	}
-
 }

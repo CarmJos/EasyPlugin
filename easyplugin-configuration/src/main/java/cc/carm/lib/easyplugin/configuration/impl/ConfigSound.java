@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ConfigSound extends ConfigStringCast<ConfigSound.SoundData> {
 
@@ -18,12 +19,20 @@ public class ConfigSound extends ConfigStringCast<ConfigSound.SoundData> {
 
 	public ConfigSound(@NotNull String configSection,
 					   @Nullable Sound defaultValue) {
-		this(null, configSection, defaultValue);
+		this((Supplier<FileConfig>) null, configSection, defaultValue);
 	}
 
 	public ConfigSound(@Nullable FileConfig source, @NotNull String configSection,
 					   @Nullable Sound defaultValue) {
-		super(source, configSection, getSoundParser(), defaultValue == null ? null : new SoundData(defaultValue));
+		this(source == null ? null : () -> source, configSection, defaultValue);
+	}
+
+	public ConfigSound(@Nullable Supplier<FileConfig> provider, @NotNull String configSection,
+					   @Nullable Sound defaultValue) {
+		super(provider, configSection,
+				getSoundParser(),
+				defaultValue == null ? null : new SoundData(defaultValue)
+		);
 	}
 
 	public void set(@Nullable SoundData value) {

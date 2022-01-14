@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class ConfigValue<V> extends FileConfigValue {
 	private final @NotNull Class<V> clazz;
@@ -19,13 +20,19 @@ public class ConfigValue<V> extends FileConfigValue {
 	public ConfigValue(@NotNull String sectionName,
 					   @NotNull Class<V> clazz,
 					   @Nullable V defaultValue) {
-		this(null, sectionName, clazz, defaultValue);
+		this((Supplier<FileConfig>) null, sectionName, clazz, defaultValue);
 	}
 
 	public ConfigValue(@Nullable FileConfig source, @NotNull String sectionName,
 					   @NotNull Class<V> clazz,
 					   @Nullable V defaultValue) {
-		super(source, sectionName);
+		this(source == null ? null : () -> source, sectionName, clazz, defaultValue);
+	}
+
+	public ConfigValue(@Nullable Supplier<FileConfig> provider, @NotNull String sectionName,
+					   @NotNull Class<V> clazz,
+					   @Nullable V defaultValue) {
+		super(provider, sectionName);
 		this.clazz = clazz;
 		this.defaultValue = defaultValue;
 	}

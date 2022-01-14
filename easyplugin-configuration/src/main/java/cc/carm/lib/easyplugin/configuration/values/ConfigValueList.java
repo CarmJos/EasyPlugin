@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ConfigValueList<V> extends FileConfigValue {
@@ -28,15 +29,17 @@ public class ConfigValueList<V> extends FileConfigValue {
 		this(null, sectionName, clazz, defaultValue);
 	}
 
-	public ConfigValueList(@Nullable FileConfig configuration, @NotNull String sectionName,
+	public ConfigValueList(@Nullable Supplier<FileConfig> provider,
+						   @NotNull String sectionName,
 						   Class<V> clazz) {
-		this(configuration, sectionName, clazz, null);
+		this(provider, sectionName, clazz, null);
 	}
 
-	public ConfigValueList(@Nullable FileConfig configuration, @NotNull String sectionName,
+	public ConfigValueList(@Nullable Supplier<FileConfig> provider,
+						   @NotNull String sectionName,
 						   @NotNull Class<V> clazz,
 						   @Nullable V[] defaultValue) {
-		super(configuration, sectionName);
+		super(provider, sectionName);
 		this.clazz = clazz;
 		this.defaultValue = defaultValue;
 	}

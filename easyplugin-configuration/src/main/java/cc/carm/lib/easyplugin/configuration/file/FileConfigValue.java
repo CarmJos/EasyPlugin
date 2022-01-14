@@ -6,18 +6,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public abstract class FileConfigValue {
 
-	protected @Nullable FileConfig source;
+	protected @Nullable Supplier<FileConfig> provider;
 	private final @NotNull String sectionName;
 
 	public FileConfigValue(@NotNull String sectionName) {
 		this(null, sectionName);
 	}
 
-	public FileConfigValue(@Nullable FileConfig source, @NotNull String sectionName) {
-		this.source = source;
+	public FileConfigValue(@Nullable Supplier<FileConfig> provider, @NotNull String sectionName) {
+		this.provider = provider;
 		this.sectionName = sectionName;
 	}
 
@@ -52,7 +53,7 @@ public abstract class FileConfigValue {
 	}
 
 	public @Nullable FileConfig getSource() {
-		return source == null ? FileConfig.getPluginConfiguration() : source;
+		return provider == null || provider.get() == null ? defaultSource() : provider.get();
 	}
 
 	public Optional<FileConfig> getSourceOptional() {
@@ -69,6 +70,10 @@ public abstract class FileConfigValue {
 
 	public static @Nullable <V> V castValue(@Nullable Object val, @NotNull Class<V> clazz, @Nullable V defaultValue) {
 		return clazz.isInstance(val) ? clazz.cast(val) : defaultValue;
+	}
+
+	public FileConfig defaultSource() {
+		return FileConfig.getPluginConfiguration();
 	}
 
 }

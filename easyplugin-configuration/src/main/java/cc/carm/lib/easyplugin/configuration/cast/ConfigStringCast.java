@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ConfigStringCast<V> extends FileConfigCachedValue<V> {
 
@@ -21,13 +22,19 @@ public class ConfigStringCast<V> extends FileConfigCachedValue<V> {
 	public ConfigStringCast(@NotNull String configSection,
 							@NotNull Function<String, V> valueCast,
 							@Nullable V defaultValue) {
-		this(null, configSection, valueCast, defaultValue);
+		this((Supplier<FileConfig>) null, configSection, valueCast, defaultValue);
 	}
 
 	public ConfigStringCast(@Nullable FileConfig source, @NotNull String sectionName,
 							@NotNull Function<String, V> valueCast,
 							@Nullable V defaultValue) {
-		super(source, sectionName);
+		this(source == null ? null : () -> source, sectionName, valueCast, defaultValue);
+	}
+
+	public ConfigStringCast(@Nullable Supplier<FileConfig> provider, @NotNull String sectionName,
+							@NotNull Function<String, V> valueCast,
+							@Nullable V defaultValue) {
+		super(provider, sectionName);
 		this.valueCast = valueCast;
 		this.defaultValue = defaultValue;
 	}

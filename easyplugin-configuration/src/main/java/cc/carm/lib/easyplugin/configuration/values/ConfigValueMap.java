@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ConfigValueMap<K, V> extends FileConfigCachedValue<Map<K, V>> {
 
@@ -16,12 +17,18 @@ public class ConfigValueMap<K, V> extends FileConfigCachedValue<Map<K, V>> {
 
 	public ConfigValueMap(@NotNull String sectionName, @NotNull Function<String, K> keyCast,
 						  @NotNull Class<V> valueClazz) {
-		this(null, sectionName, keyCast, valueClazz);
+		this((Supplier<FileConfig>) null, sectionName, keyCast, valueClazz);
 	}
+
 
 	public ConfigValueMap(@Nullable FileConfig source, @NotNull String sectionName,
 						  @NotNull Function<String, K> keyCast, @NotNull Class<V> valueClazz) {
-		super(source, sectionName);
+		this(source == null ? null : () -> source, sectionName, keyCast, valueClazz);
+	}
+
+	public ConfigValueMap(@Nullable Supplier<FileConfig> provider, @NotNull String sectionName,
+						  @NotNull Function<String, K> keyCast, @NotNull Class<V> valueClazz) {
+		super(provider, sectionName);
 		this.keyCast = keyCast;
 		this.valueClazz = valueClazz;
 	}

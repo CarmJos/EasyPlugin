@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.function.Supplier;
 
 public class ConfigMessage extends ConfigValue<String> {
 
@@ -23,14 +24,20 @@ public class ConfigMessage extends ConfigValue<String> {
 		this(sectionName, defaultValue, null);
 	}
 
-	public ConfigMessage(@NotNull String sectionName, @Nullable String defaultValue, String[] messageParams) {
-		super(null, sectionName, String.class, defaultValue);
-		this.messageParams = messageParams;
+	public ConfigMessage(@NotNull String sectionName,
+						 @Nullable String defaultValue,
+						 String[] messageParams) {
+		this((Supplier<FileConfig>) null, sectionName, defaultValue, messageParams);
 	}
 
 	public ConfigMessage(@Nullable FileConfig source, @NotNull String sectionName,
 						 @Nullable String defaultValue, String[] messageParams) {
-		super(source, sectionName, String.class, defaultValue);
+		this(source == null ? null : () -> source, sectionName, defaultValue, messageParams);
+	}
+
+	public ConfigMessage(@Nullable Supplier<FileConfig> provider, @NotNull String sectionName,
+						 @Nullable String defaultValue, String[] messageParams) {
+		super(provider, sectionName, String.class, defaultValue);
 		this.messageParams = messageParams;
 	}
 
@@ -84,9 +91,7 @@ public class ConfigMessage extends ConfigValue<String> {
 	}
 
 	@Override
-	public @Nullable FileConfig getSource() {
-		return source == null ? FileConfig.getMessageConfiguration() : source;
+	public FileConfig defaultSource() {
+		return FileConfig.getMessageConfiguration();
 	}
-
-
 }

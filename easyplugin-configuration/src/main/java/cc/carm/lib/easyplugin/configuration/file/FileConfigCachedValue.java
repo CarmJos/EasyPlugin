@@ -3,6 +3,8 @@ package cc.carm.lib.easyplugin.configuration.file;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 public abstract class FileConfigCachedValue<V> extends FileConfigValue {
 
 	protected V cachedValue;
@@ -12,10 +14,10 @@ public abstract class FileConfigCachedValue<V> extends FileConfigValue {
 		super(sectionName);
 	}
 
-	public FileConfigCachedValue(@Nullable FileConfig source, @NotNull String sectionName) {
-		super(source, sectionName);
+	public FileConfigCachedValue(@Nullable Supplier<FileConfig> provider, @NotNull String sectionName) {
+		super(provider, sectionName);
 	}
-	
+
 	public V updateCache(V value) {
 		this.updateTime = System.currentTimeMillis();
 		this.cachedValue = value;
