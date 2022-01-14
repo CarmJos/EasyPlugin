@@ -2,6 +2,7 @@ package cc.carm.lib.easyplugin.configuration.language;
 
 import cc.carm.lib.easyplugin.configuration.file.FileConfig;
 import cc.carm.lib.easyplugin.configuration.values.ConfigValueList;
+import cc.carm.lib.easyplugin.utils.ColorParser;
 import cc.carm.lib.easyplugin.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -48,7 +49,6 @@ public class EasyMessageList {
 		else return Arrays.asList(getDefaultValue());
 	}
 
-
 	private @Nullable String[] getMessageParams() {
 		return messageParams;
 	}
@@ -71,11 +71,10 @@ public class EasyMessageList {
 
 	public @NotNull List<String> get(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
 		if (sender == null) return getMessages();
-		if (params == null || values == null) {
-			return MessageUtils.setPlaceholders(sender, getMessages());
-		} else {
-			return MessageUtils.setPlaceholders(sender, getMessages(), params, values);
-		}
+		params = params == null ? new String[0] : params;
+		values = values == null ? new Object[0] : values;
+
+		return ColorParser.parse(MessageUtils.setPlaceholders(sender, getMessages(), params, values));
 	}
 
 	public void send(@Nullable CommandSender sender) {
@@ -87,11 +86,10 @@ public class EasyMessageList {
 	}
 
 	public void send(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
-		if (params == null || values == null) {
-			MessageUtils.sendWithPlaceholders(sender, getMessages());
-		} else {
-			MessageUtils.sendWithPlaceholders(sender, getMessages(), params, values);
-		}
+		List<String> messages = get(sender, params, values);
+		if (messages.isEmpty()) return;
+		if (messages.size() == 1 && messages.get(0).length() == 0) return; //空消息不再发送
+		MessageUtils.send(sender, messages);
 	}
 
 	public void sendToAll() {

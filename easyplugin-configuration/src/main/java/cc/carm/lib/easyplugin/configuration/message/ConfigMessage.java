@@ -3,13 +3,16 @@ package cc.carm.lib.easyplugin.configuration.message;
 
 import cc.carm.lib.easyplugin.configuration.file.FileConfig;
 import cc.carm.lib.easyplugin.configuration.values.ConfigValue;
+import cc.carm.lib.easyplugin.utils.ColorParser;
 import cc.carm.lib.easyplugin.utils.MessageUtils;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.function.Supplier;
 
 public class ConfigMessage extends ConfigValue<String> {
@@ -41,53 +44,67 @@ public class ConfigMessage extends ConfigValue<String> {
 		this.messageParams = messageParams;
 	}
 
-	public @NotNull String get(CommandSender sender) {
-		return MessageUtils.setPlaceholders(sender, get());
+	public String[] getMessageParams() {
+		return messageParams;
 	}
 
-	public @NotNull String get(CommandSender sender, Object[] values) {
-		if (messageParams != null) {
-			return get(sender, messageParams, values);
-		} else {
-			return get(sender);
-		}
+	public @NotNull String get(@Nullable CommandSender sender) {
+		return get(sender, null);
 	}
 
-	public @NotNull String get(CommandSender sender, String[] params, Object[] values) {
-		return MessageUtils.setPlaceholders(sender, get(), params, values);
+	public @NotNull String get(@Nullable CommandSender sender, @Nullable Object[] values) {
+		return get(sender, getMessageParams(), values);
 	}
 
-	public void send(CommandSender sender) {
-		MessageUtils.sendWithPlaceholders(sender, get());
+	public @NotNull String get(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
+		String messages = get();
+		if (sender == null || messages.length() < 1) return messages;
+		params = params == null ? new String[0] : params;
+		values = values == null ? new Object[0] : values;
+		return ColorParser.parse(MessageUtils.setPlaceholders(sender, messages, params, values));
 	}
 
-	public void send(CommandSender sender, Object[] values) {
-		if (messageParams != null) {
-			send(sender, messageParams, values);
-		} else {
-			send(sender, new String[0], new Object[0]);
-		}
-
+	public void send(@Nullable CommandSender sender) {
+		send(sender, null);
 	}
 
-	public void send(CommandSender sender, String[] params, Object[] values) {
-		MessageUtils.sendWithPlaceholders(sender, Collections.singletonList(get()), params, values);
+	public void send(@Nullable CommandSender sender, @Nullable Object[] values) {
+		send(sender, getMessageParams(), values);
+	}
+
+	public void send(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
+		String message = get(sender, params, values);
+		if (message.length() < 1) return;
+
+		MessageUtils.send(sender, message);
+	}
+
+	public void sendBar(@Nullable Player player) {
+		sendBar(player, null);
+	}
+
+	public void sendBar(@Nullable Player player, @Nullable Object[] values) {
+		sendBar(player, getMessageParams(), values);
+	}
+
+	public void sendBar(@Nullable Player player, @Nullable String[] params, @Nullable Object[] values) {
+		if (player == null) return;
+		String message = get(player, params, values);
+		if (message.length() < 1) return;
+
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(get(player, params, values)));
 	}
 
 	public void sendToAll() {
-		Bukkit.getOnlinePlayers().forEach(player -> MessageUtils.sendWithPlaceholders(player, Collections.singletonList(get())));
+		sendToAll(null);
 	}
 
-	public void sendToAll(Object[] values) {
-		if (messageParams != null) {
-			sendToAll(messageParams, values);
-		} else {
-			sendToAll();
-		}
+	public void sendToAll(@Nullable Object[] values) {
+		sendToAll(messageParams, values);
 	}
 
-	public void sendToAll(String[] params, Object[] values) {
-		Bukkit.getOnlinePlayers().forEach(pl -> MessageUtils.sendWithPlaceholders(pl, Collections.singletonList(get()), params, values));
+	public void sendToAll(@Nullable String[] params, @Nullable Object[] values) {
+		Bukkit.getOnlinePlayers().forEach(pl -> send(pl, params, values));
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package cc.carm.lib.easyplugin.configuration.message;
 
 import cc.carm.lib.easyplugin.configuration.file.FileConfig;
 import cc.carm.lib.easyplugin.configuration.values.ConfigValueList;
+import cc.carm.lib.easyplugin.utils.ColorParser;
 import cc.carm.lib.easyplugin.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -41,52 +42,52 @@ public class ConfigMessageList extends ConfigValueList<String> {
 		this.messageParams = messageParams;
 	}
 
+	public String[] getMessageParams() {
+		return messageParams;
+	}
+
 	public @NotNull List<String> get(@Nullable CommandSender sender) {
-		return MessageUtils.setPlaceholders(sender, get());
+		return get(sender, null);
 	}
 
-	public @NotNull List<String> get(@Nullable CommandSender sender, Object[] values) {
-		if (messageParams != null) {
-			return get(sender, messageParams, values);
-		} else {
-			return get(sender);
-		}
+
+	public @NotNull List<String> get(@Nullable CommandSender sender, @Nullable Object[] values) {
+		return get(sender, getMessageParams(), values);
 	}
 
-	public @NotNull List<String> get(@Nullable CommandSender sender, String[] params, Object[] values) {
-		return MessageUtils.setPlaceholders(sender, get(), params, values);
+	public @NotNull List<String> get(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
+		if (sender == null) return get();
+		params = params == null ? new String[0] : params;
+		values = values == null ? new Object[0] : values;
+
+		return ColorParser.parse(MessageUtils.setPlaceholders(sender, get(), params, values));
 	}
 
 	public void send(@Nullable CommandSender sender) {
-		MessageUtils.sendWithPlaceholders(sender, get());
+		send(sender, null);
 	}
 
-	public void send(@Nullable CommandSender sender, Object[] values) {
-		if (messageParams != null) {
-			send(sender, messageParams, values);
-		} else {
-			send(sender);
-		}
+	public void send(@Nullable CommandSender sender, @Nullable Object[] values) {
+		send(sender, getMessageParams(), values);
 	}
 
-	public void send(@Nullable CommandSender sender, String[] params, Object[] values) {
-		MessageUtils.sendWithPlaceholders(sender, get(), params, values);
-	}
-
-	public void sendToAll(String[] params, Object[] values) {
-		Bukkit.getOnlinePlayers().forEach(pl -> MessageUtils.sendWithPlaceholders(pl, get(), params, values));
+	public void send(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
+		List<String> messages = get(sender, params, values);
+		if (messages.isEmpty()) return;
+		if (messages.size() == 1 && messages.get(0).length() == 0) return; //空消息不再发送
+		MessageUtils.send(sender, messages);
 	}
 
 	public void sendToAll() {
-		Bukkit.getOnlinePlayers().forEach(player -> MessageUtils.sendWithPlaceholders(player, get()));
+		sendToAll(null);
 	}
 
-	public void sendToAll(Object[] values) {
-		if (messageParams != null) {
-			sendToAll(messageParams, values);
-		} else {
-			sendToAll();
-		}
+	public void sendToAll(@Nullable Object[] values) {
+		sendToAll(messageParams, values);
+	}
+
+	public void sendToAll(@Nullable String[] params, @Nullable Object[] values) {
+		Bukkit.getOnlinePlayers().forEach(pl -> send(pl, params, values));
 	}
 
 	@Override
