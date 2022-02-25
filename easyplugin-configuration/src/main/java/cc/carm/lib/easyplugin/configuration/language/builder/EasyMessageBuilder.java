@@ -7,11 +7,11 @@ import java.util.Arrays;
 
 public class EasyMessageBuilder {
 
-    String content;
-    String[] params;
+    protected String content;
+    protected String[] params;
 
-    @Nullable String paramPrefix = "%(";
-    @Nullable String paramSuffix = ")";
+    protected @Nullable String paramPrefix = "%(";
+    protected @Nullable String paramSuffix = ")";
 
     public EasyMessageBuilder() {
     }
