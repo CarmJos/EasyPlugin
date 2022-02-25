@@ -17,12 +17,12 @@ public class EasyMessageListBuilder {
     }
 
 
-    EasyMessageListBuilder contents(String... contents) {
+    public EasyMessageListBuilder contents(String... contents) {
         this.contents = contents;
         return this;
     }
 
-    EasyMessageListBuilder params(String... placeholders) {
+    public EasyMessageListBuilder params(String... placeholders) {
         this.params = placeholders;
         return this;
     }
