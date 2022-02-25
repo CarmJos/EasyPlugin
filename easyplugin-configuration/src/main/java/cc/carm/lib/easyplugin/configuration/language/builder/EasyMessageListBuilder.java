@@ -4,7 +4,6 @@ import cc.carm.lib.easyplugin.configuration.language.EasyMessageList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class EasyMessageListBuilder {
 
@@ -44,8 +43,13 @@ public class EasyMessageListBuilder {
         return this;
     }
 
+    protected @Nullable String[] buildParams() {
+        if (this.params == null) return null;
+        else return Arrays.stream(this.params).map(param -> paramPrefix + param + paramSuffix).toArray(String[]::new);
+    }
+
     public EasyMessageList build() {
-        return new EasyMessageList(this.contents, Optional.ofNullable(this.params).map(params -> Arrays.stream(this.params).map(param -> paramPrefix + param + paramSuffix).toArray(String[]::new)).orElse(null));
+        return new EasyMessageList(this.contents, buildParams());
     }
 
 }

@@ -86,6 +86,11 @@
         </repository>
 
         <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
             <id>carm-repo</id>
             <name>Carm's Repo</name>
             <url>https://repo.carm.cc/repository/maven-public/</url>
