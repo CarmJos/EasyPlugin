@@ -76,12 +76,6 @@
     <repositories>
 
         <repository>
-            <id>carm-repo</id>
-            <name>Carm's Repo</name>
-            <url>https://repo.carm.cc/repository/maven-public/</url>
-        </repository>
-
-        <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
@@ -89,6 +83,12 @@
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public</url>
+        </repository>
+
+        <repository>
+            <id>carm-repo</id>
+            <name>Carm's Repo</name>
+            <url>https://repo.carm.cc/repository/maven-public/</url>
         </repository>
 
         <repository>
