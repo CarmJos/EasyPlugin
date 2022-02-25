@@ -1,6 +1,7 @@
 package cc.carm.lib.easyplugin.configuration.language;
 
 import cc.carm.lib.easyplugin.configuration.file.FileConfig;
+import cc.carm.lib.easyplugin.configuration.language.builder.EasyMessageListBuilder;
 import cc.carm.lib.easyplugin.configuration.values.ConfigValueList;
 import cc.carm.lib.easyplugin.utils.ColorParser;
 import cc.carm.lib.easyplugin.utils.MessageUtils;
@@ -16,93 +17,97 @@ import java.util.List;
 
 public class EasyMessageList {
 
-	@Nullable ConfigValueList<String> configValue;
+    @Nullable ConfigValueList<String> configValue;
 
-	@Nullable String[] defaultValue;
-	@Nullable String[] messageParams;
+    @Nullable String[] defaultValue;
+    @Nullable String[] messageParams;
 
-	public EasyMessageList() {
-		this((String[]) null);
-	}
+    public static EasyMessageListBuilder builder() {
+        return new EasyMessageListBuilder();
+    }
 
-	public EasyMessageList(@Nullable String... defaultValue) {
-		this(defaultValue, null);
-	}
+    public EasyMessageList() {
+        this((String[]) null);
+    }
 
-	public EasyMessageList(@Nullable String[] defaultValue,
-						   @Nullable String[] messageParams) {
-		this.defaultValue = defaultValue;
-		this.messageParams = messageParams;
-	}
+    public EasyMessageList(@Nullable String... defaultValue) {
+        this(defaultValue, null);
+    }
 
-	public void initialize(FileConfig sourceConfig, String sectionName) {
-		configValue = new ConfigValueList<>(() -> sourceConfig, sectionName, String.class, getDefaultValue());
-	}
+    public EasyMessageList(@Nullable String[] defaultValue,
+                           @Nullable String[] messageParams) {
+        this.defaultValue = defaultValue;
+        this.messageParams = messageParams;
+    }
 
-	private @Nullable String[] getDefaultValue() {
-		return defaultValue;
-	}
+    public void initialize(FileConfig sourceConfig, String sectionName) {
+        configValue = new ConfigValueList<>(() -> sourceConfig, sectionName, String.class, getDefaultValue());
+    }
 
-	@Unmodifiable
-	private @NotNull List<String> getDefaultMessages() {
-		if (getDefaultValue() == null) return new ArrayList<>();
-		else return Arrays.asList(getDefaultValue());
-	}
+    private @Nullable String[] getDefaultValue() {
+        return defaultValue;
+    }
 
-	private @Nullable String[] getMessageParams() {
-		return messageParams;
-	}
+    @Unmodifiable
+    private @NotNull List<String> getDefaultMessages() {
+        if (getDefaultValue() == null) return new ArrayList<>();
+        else return Arrays.asList(getDefaultValue());
+    }
 
-	private @NotNull List<String> getMessages() {
-		if (configValue == null) {
-			return getDefaultMessages();
-		} else {
-			return configValue.get();
-		}
-	}
+    private @Nullable String[] getMessageParams() {
+        return messageParams;
+    }
 
-	public @NotNull List<String> get(@Nullable CommandSender sender) {
-		return get(sender, null);
-	}
+    private @NotNull List<String> getMessages() {
+        if (configValue == null) {
+            return getDefaultMessages();
+        } else {
+            return configValue.get();
+        }
+    }
 
-	public @NotNull List<String> get(@Nullable CommandSender sender, @Nullable Object[] values) {
-		return get(sender, getMessageParams(), values);
-	}
+    public @NotNull List<String> get(@Nullable CommandSender sender) {
+        return get(sender, (Object[]) null);
+    }
 
-	public @NotNull List<String> get(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
-		if (sender == null) return getMessages();
-		params = params == null ? new String[0] : params;
-		values = values == null ? new Object[0] : values;
+    public @NotNull List<String> get(@Nullable CommandSender sender, @Nullable Object... values) {
+        return get(sender, getMessageParams(), values);
+    }
 
-		return ColorParser.parse(MessageUtils.setPlaceholders(sender, getMessages(), params, values));
-	}
+    public @NotNull List<String> get(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
+        if (sender == null) return getMessages();
+        params = params == null ? new String[0] : params;
+        values = values == null ? new Object[0] : values;
 
-	public void send(@Nullable CommandSender sender) {
-		send(sender, null);
-	}
+        return ColorParser.parse(MessageUtils.setPlaceholders(sender, getMessages(), params, values));
+    }
 
-	public void send(@Nullable CommandSender sender, @Nullable Object[] values) {
-		send(sender, getMessageParams(), values);
-	}
+    public void send(@Nullable CommandSender sender) {
+        send(sender, (Object[]) null);
+    }
 
-	public void send(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
-		List<String> messages = get(sender, params, values);
-		if (messages.isEmpty()) return;
-		if (messages.size() == 1 && messages.get(0).length() == 0) return; //空消息不再发送
-		MessageUtils.send(sender, messages);
-	}
+    public void send(@Nullable CommandSender sender, @Nullable Object... values) {
+        send(sender, getMessageParams(), values);
+    }
 
-	public void sendToAll() {
-		sendToAll(null);
-	}
+    public void send(@Nullable CommandSender sender, @Nullable String[] params, @Nullable Object[] values) {
+        List<String> messages = get(sender, params, values);
+        if (messages.isEmpty()) return;
+        if (messages.size() == 1 && messages.get(0).length() == 0) return; //空消息不再发送
+        MessageUtils.send(sender, messages);
+    }
 
-	public void sendToAll(@Nullable Object[] values) {
-		sendToAll(messageParams, values);
-	}
+    public void sendToAll() {
+        sendToAll((Object[]) null);
+    }
 
-	public void sendToAll(@Nullable String[] params, @Nullable Object[] values) {
-		Bukkit.getOnlinePlayers().forEach(pl -> send(pl, params, values));
-	}
+    public void sendToAll(@Nullable Object... values) {
+        sendToAll(messageParams, values);
+    }
+
+    public void sendToAll(@Nullable String[] params, @Nullable Object[] values) {
+        Bukkit.getOnlinePlayers().forEach(pl -> send(pl, params, values));
+    }
 
 
 }
