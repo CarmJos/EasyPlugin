@@ -22,7 +22,6 @@
         <module>easyplugin-database</module>
         <module>easyplugin-gui</module>
         <module>easyplugin-configuration</module>
-        <module>easyplugin-command</module>
 
         <module>easyplugin-vault</module>
         <module>easyplugin-placeholderapi</module>

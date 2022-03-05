@@ -37,7 +37,8 @@
 ### 主要部分
 
 - Main [`easyplugin-main`](easyplugin-main)
-- Command* [`easyplugin-command`](easyplugin-command)
+- ~~Command*~~ (已独立项目到 [**EasyCommands**](https://github.com/CarmJos/EasyCommands))
+- ~~Messages*~~ (已独立项目到 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
 - Configuration [`easyplugin-configuration`](easyplugin-configuration)
 - Database* [`easyplugin-database`](easyplugin-database)
 - GUI [`easyplugin-gui`](easyplugin-gui)
