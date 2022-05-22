@@ -29,10 +29,3 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: "Target Stage"
-        run: mkdir staging && cp */target/*.jar staging
-      - name: "Upload artifact"
-        uses: actions/upload-artifact@v2
-        with:
-          name: Artifact
-          path: staging
