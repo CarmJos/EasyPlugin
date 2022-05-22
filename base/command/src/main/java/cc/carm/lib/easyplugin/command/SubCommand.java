@@ -3,7 +3,7 @@ package cc.carm.lib.easyplugin.command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("UnusedReturnValue")
@@ -17,7 +17,7 @@ public abstract class SubCommand implements NamedExecutor {
     public abstract Void execute(JavaPlugin plugin, CommandSender sender, String[] args);
 
     public List<String> tabComplete(JavaPlugin plugin, CommandSender sender, String[] args) {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
