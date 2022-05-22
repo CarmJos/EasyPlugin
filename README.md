@@ -23,31 +23,30 @@
 - 轻便独立的功能模块，按需使用，避免大量打包！
 - 详细的Javadoc与使用文档，轻松上手，方便使用！
 - 持续的更新与优化，需求不止，更新不止！
-  - 如需新功能支持，请通过 [Issues](https://github.com/CarmJos/EasyPlugin/issues) 提交功能需求。
+    - 如需新功能支持，请通过 [Issues](https://github.com/CarmJos/EasyPlugin/issues) 提交功能需求。
 
 ## 内容
 
 项目初创不久，加 * 的仍在开发更新中...
 
-### 集合部分
+### 集合部分 (`/collection`)
 
-- All [`easyplugin-all`](easyplugin-all)
-- Common [`easyplugin-common`](easyplugin-common)
+- All [`easyplugin-all`](collection/all)
+- Common [`easyplugin-common`](collection/common)
 
-### 主要部分
+### 主要部分 (`/base`)
 
-- Main [`easyplugin-main`](easyplugin-main)
-- ~~Command*~~ (已独立项目到 [**EasyCommands**](https://github.com/CarmJos/EasyCommands))
+- Main [`easyplugin-main`](base/main)
+- ~~Command*~~ (已独立项目到 [**MineCommands**](https://github.com/CarmJos/MineCommands))
 - ~~Messages*~~ (已独立项目到 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
-- Configuration [`easyplugin-configuration`](easyplugin-configuration)
-- Database* [`easyplugin-database`](easyplugin-database)
-- GUI [`easyplugin-gui`](easyplugin-gui)
+- ~~Configuration~~ (已独立项目到 [**MineConfiguration**](https://github.com/CarmJos/MineConfiguration))
+- ~~Database~~ (已独立项目到 [**EasySQL**](https://github.com/CarmJos/EasySQL))
+- GUI [`easyplugin-gui`](base/main)
 
-### 附属部分
+### 附属部分 (`/extension`)
 
-- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/)* [`easyplugin-placeholderapi`](easyplugin-placeholderapi)
-- [Vault](https://github.com/MilkBowl/VaultAPI)* [`easyplugin-vault`](easyplugin-vault)
-- [LuckPerms](https://www.spigotmc.org/resources/luckperms.28140/)* [`easyplugin-lp`](easyplugin-lp)
+- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/)* [`easyplugin-placeholderapi`](extension/papi)
+- [Vault](https://github.com/MilkBowl/VaultAPI)* [`easyplugin-vault`](extension/vault)
 
 ## 开发
 

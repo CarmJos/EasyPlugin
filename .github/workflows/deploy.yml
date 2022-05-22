@@ -20,7 +20,7 @@ jobs:
       - name: "Set up JDK"
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '8'
           distribution: 'adopt'
           cache: maven
           server-id: github
@@ -33,9 +33,29 @@ jobs:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+
+  javadoc-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: "Generate Javadoc"
+        run: mvn -B javadoc:aggregate --file pom.xml -DskipTests
+
       - name: "Copy Javadoc"
         run: |
-          bash .scripts/copy-javadoc.sh
+          rm -rf docs
+          mkdir -vp docs
+          cp -vrf target/site/apidocs/* docs/
+          cp -vrf .documentation/javadoc/JAVADOC-README.md docs/README.md
 
       - name: "Generate Sitemap"
         id: sitemap
