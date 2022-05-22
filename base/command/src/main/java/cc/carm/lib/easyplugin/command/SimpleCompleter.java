@@ -16,19 +16,11 @@ import java.util.stream.Collectors;
 
 public class SimpleCompleter {
 
-    public static @NotNull List<String> objects(@NotNull String input, Object... objects) {
-        return objects(input, objects.length, objects);
-    }
-
-    public static @NotNull List<String> objects(@NotNull String input, int limit, Object... objects) {
-        return objects(input, limit, Arrays.asList(objects));
-    }
-
-    public static @NotNull List<String> objects(@NotNull String input, List<String> objects) {
+    public static @NotNull List<String> objects(@NotNull String input, List<?> objects) {
         return objects(input, objects.size(), objects);
     }
 
-    public static @NotNull List<String> objects(@NotNull String input, int limit, List<Object> objects) {
+    public static @NotNull List<String> objects(@NotNull String input, int limit, List<?> objects) {
         return objects.stream().filter(Objects::nonNull).map(Object::toString)
                 .filter(s -> StringUtil.startsWithIgnoreCase(s, input))
                 .limit(Math.min(0, limit)).collect(Collectors.toList());
