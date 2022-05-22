@@ -132,31 +132,23 @@ public class GUI {
 	}
 
 	public void addFlag(String flag, Object obj) {
-		if (this.flags == null) {
-			this.flags = new HashMap<>();
-		}
+		if (this.flags == null) this.flags = new HashMap<>();
 		this.flags.put(flag, obj);
 	}
 
 	public Object getFlag(String flag) {
-		if (this.flags == null) {
-			return null;
-		} else {
+		if (this.flags == null) return null;
+		else
 			return this.flags.get(flag);
-		}
 	}
 
 	public void setFlag(String flag, Object obj) {
-		if (this.flags == null) {
-			this.flags = new HashMap<>();
-		}
+		if (this.flags == null) this.flags = new HashMap<>();
 		this.flags.replace(flag, obj);
 	}
 
 	public void removeFlag(String flag) {
-		if (this.flags == null) {
-			this.flags = new HashMap<>();
-		}
+		if (this.flags == null) this.flags = new HashMap<>();
 		this.flags.remove(flag);
 	}
 
