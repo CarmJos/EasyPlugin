@@ -19,6 +19,7 @@
     <modules>
 
         <module>base/main</module>
+        <module>base/command</module>
         <module>base/gui</module>
 
         <module>extension/papi</module>
@@ -27,7 +28,6 @@
         <module>collection/all</module>
         <module>collection/bom</module>
         <module>collection/common</module>
-        <module>base/command</module>
 
     </modules>
 
