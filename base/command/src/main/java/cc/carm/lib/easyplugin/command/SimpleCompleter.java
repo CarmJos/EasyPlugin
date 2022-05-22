@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SimpleCompleter {
 
@@ -21,9 +22,13 @@ public class SimpleCompleter {
     }
 
     public static @NotNull List<String> objects(@NotNull String input, int limit, List<?> objects) {
-        return objects.stream().filter(Objects::nonNull).map(Object::toString)
+        return objects(input, limit, objects.stream());
+    }
+
+    public static @NotNull List<String> objects(@NotNull String input, int limit, Stream<?> stream) {
+        return stream.filter(Objects::nonNull).map(Object::toString)
                 .filter(s -> StringUtil.startsWithIgnoreCase(s, input))
-                .limit(Math.min(0, limit)).collect(Collectors.toList());
+                .limit(Math.max(0, limit)).collect(Collectors.toList());
     }
 
     public static @NotNull List<String> text(@NotNull String input, String... texts) {
@@ -47,7 +52,7 @@ public class SimpleCompleter {
     }
 
     public static @NotNull List<String> onlinePlayers(@NotNull String input, int limit) {
-        return text(input, limit, Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList()));
+        return objects(input, limit, Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName));
     }
 
     public static @NotNull List<String> allPlayers(@NotNull String input) {
@@ -55,7 +60,7 @@ public class SimpleCompleter {
     }
 
     public static @NotNull List<String> allPlayers(@NotNull String input, int limit) {
-        return text(input, limit, Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).collect(Collectors.toList()));
+        return objects(input, limit, Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName));
     }
 
     public static @NotNull List<String> worlds(@NotNull String input) {
@@ -63,7 +68,7 @@ public class SimpleCompleter {
     }
 
     public static @NotNull List<String> worlds(@NotNull String input, int limit) {
-        return text(input, limit, Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList()));
+        return objects(input, limit, Bukkit.getWorlds().stream().map(World::getName));
     }
 
     public static @NotNull List<String> materials(@NotNull String input) {
@@ -71,7 +76,7 @@ public class SimpleCompleter {
     }
 
     public static @NotNull List<String> materials(@NotNull String input, int limit) {
-        return text(input, limit, Arrays.stream(Material.values()).map(Enum::name).collect(Collectors.toList()));
+        return objects(input, limit, Arrays.stream(Material.values()).map(Enum::name));
     }
 
     public static @NotNull List<String> effects(@NotNull String input) {
@@ -79,7 +84,7 @@ public class SimpleCompleter {
     }
 
     public static @NotNull List<String> effects(@NotNull String input, int limit) {
-        return text(input, limit, Arrays.stream(PotionEffectType.values()).map(PotionEffectType::getName).collect(Collectors.toList()));
+        return objects(input, limit, Arrays.stream(PotionEffectType.values()).map(PotionEffectType::getName));
     }
 
 }
