@@ -1,5 +1,6 @@
 package cc.carm.lib.easyplugin.gui;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -23,10 +24,10 @@ public class GUIListener implements Listener {
 
 	@EventHandler
 	public void onInventoryClickEvent(InventoryClickEvent event) {
-		if (!(event.getWhoClicked() instanceof Player)) return;
+		if (!(event.getWhoClicked() instanceof Player)) { return; }
 		Player player = (Player) event.getWhoClicked();
-		if (!GUI.hasOpenedGUI(player)) return;
-		if (GUI.getOpenedGUI(player) != getCurrentGUI()) return;
+		if (!GUI.hasOpenedGUI(player)) { return;}
+		if (GUI.getOpenedGUI(player) != getCurrentGUI()) { return; }
 
 		getCurrentGUI().rawClickListener(event);
 
@@ -35,11 +36,11 @@ public class GUIListener implements Listener {
 			return;
 		}
 
-		if (event.getClickedInventory() == null) return;
+		if (event.getClickedInventory() == null) { return; }
 
 		if (event.getClickedInventory().equals(getCurrentGUI().inv)) {
 
-			if (getCurrentGUI().cancelOnTarget) event.setCancelled(true);
+			if (getCurrentGUI().cancelOnTarget) { event.setCancelled(true); }
 
 			if (event.getSlot() != -999) {
 				GUIItem clickedItem = getCurrentGUI().getItem(event.getSlot());
@@ -61,7 +62,7 @@ public class GUIListener implements Listener {
 
 	@EventHandler
 	public void onDrag(InventoryDragEvent e) {
-		if (!(e.getWhoClicked() instanceof Player)) return;
+		if (!(e.getWhoClicked() instanceof Player)) { return; }
 		if (e.getInventory().equals(getCurrentGUI().inv)
 				|| e.getInventory().equals(e.getWhoClicked().getInventory())) {
 			getCurrentGUI().onDrag(e);
@@ -70,14 +71,18 @@ public class GUIListener implements Listener {
 
 	@EventHandler
 	public void onInventoryCloseEvent(InventoryCloseEvent event) {
-		if (!(event.getPlayer() instanceof Player)) return;
-		if (!event.getInventory().equals(getCurrentGUI().inv)) return;
+		if (!(event.getPlayer() instanceof Player)) { return; }
+		if (!event.getInventory().equals(getCurrentGUI().inv)) { return; }
 
+		close((Player) event.getPlayer());
+
+	}
+
+	protected void close(Player p){
 		HandlerList.unregisterAll(this);
 		getCurrentGUI().listener = null;
-		GUI.removeOpenedGUI((Player) event.getPlayer());
+		GUI.removeOpenedGUI(p);
 		getCurrentGUI().onClose();
-
 	}
 
 	@EventHandler
