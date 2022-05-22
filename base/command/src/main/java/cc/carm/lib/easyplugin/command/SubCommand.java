@@ -11,7 +11,7 @@ import java.util.List;
 public abstract class SubCommand implements NamedExecutor {
 
     private final String name;
-    private final String[] aliases;
+    private final List<String> aliases;
 
     public SubCommand(String name) {
         this(name, new String[0]);
@@ -19,7 +19,7 @@ public abstract class SubCommand implements NamedExecutor {
 
     public SubCommand(String name, String... aliases) {
         this.name = name;
-        this.aliases = aliases;
+        this.aliases = Arrays.asList(aliases);
     }
 
 
@@ -30,7 +30,7 @@ public abstract class SubCommand implements NamedExecutor {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList(this.aliases);
+        return this.aliases;
     }
 
     public abstract Void execute(JavaPlugin plugin, CommandSender sender, String[] args);

@@ -16,6 +16,7 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
 
     protected final @NotNull JavaPlugin plugin;
     protected final @NotNull String cmd;
+    protected final @NotNull List<String> aliases;
 
     protected final @NotNull Map<String, SubCommand> registeredCommands = new HashMap<>();
     protected final @NotNull Map<String, CommandHandler> registeredHandlers = new HashMap<>();
@@ -27,8 +28,13 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     }
 
     public CommandHandler(@NotNull JavaPlugin plugin, @NotNull String cmd) {
+        this(plugin, cmd, new String[0]);
+    }
+
+    public CommandHandler(@NotNull JavaPlugin plugin, @NotNull String cmd, @NotNull String... aliases) {
         this.plugin = plugin;
         this.cmd = cmd;
+        this.aliases = Arrays.asList(aliases);
     }
 
     public abstract void noArgs(CommandSender sender);
@@ -36,6 +42,11 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     public abstract void unknownCommand(CommandSender sender, String[] args);
 
     public abstract void noPermission(CommandSender sender);
+
+    @Override
+    public @NotNull List<String> getAliases() {
+        return aliases;
+    }
 
     @Override
     public String getName() {
