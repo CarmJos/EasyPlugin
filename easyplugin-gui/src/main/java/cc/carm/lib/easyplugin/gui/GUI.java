@@ -16,12 +16,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 public class GUI {
 
 	private static JavaPlugin plugin;
-	private static final HashMap<Player, GUI> openedGUIs = new HashMap<>();
+	private static final HashMap<UUID, GUI> openedGUIs = new HashMap<>();
 
 	public static void initialize(JavaPlugin plugin) {
 		GUI.plugin = plugin;
@@ -31,7 +32,7 @@ public class GUI {
 		return plugin;
 	}
 
-	public static HashMap<Player, GUI> getOpenedGUIs() {
+	public static HashMap<UUID, GUI> getOpenedGUIs() {
 		return openedGUIs;
 	}
 
@@ -155,11 +156,16 @@ public class GUI {
 	}
 
 	public void openGUI(Player player) {
-		if (this.type == GUIType.CANCEL) throw new NullPointerException("被取消或不存在的GUI");
+		if (this.type == GUIType.CANCEL) { throw new IllegalStateException("被取消或不存在的GUI"); }
 
 		Inventory inv = Bukkit.createInventory(null, this.type.getSize(), this.name);
 		IntStream.range(0, inv.getSize()).forEach(index -> inv.setItem(index, new ItemStack(Material.AIR)));
 		getItems().forEach((index, item) -> inv.setItem(index, item.getDisplay()));
+
+		GUI previous = getOpenedGUI(player);
+		if(previous != null){
+			previous.listener.close(player);
+		}
 
 		setOpenedGUI(player, this);
 
@@ -187,19 +193,19 @@ public class GUI {
 
 
 	public static void setOpenedGUI(Player player, GUI gui) {
-		getOpenedGUIs().put(player, gui);
+		getOpenedGUIs().put(player.getUniqueId(), gui);
 	}
 
 	public static boolean hasOpenedGUI(Player player) {
-		return getOpenedGUIs().containsKey(player);
+		return getOpenedGUIs().containsKey(player.getUniqueId());
 	}
 
 	public static GUI getOpenedGUI(Player player) {
-		return getOpenedGUIs().get(player);
+		return getOpenedGUIs().get(player.getUniqueId());
 	}
 
 	public static void removeOpenedGUI(Player player) {
-		getOpenedGUIs().remove(player);
+		getOpenedGUIs().remove(player.getUniqueId());
 	}
 
 }

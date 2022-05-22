@@ -73,11 +73,15 @@ public class GUIListener implements Listener {
 		if (!(event.getPlayer() instanceof Player)) return;
 		if (!event.getInventory().equals(getCurrentGUI().inv)) return;
 
+		close((Player) event.getPlayer());
+
+	}
+
+	protected void close(Player p){
 		HandlerList.unregisterAll(this);
 		getCurrentGUI().listener = null;
-		GUI.removeOpenedGUI((Player) event.getPlayer());
+		GUI.removeOpenedGUI(p);
 		getCurrentGUI().onClose();
-
 	}
 
 	@EventHandler
