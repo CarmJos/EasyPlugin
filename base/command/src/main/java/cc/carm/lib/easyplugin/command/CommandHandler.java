@@ -7,6 +7,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
 
     protected final @NotNull Map<String, SubCommand> registeredCommands = new HashMap<>();
     protected final @NotNull Map<String, CommandHandler> registeredHandlers = new HashMap<>();
+
+    protected final @NotNull Map<String, String> aliasesMap = new HashMap<>();
 
     public CommandHandler(@NotNull JavaPlugin plugin) {
         this(plugin, plugin.getName());
@@ -40,21 +43,15 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     }
 
     public void registerSubCommand(SubCommand command) {
-        for (String alias : command.getAliases()) {
-            if (this.registeredCommands.containsKey(alias)) {
-                this.plugin.getLogger().warning("Conflicting command aliases '" + alias + "' for '" + command.getName() + "', overwriting.");
-            }
-            this.registeredCommands.put(alias, command);
-        }
+        String name = command.getName().toLowerCase();
+        this.registeredCommands.put(name, command);
+        command.getAliases().forEach(alias -> this.aliasesMap.put(alias.toLowerCase(), name));
     }
 
     public void registerHandler(CommandHandler handler) {
-        for (String alias : handler.getAliases()) {
-            if (this.registeredCommands.containsKey(alias)) {
-                this.plugin.getLogger().warning("Conflicting command aliases '" + alias + "' for '" + handler.getName() + "', overwriting.");
-            }
-            this.registeredHandlers.put(alias, handler);
-        }
+        String name = handler.getName().toLowerCase();
+        this.registeredHandlers.put(name, handler);
+        handler.getAliases().forEach(alias -> this.aliasesMap.put(alias.toLowerCase(), name));
     }
 
     @Override
@@ -62,28 +59,30 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         if (args.length == 0) {
             this.noArgs(sender);
         } else {
-            String sub = args[0].toLowerCase();
-            CommandHandler handler = this.registeredHandlers.get(sub);
+            String input = args[0].toLowerCase();
+
+            CommandHandler handler = getHandler(input);
             if (handler != null) {
                 if (!handler.hasPermission(sender)) {
                     this.noPermission(sender);
                 } else {
                     handler.onCommand(sender, command, label, this.shortenArgs(args));
                 }
+            }
+
+            SubCommand subCommand = getSubCommand(input);
+            if (subCommand == null) {
+                this.unknownCommand(sender, args);
+            } else if (!subCommand.hasPermission(sender)) {
+                this.noPermission(sender);
             } else {
-                SubCommand subCommand = this.registeredCommands.get(sub);
-                if (subCommand == null) {
+                try {
+                    subCommand.execute(this.plugin, sender, this.shortenArgs(args));
+                } catch (ArrayIndexOutOfBoundsException var9) {
                     this.unknownCommand(sender, args);
-                } else if (!subCommand.hasPermission(sender)) {
-                    this.noPermission(sender);
-                } else {
-                    try {
-                        subCommand.execute(this.plugin, sender, this.shortenArgs(args));
-                    } catch (ArrayIndexOutOfBoundsException var9) {
-                        this.unknownCommand(sender, args);
-                    }
                 }
             }
+
         }
         return true;
     }
@@ -101,12 +100,12 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
                     .collect(Collectors.toList());
         } else {
 
-            CommandHandler handler = this.registeredHandlers.get(input);
+            CommandHandler handler = getHandler(input);
             if (handler != null && handler.hasPermission(sender)) {
                 return handler.onTabComplete(sender, command, alias, this.shortenArgs(args));
             }
 
-            SubCommand subCommand = this.registeredCommands.get(input);
+            SubCommand subCommand = getSubCommand(input);
             if (subCommand != null && subCommand.hasPermission(sender)) {
                 return subCommand.tabComplete(this.plugin, sender, this.shortenArgs(args));
             }
@@ -122,6 +121,24 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         List<NamedExecutor> sortedExecutors = new ArrayList<>(executors);
         sortedExecutors.sort(Comparator.comparing(NamedExecutor::getName));
         return sortedExecutors;
+    }
+
+    protected @Nullable CommandHandler getHandler(@NotNull String name) {
+        CommandHandler fromName = this.registeredHandlers.get(name);
+        if (fromName != null) return fromName;
+
+        String nameFromAlias = this.aliasesMap.get(name);
+        if (nameFromAlias == null) return null;
+        else return this.registeredHandlers.get(nameFromAlias);
+    }
+
+    protected @Nullable SubCommand getSubCommand(@NotNull String name) {
+        SubCommand fromName = this.registeredCommands.get(name);
+        if (fromName != null) return fromName;
+
+        String nameFromAlias = this.aliasesMap.get(name);
+        if (nameFromAlias == null) return null;
+        else return this.registeredCommands.get(nameFromAlias);
     }
 
     protected String[] shortenArgs(String[] args) {
