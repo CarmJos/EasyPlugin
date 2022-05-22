@@ -10,16 +10,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>easyplugin-command</artifactId>
+
     <properties>
-        <maven.compiler.source>${project.jdk.version}</maven.compiler.source>
-        <maven.compiler.target>${project.jdk.version}</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
-
-    <artifactId>easyplugin-placeholderapi</artifactId>
-    <packaging>jar</packaging>
-
-    <name>EasyPlugin-PlaceholderAPI</name>
 
 </project>

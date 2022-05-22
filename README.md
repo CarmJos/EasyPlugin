@@ -37,7 +37,7 @@
 ### 主要部分 (`/base`)
 
 - Main [`easyplugin-main`](base/main)
-- ~~Command*~~ (已独立项目到 [**MineCommands**](https://github.com/CarmJos/MineCommands))
+- Command [`easyplugin-command`](base/command)
 - ~~Messages*~~ (已独立项目到 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
 - ~~Configuration~~ (已独立项目到 [**MineConfiguration**](https://github.com/CarmJos/MineConfiguration))
 - ~~Database~~ (已独立项目到 [**EasySQL**](https://github.com/CarmJos/EasySQL))
