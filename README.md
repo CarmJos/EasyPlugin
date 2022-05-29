@@ -67,10 +67,10 @@
     <repositories>
 
         <repository>
-            <!--采用github依赖库，安全稳定，但需要配置 (推荐)-->
+            <!--采用github-repo依赖库(推荐)-->
             <id>EasyPlugin</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
+            <url>https://raw.githubusercontent.com/CarmJos/EasyPlugin/repo/</url>
         </repository>
 
         <repository>
@@ -121,7 +121,7 @@
 ```groovy
 repositories {
     // 采用github依赖库，安全稳定，但需要配置 (推荐)
-    maven { url 'https://maven.pkg.github.com/CarmJos/EasyPlugin' }
+    maven { url 'https://raw.githubusercontent.com/CarmJos/EasyPlugin/repo/' }
 
     // 采用我的私人依赖库，简单方便，但可能因为变故而无法使用
     maven { url 'https://repo.carm.cc/repository/maven-public/' }
