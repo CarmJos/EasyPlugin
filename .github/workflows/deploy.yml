@@ -54,7 +54,7 @@ jobs:
         run: |
           rm -rf deploy
           mkdir -vp deploy
-          cp -vrf $HOME/local-deploy deploy/
+          cp -vrf $HOME/local-deploy/* deploy/
 
       - name: "Configure Git"
         env:
@@ -80,7 +80,7 @@ jobs:
       - name: "Push files"
         run: |
           cd deploy
-          git push origin HEAD:gh-pages --force
+          git push origin HEAD:repo --force
 
   javadoc-deploy:
 
