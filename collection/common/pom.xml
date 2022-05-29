@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easyplugin-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>1.4.3</version>
+        <version>1.4.4-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -62,15 +62,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>cc.carm.lib</groupId>
-                    <artifactId>easyplugin-github</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cc.carm.lib</groupId>
                     <artifactId>easyplugin-placeholderapi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cc.carm.lib</groupId>
-                    <artifactId>easyplugin-lp</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>cc.carm.lib</groupId>

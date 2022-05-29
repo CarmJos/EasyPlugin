@@ -15,7 +15,7 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easyplugin-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.3</version>
+    <version>1.4.4-SNAPSHOT</version>
     <modules>
 
         <module>base/main</module>
@@ -34,6 +34,13 @@
     <name>EasyPlugin</name>
     <description>轻松插件类库，简单快捷的通用Spigot插件基础类库。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
+
+    <scm>
+        <connection>scm:git:git@github.com:CarmJos/EasyPlugin.git</connection>
+        <developerConnection>scm:git:git@github.com:CarmJos/EasyPlugin.git</developerConnection>
+        <url>https://github.com/CarmJos/EasyPlugin</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <developers>
         <developer>
@@ -63,11 +70,6 @@
 
     <distributionManagement>
         <downloadUrl>https://github.com/CarmJos/EasyPlugin/releases</downloadUrl>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
-        </repository>
     </distributionManagement>
 
     <repositories>
@@ -220,5 +222,48 @@
         </resources>
     </build>
 
+
+    <profiles>
+
+        <profile>
+            <id>ossrh</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>github</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>local</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+    </profiles>
 
 </project>

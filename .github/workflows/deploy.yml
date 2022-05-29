@@ -11,7 +11,7 @@ on:
     types: [ published ]
 
 jobs:
-  maven-deploy:
+  github-deploy:
 
     runs-on: ubuntu-latest
 
@@ -28,11 +28,59 @@ jobs:
           server-password: MAVEN_TOKEN
 
       - name: "Maven Deploy"
-        run: mvn -B deploy --file pom.xml -DskipTests
+        run: mvn -B -Pgithub deploy --file pom.xml -DskipTests
         env:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+
+  local-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: "Maven Deploy"
+        run: mvn -B -Plocal deploy --file pom.xml -DskipTests
+
+      - name: "Copy artifacts"
+        run: |
+          rm -rf deploy
+          mkdir -vp deploy
+          cp -vrf $HOME/local-deploy deploy/
+
+      - name: "Configure Git"
+        env:
+          DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          mkdir -p ~/.ssh/
+          echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name '${{ github.repository_owner }}'
+          git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
+
+      - name: "Commit files"
+        run: |
+          cd deploy
+          git init
+          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "Maven project deployment."
+
+      - name: "Push files"
+        run: |
+          cd deploy
+          git push origin HEAD:gh-pages --force
 
   javadoc-deploy:
 
@@ -61,7 +109,7 @@ jobs:
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://carmjos.github.io/EasyPlugin
+          base-url-path: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
           path-to-root: docs
 
       - name: Output stats
@@ -71,7 +119,7 @@ jobs:
           echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
           ls -l docs
 
-      - name: Configure Git
+      - name: "Configure Git"
         env:
           DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
         run: |
@@ -80,19 +128,19 @@ jobs:
           echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name 'CarmJos'
-          git config --global user.email 'carm@carm.cc'
+          git config --global user.name '${{ github.repository_owner }}'
+          git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
 
-      - name: Commit documentation changes
+      - name: "Commit documentation"
         run: |
           cd docs
           git init
-          git remote add origin git@github.com:CarmJos/EasyPlugin.git
+          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
           git checkout -b gh-pages
           git add -A
           git commit -m "API Document generated."
 
-      - name: Javadoc Website Push
+      - name: "Push Javadoc website"
         run: |
           cd docs
           git push origin HEAD:gh-pages --force

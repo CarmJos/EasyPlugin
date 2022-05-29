@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easyplugin-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>1.4.3</version>
+        <version>1.4.4-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -50,39 +50,6 @@
         <url>https://github.com/CarmJos/EasyPlugin/actions/workflows/maven.yml</url>
     </ciManagement>
 
-    <distributionManagement>
-        <downloadUrl>https://github.com/CarmJos/EasyPlugin/releases</downloadUrl>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/EasyPlugin</url>
-        </repository>
-    </distributionManagement>
-
-    <repositories>
-
-        <repository>
-            <id>carm-repo</id>
-            <name>Carm's Repo</name>
-            <url>https://repo.carm.cc/repository/maven-public/</url>
-        </repository>
-
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/*</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-    </repositories>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -92,17 +59,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>easyplugin-configuration</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>easyplugin-command</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>easyplugin-database</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -112,17 +69,12 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>easyplugin-placeholderapi</artifactId>
+                <artifactId>easyplugin-papi</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
                 <artifactId>easyplugin-vault</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
-                <artifactId>easyplugin-lp</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
         </dependencies>
@@ -137,6 +89,11 @@
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>easyplugin-gui</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>easyplugin-command</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
