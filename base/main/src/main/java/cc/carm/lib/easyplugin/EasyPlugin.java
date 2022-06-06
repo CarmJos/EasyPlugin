@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class EasyPlugin extends JavaPlugin {
 
@@ -132,6 +134,21 @@ public abstract class EasyPlugin extends JavaPlugin {
 
     public void debug(@Nullable String... messages) {
         if (isDebugging()) print("&8[DEBUG] &r", messages);
+    }
+
+    public void callEventSync(Event event) {
+        getScheduler().run(() -> Bukkit.getPluginManager().callEvent(event));
+    }
+
+    public void callEventAsync(Event event) {
+        getScheduler().runAsync(() -> Bukkit.getPluginManager().callEvent(event));
+    }
+
+    public @NotNull <T extends Event> CompletableFuture<T> callEventFuture(T event) {
+        return CompletableFuture.supplyAsync(() -> {
+            Bukkit.getPluginManager().callEvent(event);
+            return event;
+        });
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
