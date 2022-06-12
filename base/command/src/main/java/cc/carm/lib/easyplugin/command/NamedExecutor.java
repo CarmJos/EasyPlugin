@@ -1,7 +1,5 @@
 package cc.carm.lib.easyplugin.command;
 
-import cc.carm.lib.mineconfiguration.bukkit.value.ConfiguredMessage;
-import cc.carm.lib.mineconfiguration.bukkit.value.ConfiguredMessageList;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
@@ -34,20 +32,5 @@ public interface NamedExecutor {
         Arrays.stream(messages).map(finalParser).forEach(sender::sendMessage);
         return null;
     }
-
-    default Void sendMessage(@NotNull CommandSender sender,
-                             @NotNull ConfiguredMessageList<?> messages,
-                             @Nullable Object... params) {
-        messages.send(sender, params);
-        return null;
-    }
-
-    default Void sendMessage(@NotNull CommandSender sender,
-                             @NotNull ConfiguredMessage<?> message,
-                             @Nullable Object... params) {
-        message.send(sender, params);
-        return null;
-    }
-
 
 }

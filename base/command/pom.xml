@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easyplugin-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>1.4.6</version>
+        <version>1.4.7</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -47,16 +47,5 @@
         <system>GitHub Actions</system>
         <url>https://github.com/CarmJos/EasyPlugin/actions/workflows/maven.yml</url>
     </ciManagement>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>cc.carm.lib</groupId>
-            <artifactId>mineconfiguration-bukkit-base</artifactId>
-            <version>2.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-    </dependencies>
 
 </project>
