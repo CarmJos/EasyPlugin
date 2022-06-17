@@ -46,7 +46,7 @@ public class GUIItemConfiguration {
         this.slots.forEach(slot -> gui.setItem(slot, item));
     }
 
-    public Map<String, Object> serialize() {
+    public @NotNull Map<String, Object> serialize() {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
         map.put("type", this.type.name());
