@@ -29,7 +29,7 @@
 
         <module>extension/papi</module>
         <module>extension/vault</module>
-        <module>extension/updater</module>
+        <module>extension/gh-checker</module>
 
         <module>collection/all</module>
         <module>collection/bom</module>

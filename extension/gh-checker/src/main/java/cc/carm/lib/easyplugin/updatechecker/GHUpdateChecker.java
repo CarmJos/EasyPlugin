@@ -21,6 +21,12 @@ public class GHUpdateChecker {
         return new GHUpdateChecker(plugin.getLogger(), getGithubOwner(plugin), plugin.getName());
     }
 
+    public static @NotNull Runnable runner(@NotNull Logger logger,
+                                           @NotNull String owner, @NotNull String repo,
+                                           @NotNull String currentVersion) {
+        return of(logger, owner, repo).runner(currentVersion);
+    }
+
     public static @NotNull Runnable runner(@NotNull Plugin plugin) {
         return of(plugin).runner(plugin.getDescription().getVersion());
     }
