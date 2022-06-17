@@ -10,64 +10,64 @@ import java.util.Set;
 
 public class GUIItem {
 
-	ItemStack display;
-	boolean actionActive = true;
+    ItemStack display;
+    boolean actionActive = true;
 
-	public Set<GUIClickAction> actions = new HashSet<>();
-	public Set<GUIClickAction> actionsIgnoreActive = new HashSet<>();
+    public Set<GUIClickAction> actions = new HashSet<>();
+    public Set<GUIClickAction> actionsIgnoreActive = new HashSet<>();
 
-	public GUIItem(ItemStack display) {
-		this.display = display;
-	}
+    public GUIItem(ItemStack display) {
+        this.display = display;
+    }
 
-	public final ItemStack getDisplay() {
-		return this.display;
-	}
+    public final ItemStack getDisplay() {
+        return this.display;
+    }
 
-	public final void setDisplay(ItemStack display) {
-		this.display = display;
-	}
+    public final void setDisplay(ItemStack display) {
+        this.display = display;
+    }
 
-	public final boolean isActionActive() {
-		return this.actionActive;
-	}
+    public final boolean isActionActive() {
+        return this.actionActive;
+    }
 
-	public final void setActionActive(boolean b) {
-		actionActive = b;
-	}
+    public final void setActionActive(boolean b) {
+        actionActive = b;
+    }
 
-	/**
-	 * 玩家点击GUI后执行的代码
-	 *
-	 * @param type 点击的类型
-	 */
-	public void onClick(ClickType type) {
+    /**
+     * 玩家点击GUI后执行的代码
+     *
+     * @param type 点击的类型
+     */
+    public void onClick(ClickType type) {
 
-	}
+    }
 
-	public void addClickAction(GUIClickAction action) {
-		actions.add(action);
-	}
+    public void addClickAction(GUIClickAction action) {
+        actions.add(action);
+    }
 
-	public void addActionIgnoreActive(GUIClickAction action) {
-		actionsIgnoreActive.add(action);
-	}
+    public void addActionIgnoreActive(GUIClickAction action) {
+        actionsIgnoreActive.add(action);
+    }
 
-	public void rawClickAction(InventoryClickEvent event) {
+    public void rawClickAction(InventoryClickEvent event) {
 
-	}
+    }
 
-	/**
-	 * 玩家点击GUI后执行的代码
-	 *
-	 * @param player 点击GUI的玩家
-	 */
-	public void customAction(Player player) {
+    /**
+     * 玩家点击GUI后执行的代码
+     *
+     * @param player 点击GUI的玩家
+     */
+    public void customAction(Player player) {
 
-	}
+    }
 
-	public abstract static class GUIClickAction {
-		public abstract void run(ClickType type, Player player);
-	}
+    public abstract static class GUIClickAction {
+        public abstract void run(ClickType type, Player player);
+    }
 
 }

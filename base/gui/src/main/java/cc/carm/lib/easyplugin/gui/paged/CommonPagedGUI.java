@@ -11,22 +11,22 @@ import java.util.List;
 
 public class CommonPagedGUI extends PagedGUI {
 
-	private int[] range;
+    private int[] range;
 
-	private CommonPagedGUI(GUIType type, String name) {
-		super(type, name);
-	}
+    private CommonPagedGUI(GUIType type, String name) {
+        super(type, name);
+    }
 
-	public CommonPagedGUI(GUIType type, String Name, int a, int b) {
-		this(type, Name, toRange(type, a, b));
-	}
+    public CommonPagedGUI(GUIType type, String Name, int a, int b) {
+        this(type, Name, toRange(type, a, b));
+    }
 
-	public CommonPagedGUI(GUIType type, String Name, int[] range) {
-		super(type, Name);
-		Arrays.sort(range);
-		this.range = range;
+    public CommonPagedGUI(GUIType type, String Name, int[] range) {
+        super(type, Name);
+        Arrays.sort(range);
+        this.range = range;
 
-	}
+    }
 
 
 	
@@ -41,122 +41,122 @@ public class CommonPagedGUI extends PagedGUI {
 	}
 	*/
 
-	private static int[] toRange(GUIType type, int a, int b) {
-		if (a > b) {
-			a = a ^ b;
-			b = a ^ b;
-			a = a ^ b;
-		}
+    private static int[] toRange(GUIType type, int a, int b) {
+        if (a > b) {
+            a = a ^ b;
+            b = a ^ b;
+            a = a ^ b;
+        }
 
-		int lineA = getLine(a);
-		int columnA = getColumn(a);
-		int lineB = getLine(b);
-		int columnB = getColumn(b);
+        int lineA = getLine(a);
+        int columnA = getColumn(a);
+        int lineB = getLine(b);
+        int columnB = getColumn(b);
 
-		if (lineB > type.getLines())
-			throw new IndexOutOfBoundsException("页面内容范围超过了GUI的大小");
+        if (lineB > type.getLines())
+            throw new IndexOutOfBoundsException("页面内容范围超过了GUI的大小");
 
-		int[] range = new int[(lineB - lineA + 1) * (columnB - columnA + 1)];
+        int[] range = new int[(lineB - lineA + 1) * (columnB - columnA + 1)];
 
-		for (int i = 0, l = 0; i < type.getSize(); i++) {
-			int li = getLine(i);
-			int ci = getColumn(i);
-			if (li >= lineA && li <= lineB && ci >= columnA && ci <= columnB) {
-				range[l] = i;
-				l++;
-			}
-		}
+        for (int i = 0, l = 0; i < type.getSize(); i++) {
+            int li = getLine(i);
+            int ci = getColumn(i);
+            if (li >= lineA && li <= lineB && ci >= columnA && ci <= columnB) {
+                range[l] = i;
+                l++;
+            }
+        }
 
-		return range;
-	}
+        return range;
+    }
 
-	private static int getLine(int i) {
-		return i / 9 + 1;
-	}
+    private static int getLine(int i) {
+        return i / 9 + 1;
+    }
 
-	private static int getColumn(int i) {
-		return i % 9 + 1;
-	}
+    private static int getColumn(int i) {
+        return i % 9 + 1;
+    }
 
-	@Override
-	public boolean hasPreviousPage() {
-		return page > 1;
-	}
+    @Override
+    public boolean hasPreviousPage() {
+        return page > 1;
+    }
 
-	@Override
-	public boolean hasNextPage() {
-		return page < getLastPageNumber();
-	}
-
-
-	/**
-	 * 前往第一页
-	 */
-	public void goFirstPage() {
-		if (hasPreviousPage())
-			this.page = 1;
-		else
-			throw new IndexOutOfBoundsException();
-	}
+    @Override
+    public boolean hasNextPage() {
+        return page < getLastPageNumber();
+    }
 
 
-	/**
-	 * 前往最后一页
-	 */
-	public void goLastPage() {
-		if (hasNextPage())
-			this.page = getLastPageNumber();
-		else
-			throw new IndexOutOfBoundsException();
-	}
+    /**
+     * 前往第一页
+     */
+    public void goFirstPage() {
+        if (hasPreviousPage())
+            this.page = 1;
+        else
+            throw new IndexOutOfBoundsException();
+    }
 
 
-	/**
-	 * 得到最后一页的页码
-	 *
-	 * @return 最后一页的页码
-	 */
-	public int getLastPageNumber() {
-		return (this.container.size() / range.length) + 1;
-	}
-
-	/**
-	 * 得到第一页的页码
-	 *
-	 * @return 第一页页码(默认为1)
-	 */
-	public int getFirstPageNumber() {
-		return 1;
-	}
+    /**
+     * 前往最后一页
+     */
+    public void goLastPage() {
+        if (hasNextPage())
+            this.page = getLastPageNumber();
+        else
+            throw new IndexOutOfBoundsException();
+    }
 
 
-	@Override
-	public void openGUI(Player player) {
-		if (container.isEmpty()) {
-			super.openGUI(player);
-			return;
-		}
-		List<GUIItem> list = new ArrayList<>();
-		int start = (page - 1) * range.length;
-		for (int i = start; i < start + range.length; i++) {
-			if (i < container.size()) {
-				list.add(container.get(i));
-			} else {
-				break;
-			}
-		}
+    /**
+     * 得到最后一页的页码
+     *
+     * @return 最后一页的页码
+     */
+    public int getLastPageNumber() {
+        return (this.container.size() / range.length) + 1;
+    }
 
-		int i = 0;
-		Arrays.stream(range).forEach(index -> setItem(index, null));
-		for (int index : range) {
-			if (i < list.size()) {
-				setItem(index, list.get(i));
-				i++;
-			} else {
-				break;
-			}
-		}
-		super.openGUI(player);
-	}
+    /**
+     * 得到第一页的页码
+     *
+     * @return 第一页页码(默认为1)
+     */
+    public int getFirstPageNumber() {
+        return 1;
+    }
+
+
+    @Override
+    public void openGUI(Player player) {
+        if (container.isEmpty()) {
+            super.openGUI(player);
+            return;
+        }
+        List<GUIItem> list = new ArrayList<>();
+        int start = (page - 1) * range.length;
+        for (int i = start; i < start + range.length; i++) {
+            if (i < container.size()) {
+                list.add(container.get(i));
+            } else {
+                break;
+            }
+        }
+
+        int i = 0;
+        Arrays.stream(range).forEach(index -> setItem(index, null));
+        for (int index : range) {
+            if (i < list.size()) {
+                setItem(index, list.get(i));
+                i++;
+            } else {
+                break;
+            }
+        }
+        super.openGUI(player);
+    }
 
 }

@@ -7,86 +7,88 @@ import cc.carm.lib.easyplugin.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GUIItemConfiguration {
 
-	Material material;
-	int data;
-	String name;
-	@NotNull List<String> lore;
+    @NotNull Material type;
+    int data;
+    @Nullable String name;
+    @NotNull List<String> lore;
 
-	@NotNull List<Integer> slots;
-	@NotNull List<GUIActionConfiguration> actions;
+    @NotNull List<Integer> slots;
+    @NotNull List<GUIActionConfiguration> actions;
 
-	public GUIItemConfiguration(Material material, int data,
-								String name, @NotNull List<String> lore,
-								@NotNull List<GUIActionConfiguration> actions,
-								@NotNull List<Integer> slots) {
-		this.material = material;
-		this.data = data;
-		this.name = name;
-		this.lore = lore;
-		this.slots = slots;
-		this.actions = actions;
-	}
+    public GUIItemConfiguration(@NotNull Material type, int data,
+                                @Nullable String name, @NotNull List<String> lore,
+                                @NotNull List<GUIActionConfiguration> actions,
+                                @NotNull List<Integer> slots) {
+        this.type = type;
+        this.data = data;
+        this.name = name;
+        this.lore = lore;
+        this.slots = slots;
+        this.actions = actions;
+    }
 
-	public void setupItems(Player player, GUI gui) {
-		ItemStackFactory icon = new ItemStackFactory(this.material);
-		icon.setDurability(this.data);
-		if (this.name != null) icon.setDisplayName(this.name);
-		icon.setLore(MessageUtils.setPlaceholders(player, this.lore));
+    public void setupItems(Player player, GUI gui) {
+        ItemStackFactory icon = new ItemStackFactory(this.type);
+        icon.setDurability(this.data);
+        if (this.name != null) icon.setDisplayName(this.name);
+        icon.setLore(MessageUtils.setPlaceholders(player, this.lore));
 
-		GUIItem item = new GUIItem(icon.toItemStack());
-		this.actions.stream().map(GUIActionConfiguration::toClickAction).forEach(item::addClickAction);
-		this.slots.forEach(slot -> gui.setItem(slot, item));
-	}
+        GUIItem item = new GUIItem(icon.toItemStack());
+        this.actions.stream().map(GUIActionConfiguration::toClickAction).forEach(item::addClickAction);
+        this.slots.forEach(slot -> gui.setItem(slot, item));
+    }
 
-	@Nullable
-	public static GUIItemConfiguration readFrom(@Nullable ConfigurationSection itemSection) {
-		if (itemSection == null) return null;
-		Material material = Optional.ofNullable(Material.matchMaterial(itemSection.getString("material", "STONE"))).orElse(Material.STONE);
-		int data = itemSection.getInt("data", 0);
-		String name = itemSection.getString("name");
-		List<String> lore = itemSection.getStringList("lore");
+    public Map<String, Object> serialize() {
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
-		List<Integer> slots = itemSection.getIntegerList("slots");
-		int slot = itemSection.getInt("slot", 0);
+        map.put("type", this.type.name());
+        if (this.name != null) map.put("name", this.name);
+        if (this.data != 0) map.put("data", this.data);
+        if (!this.lore.isEmpty()) map.put("lore", this.lore);
+        if (this.slots.size() > 1) {
+            map.put("slots", this.slots);
+        } else if (slots.size() == 1) {
+            map.put("slots", this.slots.get(0));
+        }
+        if (!this.actions.isEmpty()) {
+            map.put("actions", this.actions.stream().map(GUIActionConfiguration::serialize).collect(Collectors.toList()));
+        }
+        return map;
+    }
 
-		List<String> actionsString = itemSection.getStringList("actions");
-		List<GUIActionConfiguration> actions = new ArrayList<>();
-		for (String actionString : actionsString) {
-			int prefixStart = actionString.indexOf("[");
-			int prefixEnd = actionString.indexOf("]");
-			if (prefixStart < 0 || prefixEnd < 0) continue;
+    @Nullable
+    public static GUIItemConfiguration readFrom(@Nullable ConfigurationSection itemSection) {
+        if (itemSection == null) return null;
+        String material = Optional.ofNullable(itemSection.getString("type")).orElse("STONE");
+        Material type = Optional.ofNullable(Material.matchMaterial(material)).orElse(Material.STONE);
+        int data = itemSection.getInt("data", 0);
+        String name = itemSection.getString("name");
+        List<String> lore = itemSection.getStringList("lore");
 
-			String prefix = actionString.substring(prefixStart + 1, prefixEnd);
-			ClickType clickType = null;
-			GUIActionType actionType;
-			if (prefix.contains(":")) {
-				String[] args = prefix.split(":");
-				clickType = GUIConfiguration.readClickType(args[0]);
-				actionType = GUIActionType.readActionType(args[1]);
-			} else {
-				actionType = GUIActionType.readActionType(prefix);
-			}
+        List<Integer> slots = itemSection.getIntegerList("slots");
+        int slot = itemSection.getInt("slot", 0);
 
-			if (actionType == null) continue;
-			actions.add(new GUIActionConfiguration(clickType, actionType, actionString.substring(prefixEnd + 1).trim()));
-		}
+        List<String> actionsString = itemSection.getStringList("actions");
+        List<GUIActionConfiguration> actions = new ArrayList<>();
+        for (String actionString : actionsString) {
+            GUIActionConfiguration action = GUIActionConfiguration.deserialize(actionString);
+            if (action == null) continue;
+            actions.add(action);
+        }
 
-		return new GUIItemConfiguration(
-				material, data, name, lore, actions,
-				slots.size() > 0 ? slots : Collections.singletonList(slot)
-		);
-	}
+        return new GUIItemConfiguration(
+                type, data, name, lore, actions,
+                slots.size() > 0 ? slots : Collections.singletonList(slot)
+        );
+    }
 
 
 }

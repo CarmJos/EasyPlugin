@@ -12,344 +12,344 @@ import java.util.concurrent.Callable;
 @SuppressWarnings("DuplicatedCode")
 public class SchedulerUtils {
 
-	private final JavaPlugin plugin;
+    private final JavaPlugin plugin;
 
-	public SchedulerUtils(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
+    public SchedulerUtils(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-	private JavaPlugin getPlugin() {
-		return plugin;
-	}
-
-
-	/**
-	 * 在服务端主线程中执行一个任务
-	 *
-	 * @param runnable 需要执行的任务
-	 */
-	public void run(Runnable runnable) {
-		Bukkit.getScheduler().runTask(getPlugin(), runnable);
-	}
+    private JavaPlugin getPlugin() {
+        return plugin;
+    }
 
 
-	/**
-	 * 异步执行一个任务。
-	 *
-	 * @param runnable 需要执行的任务
-	 */
-	public void runAsync(Runnable runnable) {
-		Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), runnable);
-	}
-	
-	/**
-	 * 在主线程延时执行一个任务。
-	 *
-	 * @param delay    延迟的ticks
-	 * @param runnable 需要执行的任务
-	 */
-	public void runLater(long delay, Runnable runnable) {
-		Bukkit.getScheduler().runTaskLater(getPlugin(), runnable, delay);
-	}
-
-	/**
-	 * 异步延时执行一个任务。
-	 *
-	 * @param delay    延迟的ticks
-	 * @param runnable 需要执行的任务
-	 */
-	public void runLaterAsync(long delay, Runnable runnable) {
-		Bukkit.getScheduler().runTaskLaterAsynchronously(getPlugin(), runnable, delay);
-	}
-
-	/**
-	 * 间隔一段时间按顺序执行列表中的任务
-	 *
-	 * @param interval 间隔时间
-	 * @param tasks    任务列表
-	 */
-	public void runAtInterval(long interval, Runnable... tasks) {
-		runAtInterval(0L, interval, tasks);
-	}
+    /**
+     * 在服务端主线程中执行一个任务
+     *
+     * @param runnable 需要执行的任务
+     */
+    public void run(Runnable runnable) {
+        Bukkit.getScheduler().runTask(getPlugin(), runnable);
+    }
 
 
-	/**
-	 * 间隔一段时间按顺序执行列表中的任务
-	 *
-	 * @param delay    延迟时间
-	 * @param interval 间隔时间
-	 * @param tasks    任务列表
-	 */
-	public void runAtInterval(long delay, long interval, Runnable... tasks) {
-		new BukkitRunnable() {
-			private int index;
+    /**
+     * 异步执行一个任务。
+     *
+     * @param runnable 需要执行的任务
+     */
+    public void runAsync(Runnable runnable) {
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), runnable);
+    }
 
-			@Override
-			public void run() {
-				if (this.index >= tasks.length) {
-					this.cancel();
-					return;
-				}
+    /**
+     * 在主线程延时执行一个任务。
+     *
+     * @param delay    延迟的ticks
+     * @param runnable 需要执行的任务
+     */
+    public void runLater(long delay, Runnable runnable) {
+        Bukkit.getScheduler().runTaskLater(getPlugin(), runnable, delay);
+    }
 
-				tasks[index].run();
-				index++;
-			}
-		}.runTaskTimer(getPlugin(), delay, interval);
-	}
+    /**
+     * 异步延时执行一个任务。
+     *
+     * @param delay    延迟的ticks
+     * @param runnable 需要执行的任务
+     */
+    public void runLaterAsync(long delay, Runnable runnable) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getPlugin(), runnable, delay);
+    }
 
-	/**
-	 * 间隔一段时间按顺序异步执行列表中的任务
-	 *
-	 * @param interval 间隔时间
-	 * @param tasks    任务列表
-	 */
-	public void runAtIntervalAsync(long interval, Runnable... tasks) {
-		runAtIntervalAsync(0L, interval, tasks);
-	}
+    /**
+     * 间隔一段时间按顺序执行列表中的任务
+     *
+     * @param interval 间隔时间
+     * @param tasks    任务列表
+     */
+    public void runAtInterval(long interval, Runnable... tasks) {
+        runAtInterval(0L, interval, tasks);
+    }
 
-	/**
-	 * 间隔一段时间按顺序异步执行列表中的任务
-	 *
-	 * @param delay    延迟时间
-	 * @param interval 间隔时间
-	 * @param tasks    任务列表
-	 */
-	public void runAtIntervalAsync(long delay, long interval, Runnable... tasks) {
-		new BukkitRunnable() {
-			private int index;
 
-			@Override
-			public void run() {
-				if (this.index >= tasks.length) {
-					this.cancel();
-					return;
-				}
+    /**
+     * 间隔一段时间按顺序执行列表中的任务
+     *
+     * @param delay    延迟时间
+     * @param interval 间隔时间
+     * @param tasks    任务列表
+     */
+    public void runAtInterval(long delay, long interval, Runnable... tasks) {
+        new BukkitRunnable() {
+            private int index;
 
-				tasks[index].run();
-				index++;
-			}
-		}.runTaskTimerAsynchronously(getPlugin(), delay, interval);
-	}
+            @Override
+            public void run() {
+                if (this.index >= tasks.length) {
+                    this.cancel();
+                    return;
+                }
 
-	/**
-	 * 重复执行一个任务。
-	 *
-	 * @param repetitions 重复次数
-	 * @param interval    间隔时间
-	 * @param task        任务
-	 * @param onComplete  结束时执行的任务
-	 */
-	public void repeat(int repetitions, long interval, Runnable task, Runnable onComplete) {
-		new BukkitRunnable() {
-			private int index;
+                tasks[index].run();
+                index++;
+            }
+        }.runTaskTimer(getPlugin(), delay, interval);
+    }
 
-			@Override
-			public void run() {
-				index++;
-				if (this.index >= repetitions) {
-					this.cancel();
-					if (onComplete == null) {
-						return;
-					}
+    /**
+     * 间隔一段时间按顺序异步执行列表中的任务
+     *
+     * @param interval 间隔时间
+     * @param tasks    任务列表
+     */
+    public void runAtIntervalAsync(long interval, Runnable... tasks) {
+        runAtIntervalAsync(0L, interval, tasks);
+    }
 
-					onComplete.run();
-					return;
-				}
+    /**
+     * 间隔一段时间按顺序异步执行列表中的任务
+     *
+     * @param delay    延迟时间
+     * @param interval 间隔时间
+     * @param tasks    任务列表
+     */
+    public void runAtIntervalAsync(long delay, long interval, Runnable... tasks) {
+        new BukkitRunnable() {
+            private int index;
 
-				task.run();
-			}
-		}.runTaskTimer(getPlugin(), 0L, interval);
-	}
+            @Override
+            public void run() {
+                if (this.index >= tasks.length) {
+                    this.cancel();
+                    return;
+                }
 
-	/**
-	 * 重复执行一个任务。
-	 *
-	 * @param repetitions 重复次数
-	 * @param interval    间隔时间
-	 * @param task        任务
-	 * @param onComplete  结束时执行的任务
-	 */
-	public void repeatAsync(int repetitions, long interval, Runnable task, Runnable onComplete) {
-		new BukkitRunnable() {
-			private int index;
+                tasks[index].run();
+                index++;
+            }
+        }.runTaskTimerAsynchronously(getPlugin(), delay, interval);
+    }
 
-			@Override
-			public void run() {
-				index++;
-				if (this.index >= repetitions) {
-					this.cancel();
-					if (onComplete == null) {
-						return;
-					}
+    /**
+     * 重复执行一个任务。
+     *
+     * @param repetitions 重复次数
+     * @param interval    间隔时间
+     * @param task        任务
+     * @param onComplete  结束时执行的任务
+     */
+    public void repeat(int repetitions, long interval, Runnable task, Runnable onComplete) {
+        new BukkitRunnable() {
+            private int index;
 
-					onComplete.run();
-					return;
-				}
+            @Override
+            public void run() {
+                index++;
+                if (this.index >= repetitions) {
+                    this.cancel();
+                    if (onComplete == null) {
+                        return;
+                    }
 
-				task.run();
-			}
-		}.runTaskTimerAsynchronously(getPlugin(), 0L, interval);
-	}
+                    onComplete.run();
+                    return;
+                }
 
-	/**
-	 * 在满足某个条件时，重复执行一个任务。
-	 *
-	 * @param interval   重复间隔时间
-	 * @param predicate  条件
-	 * @param task       任务
-	 * @param onComplete 结束时执行的任务
-	 */
-	public void repeatWhile(long interval, Callable<Boolean> predicate, Runnable task, Runnable onComplete) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					if (!predicate.call()) {
-						this.cancel();
-						if (onComplete == null) {
-							return;
-						}
+                task.run();
+            }
+        }.runTaskTimer(getPlugin(), 0L, interval);
+    }
 
-						onComplete.run();
-						return;
-					}
+    /**
+     * 重复执行一个任务。
+     *
+     * @param repetitions 重复次数
+     * @param interval    间隔时间
+     * @param task        任务
+     * @param onComplete  结束时执行的任务
+     */
+    public void repeatAsync(int repetitions, long interval, Runnable task, Runnable onComplete) {
+        new BukkitRunnable() {
+            private int index;
 
-					task.run();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}.runTaskTimer(getPlugin(), 0L, interval);
-	}
+            @Override
+            public void run() {
+                index++;
+                if (this.index >= repetitions) {
+                    this.cancel();
+                    if (onComplete == null) {
+                        return;
+                    }
 
-	/**
-	 * 在满足某个条件时，重复执行一个任务。
-	 *
-	 * @param interval   重复间隔时间
-	 * @param predicate  条件
-	 * @param task       任务
-	 * @param onComplete 结束时执行的任务
-	 */
-	public void repeatWhileAsync(long interval, Callable<Boolean> predicate, Runnable task, Runnable onComplete) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					if (!predicate.call()) {
-						this.cancel();
-						if (onComplete == null) {
-							return;
-						}
+                    onComplete.run();
+                    return;
+                }
 
-						onComplete.run();
-						return;
-					}
+                task.run();
+            }
+        }.runTaskTimerAsynchronously(getPlugin(), 0L, interval);
+    }
 
-					task.run();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}.runTaskTimerAsynchronously(getPlugin(), 0L, interval);
-	}
+    /**
+     * 在满足某个条件时，重复执行一个任务。
+     *
+     * @param interval   重复间隔时间
+     * @param predicate  条件
+     * @param task       任务
+     * @param onComplete 结束时执行的任务
+     */
+    public void repeatWhile(long interval, Callable<Boolean> predicate, Runnable task, Runnable onComplete) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!predicate.call()) {
+                        this.cancel();
+                        if (onComplete == null) {
+                            return;
+                        }
 
-	public interface Task {
-		void start(Runnable onComplete);
-	}
+                        onComplete.run();
+                        return;
+                    }
 
-	public class TaskBuilder {
-		private final Queue<Task> taskList;
+                    task.run();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskTimer(getPlugin(), 0L, interval);
+    }
 
-		public TaskBuilder() {
-			this.taskList = new LinkedList<>();
-		}
+    /**
+     * 在满足某个条件时，重复执行一个任务。
+     *
+     * @param interval   重复间隔时间
+     * @param predicate  条件
+     * @param task       任务
+     * @param onComplete 结束时执行的任务
+     */
+    public void repeatWhileAsync(long interval, Callable<Boolean> predicate, Runnable task, Runnable onComplete) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!predicate.call()) {
+                        this.cancel();
+                        if (onComplete == null) {
+                            return;
+                        }
 
-		public TaskBuilder append(TaskBuilder builder) {
-			this.taskList.addAll(builder.taskList);
-			return this;
-		}
+                        onComplete.run();
+                        return;
+                    }
 
-		public TaskBuilder appendDelay(long delay) {
-			this.taskList.add(onComplete -> SchedulerUtils.this.runLater(delay, onComplete));
-			return this;
-		}
+                    task.run();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskTimerAsynchronously(getPlugin(), 0L, interval);
+    }
 
-		public TaskBuilder appendTask(Runnable task) {
-			this.taskList.add(onComplete ->
-			{
-				task.run();
-				onComplete.run();
-			});
+    public interface Task {
+        void start(Runnable onComplete);
+    }
 
-			return this;
-		}
+    public class TaskBuilder {
+        private final Queue<Task> taskList;
 
-		public TaskBuilder appendTask(Task task) {
-			this.taskList.add(task);
-			return this;
-		}
+        public TaskBuilder() {
+            this.taskList = new LinkedList<>();
+        }
 
-		public TaskBuilder appendDelayedTask(long delay, Runnable task) {
-			this.taskList.add(onComplete -> SchedulerUtils.this.runLater(delay, () ->
-			{
-				task.run();
-				onComplete.run();
-			}));
+        public TaskBuilder append(TaskBuilder builder) {
+            this.taskList.addAll(builder.taskList);
+            return this;
+        }
 
-			return this;
-		}
+        public TaskBuilder appendDelay(long delay) {
+            this.taskList.add(onComplete -> SchedulerUtils.this.runLater(delay, onComplete));
+            return this;
+        }
 
-		public TaskBuilder appendTasks(long delay, long interval, Runnable... tasks) {
-			this.taskList.add(onComplete ->
-			{
-				Runnable[] runnables = Arrays.copyOf(tasks, tasks.length + 1);
-				runnables[runnables.length - 1] = onComplete;
-				SchedulerUtils.this.runAtInterval(delay, interval, runnables);
-			});
+        public TaskBuilder appendTask(Runnable task) {
+            this.taskList.add(onComplete ->
+            {
+                task.run();
+                onComplete.run();
+            });
 
-			return this;
-		}
+            return this;
+        }
 
-		public TaskBuilder appendRepeatingTask(int repetitions, long interval, Runnable task) {
-			this.taskList.add(onComplete -> SchedulerUtils.this.repeat(repetitions, interval, task, onComplete));
-			return this;
-		}
+        public TaskBuilder appendTask(Task task) {
+            this.taskList.add(task);
+            return this;
+        }
 
-		public TaskBuilder appendConditionalRepeatingTask(long interval, Callable<Boolean> predicate, Runnable task) {
-			this.taskList.add(onComplete -> SchedulerUtils.this.repeatWhile(interval, predicate, task, onComplete));
-			return this;
-		}
+        public TaskBuilder appendDelayedTask(long delay, Runnable task) {
+            this.taskList.add(onComplete -> SchedulerUtils.this.runLater(delay, () ->
+            {
+                task.run();
+                onComplete.run();
+            }));
 
-		public TaskBuilder waitFor(Callable<Boolean> predicate) {
-			this.taskList.add(onComplete -> new BukkitRunnable() {
-				@Override
-				public void run() {
-					try {
-						if (!predicate.call()) {
-							return;
-						}
+            return this;
+        }
 
-						this.cancel();
-						onComplete.run();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}.runTaskTimer(getPlugin(), 0L, 1L));
-			return this;
-		}
+        public TaskBuilder appendTasks(long delay, long interval, Runnable... tasks) {
+            this.taskList.add(onComplete ->
+            {
+                Runnable[] runnables = Arrays.copyOf(tasks, tasks.length + 1);
+                runnables[runnables.length - 1] = onComplete;
+                SchedulerUtils.this.runAtInterval(delay, interval, runnables);
+            });
 
-		public void runTasks() {
-			this.startNext();
-		}
+            return this;
+        }
 
-		private void startNext() {
-			Task task = this.taskList.poll();
-			if (task == null) {
-				return;
-			}
+        public TaskBuilder appendRepeatingTask(int repetitions, long interval, Runnable task) {
+            this.taskList.add(onComplete -> SchedulerUtils.this.repeat(repetitions, interval, task, onComplete));
+            return this;
+        }
 
-			task.start(this::startNext);
-		}
-	}
+        public TaskBuilder appendConditionalRepeatingTask(long interval, Callable<Boolean> predicate, Runnable task) {
+            this.taskList.add(onComplete -> SchedulerUtils.this.repeatWhile(interval, predicate, task, onComplete));
+            return this;
+        }
+
+        public TaskBuilder waitFor(Callable<Boolean> predicate) {
+            this.taskList.add(onComplete -> new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (!predicate.call()) {
+                            return;
+                        }
+
+                        this.cancel();
+                        onComplete.run();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.runTaskTimer(getPlugin(), 0L, 1L));
+            return this;
+        }
+
+        public void runTasks() {
+            this.startNext();
+        }
+
+        private void startNext() {
+            Task task = this.taskList.poll();
+            if (task == null) {
+                return;
+            }
+
+            task.start(this::startNext);
+        }
+    }
 }

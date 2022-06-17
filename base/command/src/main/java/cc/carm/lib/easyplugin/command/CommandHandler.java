@@ -1,4 +1,3 @@
-
 package cc.carm.lib.easyplugin.command;
 
 import org.bukkit.command.Command;

@@ -11,82 +11,82 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GUIListener implements Listener {
 
-	GUI currentGUI;
+    GUI currentGUI;
 
-	public GUIListener(GUI gui) {
-		this.currentGUI = gui;
-	}
+    public GUIListener(GUI gui) {
+        this.currentGUI = gui;
+    }
 
-	public GUI getCurrentGUI() {
-		return currentGUI;
-	}
+    public GUI getCurrentGUI() {
+        return currentGUI;
+    }
 
-	@EventHandler
-	public void onInventoryClickEvent(InventoryClickEvent event) {
-		if (!(event.getWhoClicked() instanceof Player)) return;
-		Player player = (Player) event.getWhoClicked();
-		if (!GUI.hasOpenedGUI(player)) return;
-		if (GUI.getOpenedGUI(player) != getCurrentGUI()) return;
+    @EventHandler
+    public void onInventoryClickEvent(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        Player player = (Player) event.getWhoClicked();
+        if (!GUI.hasOpenedGUI(player)) return;
+        if (GUI.getOpenedGUI(player) != getCurrentGUI()) return;
 
-		getCurrentGUI().rawClickListener(event);
+        getCurrentGUI().rawClickListener(event);
 
-		if (event.getSlot() == -999 && getCurrentGUI().cancelOnOuter) {
-			event.setCancelled(true);
-			return;
-		}
+        if (event.getSlot() == -999 && getCurrentGUI().cancelOnOuter) {
+            event.setCancelled(true);
+            return;
+        }
 
-		if (event.getClickedInventory() == null) return;
+        if (event.getClickedInventory() == null) return;
 
-		if (event.getClickedInventory().equals(getCurrentGUI().inv)) {
+        if (event.getClickedInventory().equals(getCurrentGUI().inv)) {
 
-			if (getCurrentGUI().cancelOnTarget) event.setCancelled(true);
+            if (getCurrentGUI().cancelOnTarget) event.setCancelled(true);
 
-			if (event.getSlot() != -999) {
-				GUIItem clickedItem = getCurrentGUI().getItem(event.getSlot());
-				if (clickedItem != null) {
-					if (clickedItem.isActionActive()) {
-						clickedItem.onClick(event.getClick());
-						clickedItem.rawClickAction(event);
-						clickedItem.actions.forEach(action -> action.run(event.getClick(), player));
-					}
-					clickedItem.actionsIgnoreActive.forEach(action -> action.run(event.getClick(), player));
-				}
-			}
+            if (event.getSlot() != -999) {
+                GUIItem clickedItem = getCurrentGUI().getItem(event.getSlot());
+                if (clickedItem != null) {
+                    if (clickedItem.isActionActive()) {
+                        clickedItem.onClick(event.getClick());
+                        clickedItem.rawClickAction(event);
+                        clickedItem.actions.forEach(action -> action.run(event.getClick(), player));
+                    }
+                    clickedItem.actionsIgnoreActive.forEach(action -> action.run(event.getClick(), player));
+                }
+            }
 
-		} else if (event.getClickedInventory().equals(player.getInventory()) && getCurrentGUI().cancelOnSelf) {
-			event.setCancelled(true);
-		}
+        } else if (event.getClickedInventory().equals(player.getInventory()) && getCurrentGUI().cancelOnSelf) {
+            event.setCancelled(true);
+        }
 
-	}
+    }
 
-	@EventHandler
-	public void onDrag(InventoryDragEvent e) {
-		if (!(e.getWhoClicked() instanceof Player)) return;
-		if (e.getInventory().equals(getCurrentGUI().inv)
-				|| e.getInventory().equals(e.getWhoClicked().getInventory())) {
-			getCurrentGUI().onDrag(e);
-		}
-	}
+    @EventHandler
+    public void onDrag(InventoryDragEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) return;
+        if (e.getInventory().equals(getCurrentGUI().inv)
+                || e.getInventory().equals(e.getWhoClicked().getInventory())) {
+            getCurrentGUI().onDrag(e);
+        }
+    }
 
-	@EventHandler
-	public void onInventoryCloseEvent(InventoryCloseEvent event) {
-		if (!(event.getPlayer() instanceof Player)) return;
-		if (!event.getInventory().equals(getCurrentGUI().inv)) return;
+    @EventHandler
+    public void onInventoryCloseEvent(InventoryCloseEvent event) {
+        if (!(event.getPlayer() instanceof Player)) return;
+        if (!event.getInventory().equals(getCurrentGUI().inv)) return;
 
-		close((Player) event.getPlayer());
+        close((Player) event.getPlayer());
 
-	}
+    }
 
-	protected void close(Player p){
-		HandlerList.unregisterAll(this);
-		getCurrentGUI().listener = null;
-		GUI.removeOpenedGUI(p);
-		getCurrentGUI().onClose();
-	}
+    protected void close(Player p) {
+        HandlerList.unregisterAll(this);
+        getCurrentGUI().listener = null;
+        GUI.removeOpenedGUI(p);
+        getCurrentGUI().onClose();
+    }
 
-	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent event) {
-		GUI.removeOpenedGUI(event.getPlayer());
-	}
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        GUI.removeOpenedGUI(event.getPlayer());
+    }
 
 }
