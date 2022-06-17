@@ -9,7 +9,6 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <properties>
         <maven.compiler.source>${project.jdk.version}</maven.compiler.source>
         <maven.compiler.target>${project.jdk.version}</maven.compiler.target>
@@ -17,19 +16,12 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
 
-    <artifactId>easyplugin-placeholderapi</artifactId>
+    <artifactId>easyplugin-storage</artifactId>
     <packaging>jar</packaging>
 
-    <name>EasyPlugin-PlaceholderAPI</name>
+    <name>EasyPlugin-Storage</name>
+    <description>轻松插件存储接口模块，包含存储相关的统一接口。</description>
+    <url>https://github.com/CarmJos/EasyPlugin</url>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-    </dependencies>
 
 </project>

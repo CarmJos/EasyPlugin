@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class ColorParser {
 
-    public static final Pattern HEX_PATTERN = Pattern.compile("&\\(&?#([0-9a-fA-F]{6})\\)");
+    public static final Pattern HEX_PATTERN = Pattern.compile("&\\(&?#([\\da-fA-F]{6})\\)");
 
     public static String parse(String text) {
         return parseBaseColor(parseHexColor(text));
