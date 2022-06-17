@@ -56,7 +56,7 @@ public class GUIItemConfiguration {
         if (this.slots.size() > 1) {
             map.put("slots", this.slots);
         } else if (slots.size() == 1) {
-            map.put("slots", this.slots.get(0));
+            map.put("slot", this.slots.get(0));
         }
         if (!this.actions.isEmpty()) {
             map.put("actions", this.actions.stream().map(GUIActionConfiguration::serialize).collect(Collectors.toList()));
