@@ -9,10 +9,13 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,13 +25,23 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class EasyPlugin extends JavaPlugin {
 
-    protected EasyPluginMessageProvider messageProvider;
+    protected @NotNull EasyPluginMessageProvider messageProvider;
 
     public EasyPlugin() {
         this(EasyPluginMessageProvider.ZH_CN);
     }
 
-    public EasyPlugin(EasyPluginMessageProvider messageProvider) {
+    public EasyPlugin(@NotNull EasyPluginMessageProvider messageProvider) {
+        this.messageProvider = messageProvider;
+    }
+
+    protected EasyPlugin(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
+        this(EasyPluginMessageProvider.ZH_CN, loader, descriptionFile, dataFolder, file);
+    }
+
+    protected EasyPlugin(@NotNull EasyPluginMessageProvider messageProvider,
+                         JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
+        super(loader, descriptionFile, dataFolder, file);
         this.messageProvider = messageProvider;
     }
 
