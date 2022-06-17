@@ -4,15 +4,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface StorageType<K, V> {
+public interface StorageType<K, T, S extends DataStorage<K, T>> {
 
     int getID();
 
     @NotNull List<String> getAlias();
 
-    @NotNull Class<? extends DataStorage<K, V>> getStorageClass();
+    @NotNull Class<? extends S> getStorageClass();
 
-    default @NotNull DataStorage<K, V> createStorage() throws Exception {
+    default @NotNull S createStorage() throws Exception {
         return getStorageClass().newInstance();
     }
 
