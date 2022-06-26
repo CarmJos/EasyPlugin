@@ -38,7 +38,9 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
 
     public abstract void noArgs(CommandSender sender);
 
-    public abstract void unknownCommand(CommandSender sender, String[] args);
+    public void unknownCommand(CommandSender sender, String[] args) {
+        noArgs(sender);
+    }
 
     public abstract void noPermission(CommandSender sender);
 
