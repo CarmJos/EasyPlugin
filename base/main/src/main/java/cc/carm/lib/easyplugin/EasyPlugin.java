@@ -45,8 +45,8 @@ public abstract class EasyPlugin extends JavaPlugin {
         this.messageProvider = messageProvider;
     }
 
-    private SchedulerUtils scheduler;
-    private boolean initialized = false;
+    protected SchedulerUtils scheduler;
+    protected boolean initialized = false;
 
     @Override
     public final void onLoad() {
@@ -79,7 +79,7 @@ public abstract class EasyPlugin extends JavaPlugin {
 
     @Override
     public final void onDisable() {
-        if (!hasOverride("shutdown") || !isInitialized()) return;
+        if (!hasOverride("shutdown") || !this.initialized) return;
         outputInfo();
 
         log(messageProvider.disabling(this));
@@ -101,10 +101,6 @@ public abstract class EasyPlugin extends JavaPlugin {
      */
     public void outputInfo() {
         Optional.ofNullable(JarResourceUtils.readResource(this.getResource("PLUGIN_INFO"))).ifPresent(this::log);
-    }
-
-    public boolean isInitialized() {
-        return initialized;
     }
 
     public boolean isDebugging() {
@@ -149,15 +145,16 @@ public abstract class EasyPlugin extends JavaPlugin {
         if (isDebugging()) print("&8[DEBUG] &r", messages);
     }
 
-    public void callEventSync(Event event) {
-        getScheduler().run(() -> Bukkit.getPluginManager().callEvent(event));
+    public @NotNull <T extends Event> CompletableFuture<T> callSync(T event) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        getScheduler().run(() -> {
+            Bukkit.getPluginManager().callEvent(event);
+            future.complete(event);
+        });
+        return future;
     }
 
-    public void callEventAsync(Event event) {
-        getScheduler().runAsync(() -> Bukkit.getPluginManager().callEvent(event));
-    }
-
-    public @NotNull <T extends Event> CompletableFuture<T> callEventFuture(T event) {
+    public @NotNull <T extends Event> CompletableFuture<T> callAsync(T event) {
         return CompletableFuture.supplyAsync(() -> {
             Bukkit.getPluginManager().callEvent(event);
             return event;
