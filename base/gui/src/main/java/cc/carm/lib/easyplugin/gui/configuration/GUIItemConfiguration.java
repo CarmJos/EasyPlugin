@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class GUIItemConfiguration {
 
     @NotNull Material type;
+    int amount;
     int data;
     @Nullable String name;
     @NotNull List<String> lore;
@@ -23,11 +24,12 @@ public class GUIItemConfiguration {
     @NotNull List<Integer> slots;
     @NotNull List<GUIActionConfiguration> actions;
 
-    public GUIItemConfiguration(@NotNull Material type, int data,
+    public GUIItemConfiguration(@NotNull Material type, int amount, int data,
                                 @Nullable String name, @NotNull List<String> lore,
                                 @NotNull List<GUIActionConfiguration> actions,
                                 @NotNull List<Integer> slots) {
         this.type = type;
+        this.amount = amount;
         this.data = data;
         this.name = name;
         this.lore = lore;
@@ -36,8 +38,7 @@ public class GUIItemConfiguration {
     }
 
     public void setupItems(Player player, GUI gui) {
-        ItemStackFactory icon = new ItemStackFactory(this.type);
-        icon.setDurability(this.data);
+        ItemStackFactory icon = new ItemStackFactory(this.type, this.amount, this.data);
         if (this.name != null) icon.setDisplayName(this.name);
         icon.setLore(MessageUtils.setPlaceholders(player, this.lore));
 
@@ -51,6 +52,7 @@ public class GUIItemConfiguration {
 
         map.put("type", this.type.name());
         if (this.name != null) map.put("name", this.name);
+        if (this.amount != 1) map.put("amount", this.amount);
         if (this.data != 0) map.put("data", this.data);
         if (!this.lore.isEmpty()) map.put("lore", this.lore);
         if (this.slots.size() > 1) {
@@ -70,6 +72,7 @@ public class GUIItemConfiguration {
         String material = Optional.ofNullable(itemSection.getString("type")).orElse("STONE");
         Material type = Optional.ofNullable(Material.matchMaterial(material)).orElse(Material.STONE);
         int data = itemSection.getInt("data", 0);
+        int amount = itemSection.getInt("amount", 1);
         String name = itemSection.getString("name");
         List<String> lore = itemSection.getStringList("lore");
 
@@ -85,10 +88,9 @@ public class GUIItemConfiguration {
         }
 
         return new GUIItemConfiguration(
-                type, data, name, lore, actions,
+                type, amount, data, name, lore, actions,
                 slots.size() > 0 ? slots : Collections.singletonList(slot)
         );
     }
-
 
 }
