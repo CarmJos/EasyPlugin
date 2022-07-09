@@ -13,15 +13,10 @@ public abstract class SubCommand implements NamedExecutor {
     private final String name;
     private final List<String> aliases;
 
-    public SubCommand(String name) {
-        this(name, new String[0]);
-    }
-
     public SubCommand(String name, String... aliases) {
         this.name = name;
         this.aliases = Arrays.asList(aliases);
     }
-
 
     @Override
     public String getName() {
