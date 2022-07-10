@@ -1,7 +1,6 @@
 package cc.carm.lib.easyplugin.command;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +15,7 @@ public interface NamedExecutor {
 
     List<String> getAliases();
 
-    default boolean hasPermission(Permissible permissible) {
+    default boolean hasPermission(CommandSender sender) {
         return true;
     }
 
