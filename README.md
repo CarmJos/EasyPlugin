@@ -27,7 +27,7 @@
 
 ## 内容
 
-项目初创不久，加 * 的仍在开发更新中...
+项目初创不久，加 * 的仍在开发更新中...欢迎各路大佬帮助提供本项目的开发文档~
 
 ### 集合部分 (`/collection`)
 
@@ -49,12 +49,13 @@
   - 随本项目提供了 `FileBasedStorage`、`FolderBasedStorage` 等常用存储抽象方法。
 
 > 以下项目均已独立出单独项目，仅仅是按照包名规则打包到EasyPlugin的子项目中。
-> 如需使用，**强烈建议单独引用对应的项目，以支持完整的Javadoc并获取源码内容！**
+> 
+> 如需使用，**强烈建议自行引用对应的项目**，以支持完整的Javadoc并获取源码内容！
 
 - _Listener_ [`easyplugin-listener`](base/listener) (打包自 [**EasyListener**](https://github.com/CarmJos/EasyListener))
 - _Configuration_ [`easyplugin-conf`](base/conf) (打包自 [**MineConfiguration**](https://github.com/CarmJos/MineConfiguration))
 - _Database_ [`easyplugin-database`](base/database)  (打包自 [**EasySQL**](https://github.com/CarmJos/EasySQL))
-- _Messages_ [`easyplugin-message`](base/message) (打包自 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
+- _Messages*_ [`easyplugin-message`](base/message) (打包自 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
 
 ### 附属部分 (`/extension`)
 
