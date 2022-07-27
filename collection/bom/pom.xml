@@ -73,6 +73,21 @@
                 <artifactId>easyplugin-storage</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>easyplugin-listener</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>easyplugin-database</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>easyplugin-conf</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>

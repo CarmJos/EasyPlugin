@@ -68,6 +68,14 @@
                     <groupId>cc.carm.lib</groupId>
                     <artifactId>easyplugin-vault</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>cc.carm.lib</groupId>
+                    <artifactId>easyplugin-database</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>cc.carm.lib</groupId>
+                    <artifactId>easyplugin-storage</artifactId>
+                </exclusion>
             </exclusions>
 
         </dependency>
