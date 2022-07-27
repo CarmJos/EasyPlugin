@@ -49,7 +49,7 @@ public class AutoPagedGUI extends CommonPagedGUI {
                 setItem(previousPageSlot, new GUIItem(
                         previousPageUI == null ? getDefaultPreviousPage(user) : previousPageUI) {
                     @Override
-                    public void onClick(ClickType type) {
+                    public void onClick(Player clicker, ClickType type) {
                         if (type == ClickType.RIGHT) {
                             goFirstPage();
                         } else {
@@ -68,7 +68,7 @@ public class AutoPagedGUI extends CommonPagedGUI {
                 setItem(nextPageSlot, new GUIItem(
                         nextPageUI == null ? getDefaultNextPage(user) : nextPageUI) {
                     @Override
-                    public void onClick(ClickType type) {
+                    public void onClick(Player clicker, ClickType type) {
                         if (type == ClickType.RIGHT) {
                             goLastPage();
                         } else {

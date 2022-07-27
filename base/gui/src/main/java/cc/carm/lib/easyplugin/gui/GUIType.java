@@ -14,8 +14,8 @@ public enum GUIType {
     SIX_BY_NINE(6, 54),
     CANCEL(0, 0);
 
-    int lines;
-    int size;
+    private final int lines;
+    private final int size;
 
     GUIType(int lines, int size) {
         this.lines = lines;

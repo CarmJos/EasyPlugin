@@ -37,12 +37,24 @@ public class GUIItem {
     }
 
     /**
-     * 玩家点击GUI后执行的代码
+     * 玩家点击该物品后执行的代码
+     * 可以使用 {@link #onClick(Player, ClickType)} 操作点击者
      *
      * @param type 点击的类型
      */
+    @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     public void onClick(ClickType type) {
+    }
 
+    /**
+     * 玩家点击GUI后执行的代码
+     *
+     * @param clicker 点击的玩家
+     * @param type    点击的类型
+     */
+    public void onClick(Player clicker, ClickType type) {
+        this.onClick(type); // Deprecated method support
     }
 
     public void addClickAction(GUIClickAction action) {
@@ -58,7 +70,7 @@ public class GUIItem {
     }
 
     /**
-     * 玩家点击GUI后执行的代码
+     * 自定义点击事件代码 (须自行触发)
      *
      * @param player 点击GUI的玩家
      */

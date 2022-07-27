@@ -45,7 +45,7 @@ public class GUIListener implements Listener {
                 GUIItem clickedItem = getCurrentGUI().getItem(event.getSlot());
                 if (clickedItem != null) {
                     if (clickedItem.isActionActive()) {
-                        clickedItem.onClick(event.getClick());
+                        clickedItem.onClick(player, event.getClick());
                         clickedItem.rawClickAction(event);
                         clickedItem.actions.forEach(action -> action.run(event.getClick(), player));
                     }

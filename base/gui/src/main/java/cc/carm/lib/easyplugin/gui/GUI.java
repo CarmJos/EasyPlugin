@@ -13,10 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class GUI {
@@ -56,9 +53,9 @@ public class GUI {
      */
     boolean cancelOnOuter = true;
 
-    Map<String, Object> flags;
+    protected final Map<String, Object> flags = new LinkedHashMap<>();
 
-    GUIListener listener;
+    protected GUIListener listener;
 
     public GUI(GUIType type, String name) {
         this.type = type;
@@ -131,24 +128,15 @@ public class GUI {
         this.cancelOnOuter = b;
     }
 
-    public void addFlag(String flag, Object obj) {
-        if (this.flags == null) this.flags = new HashMap<>();
-        this.flags.put(flag, obj);
-    }
-
     public Object getFlag(String flag) {
-        if (this.flags == null) return null;
-        else
-            return this.flags.get(flag);
+        return this.flags.get(flag);
     }
 
     public void setFlag(String flag, Object obj) {
-        if (this.flags == null) this.flags = new HashMap<>();
-        this.flags.replace(flag, obj);
+        this.flags.put(flag, obj);
     }
 
     public void removeFlag(String flag) {
-        if (this.flags == null) this.flags = new HashMap<>();
         this.flags.remove(flag);
     }
 
@@ -193,6 +181,13 @@ public class GUI {
     public void onClose() {
     }
 
+    public GUIType getGUIType() {
+        return type;
+    }
+
+    public String getGUIName() {
+        return name;
+    }
 
     public static void setOpenedGUI(Player player, GUI gui) {
         getOpenedGUIs().put(player.getUniqueId(), gui);
