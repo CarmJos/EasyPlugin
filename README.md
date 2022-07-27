@@ -37,11 +37,24 @@
 ### 主要部分 (`/base`)
 
 - Main [`easyplugin-main`](base/main)
+  -  主要接口模块，提供了方便的插件入口类与相关工具类。
 - Command [`easyplugin-command`](base/command)
-- ~~Messages*~~ (已独立项目到 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
-- ~~Configuration~~ (已独立项目到 [**MineConfiguration**](https://github.com/CarmJos/MineConfiguration))
-- ~~Database~~ (已独立项目到 [**EasySQL**](https://github.com/CarmJos/EasySQL))
+  - 指令接口模块，便于快速进行子指令的实现，并提供单独的TabComplete方法。
+  - 随本项目提供了 `SimpleCompleter` 类，用于快速创建补全的内容列表。
 - GUI [`easyplugin-gui`](base/main)
+  - 简单便捷的箱子GUI接口，可以快速实现GUI中不同图标的点击功能。
+  - 随本项目提供了 `AutoPagedGUI` 等翻页GUI抽象类。
+- Storage [`easyplugin-storage`](base/storage)
+  - 抽象存储管理器，便于实现不同的存储类型。 
+  - 随本项目提供了 `FileBasedStorage`、`FolderBasedStorage` 等常用存储抽象方法。
+
+> 以下项目均已独立出单独项目，仅仅是按照包名规则打包到EasyPlugin的子项目中。
+> 如需使用，**强烈建议单独引用对应的项目，以支持完整的Javadoc并获取源码内容！**
+
+- _Listener_ [`easyplugin-listener`](base/listener) (打包自 [**EasyListener**](https://github.com/CarmJos/EasyListener))
+- _Configuration_ [`easyplugin-conf`](base/conf) (打包自 [**MineConfiguration**](https://github.com/CarmJos/MineConfiguration))
+- _Database_ [`easyplugin-database`](base/database)  (打包自 [**EasySQL**](https://github.com/CarmJos/EasySQL))
+- _Messages_ [`easyplugin-message`](base/message) (打包自 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
 
 ### 附属部分 (`/extension`)
 
