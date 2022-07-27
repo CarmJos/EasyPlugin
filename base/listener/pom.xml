@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>easyplugin-parent</artifactId>
+        <groupId>cc.carm.lib</groupId>
+        <version>1.4.13</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <maven.compiler.source>${project.jdk.version}</maven.compiler.source>
+        <maven.compiler.target>${project.jdk.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    </properties>
+    <artifactId>easyplugin-listener</artifactId>
+
+    <name>EasyPlugin-Listener</name>
+    <description>轻松插件监听器接口模块，基于 EasyListener 项目。</description>
+    <url>https://github.com/CarmJos/EasyPlugin</url>
+
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.html</url>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <dependency>
+            <!-- https://github.com/CarmJos/EasyListener -->
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easylistener</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>cc.carm.lib.easylistener</pattern>
+                            <shadedPattern>cc.carm.lib.easyplugin.listener</shadedPattern>
+                        </relocation>
+                    </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                                <exclude>META-INF/*.txt</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

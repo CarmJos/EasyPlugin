@@ -52,6 +52,7 @@
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
                 <artifactId>easyplugin-main</artifactId>
@@ -69,6 +70,12 @@
             </dependency>
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
+                <artifactId>easyplugin-storage</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>easyplugin-papi</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
@@ -77,6 +84,13 @@
                 <artifactId>easyplugin-vault</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>easyplugin-githubchecker</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
