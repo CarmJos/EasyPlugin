@@ -145,6 +145,13 @@ public abstract class EasyPlugin extends JavaPlugin {
         if (isDebugging()) print("&8[DEBUG] &r", messages);
     }
 
+    /**
+     * 在主线程唤起一个事件，并支持获取事件的结果。
+     *
+     * @param event 同步事件 (isAsync=false)
+     * @param <T>   事件类型
+     * @return CompletableFuture
+     */
     public @NotNull <T extends Event> CompletableFuture<T> callSync(T event) {
         CompletableFuture<T> future = new CompletableFuture<>();
         getScheduler().run(() -> {
@@ -154,11 +161,24 @@ public abstract class EasyPlugin extends JavaPlugin {
         return future;
     }
 
+    /**
+     * 在异步线程中唤起一个事件，并支持获取事件的结果。
+     *
+     * @param event 异步事件 (isAsync=true)
+     * @param <T>   事件类型
+     * @return CompletableFuture
+     */
     public @NotNull <T extends Event> CompletableFuture<T> callAsync(T event) {
-        return CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        getScheduler().runAsync(() -> {
             Bukkit.getPluginManager().callEvent(event);
-            return event;
+            future.complete(event);
         });
+        return future;
+    }
+
+    protected void setMessageProvider(@NotNull EasyPluginMessageProvider provider) {
+        this.messageProvider = provider;
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
