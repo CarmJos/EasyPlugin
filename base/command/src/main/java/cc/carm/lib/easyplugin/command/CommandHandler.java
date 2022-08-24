@@ -1,6 +1,5 @@
 package cc.carm.lib.easyplugin.command;
 
-import jdk.internal.foreign.CABI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
