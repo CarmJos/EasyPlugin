@@ -38,10 +38,10 @@ public abstract class SubCommand<C extends CommandHandler> implements NamedExecu
         return this.aliases;
     }
 
-    public abstract Void execute(JavaPlugin plugin, CommandSender sender, String[] args);
+    public abstract Void execute(JavaPlugin plugin, CommandSender sender, String[] args) throws Exception;
 
     public List<String> tabComplete(JavaPlugin plugin, CommandSender sender, String[] args) {
         return Collections.emptyList();
     }
-    
+
 }

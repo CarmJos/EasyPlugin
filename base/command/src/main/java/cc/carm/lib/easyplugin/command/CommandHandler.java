@@ -1,5 +1,6 @@
 package cc.carm.lib.easyplugin.command;
 
+import jdk.internal.foreign.CABI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -44,6 +45,11 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     }
 
     public abstract Void noPermission(CommandSender sender);
+
+    public Void onException(CommandSender sender, SubCommand<?> cmd, Exception ex) {
+        sender.sendMessage("Error occurred when executing " + cmd.getName() + ": " + ex.getLocalizedMessage());
+        return null;
+    }
 
     @Override
     public @NotNull List<String> getAliases() {
@@ -91,8 +97,10 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
             } else {
                 try {
                     sub.execute(this.plugin, sender, this.shortenArgs(args));
-                } catch (ArrayIndexOutOfBoundsException var9) {
+                } catch (ArrayIndexOutOfBoundsException ex) {
                     this.unknownCommand(sender, args);
+                } catch (Exception ex) {
+                    this.onException(sender, sub, ex);
                 }
             }
 
