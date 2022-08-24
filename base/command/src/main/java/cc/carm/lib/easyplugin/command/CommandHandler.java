@@ -11,13 +11,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("UnusedReturnValue")
 public abstract class CommandHandler implements TabExecutor, NamedExecutor {
 
     protected final @NotNull JavaPlugin plugin;
     protected final @NotNull String cmd;
     protected final @NotNull List<String> aliases;
 
-    protected final @NotNull Map<String, SubCommand> registeredCommands = new HashMap<>();
+    protected final @NotNull Map<String, SubCommand<?>> registeredCommands = new HashMap<>();
     protected final @NotNull Map<String, CommandHandler> registeredHandlers = new HashMap<>();
 
     protected final @NotNull Map<String, String> aliasesMap = new HashMap<>();
@@ -36,13 +37,13 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         this.aliases = Arrays.asList(aliases);
     }
 
-    public abstract void noArgs(CommandSender sender);
+    public abstract Void noArgs(CommandSender sender);
 
-    public void unknownCommand(CommandSender sender, String[] args) {
-        noArgs(sender);
+    public Void unknownCommand(CommandSender sender, String[] args) {
+        return noArgs(sender);
     }
 
-    public abstract void noPermission(CommandSender sender);
+    public abstract Void noPermission(CommandSender sender);
 
     @Override
     public @NotNull List<String> getAliases() {
@@ -54,7 +55,7 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         return this.cmd;
     }
 
-    public void registerSubCommand(SubCommand command) {
+    public void registerSubCommand(SubCommand<?> command) {
         String name = command.getName().toLowerCase();
         this.registeredCommands.put(name, command);
         command.getAliases().forEach(alias -> this.aliasesMap.put(alias.toLowerCase(), name));
@@ -82,14 +83,14 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
                 }
             }
 
-            SubCommand subCommand = getSubCommand(input);
-            if (subCommand == null) {
+            SubCommand<?> sub = getSubCommand(input);
+            if (sub == null) {
                 this.unknownCommand(sender, args);
-            } else if (!subCommand.hasPermission(sender)) {
+            } else if (!sub.hasPermission(sender)) {
                 this.noPermission(sender);
             } else {
                 try {
-                    subCommand.execute(this.plugin, sender, this.shortenArgs(args));
+                    sub.execute(this.plugin, sender, this.shortenArgs(args));
                 } catch (ArrayIndexOutOfBoundsException var9) {
                     this.unknownCommand(sender, args);
                 }
@@ -117,9 +118,9 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
                 return handler.onTabComplete(sender, command, alias, this.shortenArgs(args));
             }
 
-            SubCommand subCommand = getSubCommand(input);
-            if (subCommand != null && subCommand.hasPermission(sender)) {
-                return subCommand.tabComplete(this.plugin, sender, this.shortenArgs(args));
+            SubCommand<?> sub = getSubCommand(input);
+            if (sub != null && sub.hasPermission(sender)) {
+                return sub.tabComplete(this.plugin, sender, this.shortenArgs(args));
             }
 
             return Collections.emptyList();
@@ -144,8 +145,8 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         else return this.registeredHandlers.get(nameFromAlias);
     }
 
-    protected @Nullable SubCommand getSubCommand(@NotNull String name) {
-        SubCommand fromName = this.registeredCommands.get(name);
+    protected @Nullable SubCommand<?> getSubCommand(@NotNull String name) {
+        SubCommand<?> fromName = this.registeredCommands.get(name);
         if (fromName != null) return fromName;
 
         String nameFromAlias = this.aliasesMap.get(name);
