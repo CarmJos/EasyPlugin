@@ -22,29 +22,29 @@ public class EasyCooldown<P, K> {
     protected final NumberFormat numberFormatter;
 
     protected final @NotNull Map<K, Long> cooldown = new HashMap<>();
-    protected final @NotNull Function<P, K> provider;
+    protected final @NotNull Function<P, K> providerToKey;
 
     protected long defaultDuration;
 
-    public EasyCooldown(@NotNull Function<P, K> provider) {
-        this(defaultFormatter(), provider, 1000L);
+    public EasyCooldown(@NotNull Function<P, K> providerToKey) {
+        this(defaultFormatter(), providerToKey, 1000L);
     }
 
     public EasyCooldown(@NotNull NumberFormat numberFormatter,
-                        @NotNull Function<P, K> provider) {
-        this(numberFormatter, provider, 1000L);
+                        @NotNull Function<P, K> providerToKey) {
+        this(numberFormatter, providerToKey, 1000L);
     }
 
     public EasyCooldown(@NotNull NumberFormat numberFormatter,
-                        @NotNull Function<P, K> provider,
+                        @NotNull Function<P, K> providerToKey,
                         long defaultDuration) {
         this.numberFormatter = numberFormatter;
-        this.provider = provider;
+        this.providerToKey = providerToKey;
         this.defaultDuration = defaultDuration;
     }
 
     public long getCooldown(@NotNull P provider) {
-        Long time = this.cooldown.get(this.provider.apply(provider));
+        Long time = this.cooldown.get(this.providerToKey.apply(provider));
         if (time == null || time < 0) return 0;
 
         long duration = getDuration(provider);
@@ -59,7 +59,15 @@ public class EasyCooldown<P, K> {
     }
 
     public void updateTime(@NotNull P provider) {
-        this.cooldown.put(this.provider.apply(provider), System.currentTimeMillis());
+        this.cooldown.put(this.providerToKey.apply(provider), System.currentTimeMillis());
+    }
+
+    public void clear(@NotNull P provider) {
+        clearCooldown(this.providerToKey.apply(provider));
+    }
+
+    public void clearCooldown(@NotNull K key) {
+        this.cooldown.remove(key);
     }
 
     public boolean isCoolingDown(@NotNull P provider) {
