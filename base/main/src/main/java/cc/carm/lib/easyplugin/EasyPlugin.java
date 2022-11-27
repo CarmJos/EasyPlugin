@@ -149,7 +149,8 @@ public abstract class EasyPlugin extends JavaPlugin {
     /**
      * 在主线程执行操作，并支持获取其结果。
      *
-     * @param <T> 结果类型
+     * @param <T>    结果类型
+     * @param action 需要执行的内容
      * @return CompletableFuture
      */
     public @NotNull <T> CompletableFuture<T> supplySync(@NotNull Supplier<T> action) {
@@ -161,7 +162,8 @@ public abstract class EasyPlugin extends JavaPlugin {
     /**
      * 在异步线程中执行一个操作，并获取操作的结果。
      *
-     * @param <T> 事件类型
+     * @param <T>    事件类型
+     * @param action 需要执行的内容
      * @return CompletableFuture
      */
     public @NotNull <T> CompletableFuture<T> supplyAsync(@NotNull Supplier<T> action) {
