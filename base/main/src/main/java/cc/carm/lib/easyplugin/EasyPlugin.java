@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public abstract class EasyPlugin extends JavaPlugin {
 
@@ -146,6 +147,30 @@ public abstract class EasyPlugin extends JavaPlugin {
     }
 
     /**
+     * 在主线程执行操作，并支持获取其结果。
+     *
+     * @param <T> 结果类型
+     * @return CompletableFuture
+     */
+    public @NotNull <T> CompletableFuture<T> supplySync(@NotNull Supplier<T> action) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        getScheduler().run(() -> future.complete(action.get()));
+        return future;
+    }
+
+    /**
+     * 在异步线程中执行一个操作，并获取操作的结果。
+     *
+     * @param <T> 事件类型
+     * @return CompletableFuture
+     */
+    public @NotNull <T> CompletableFuture<T> supplyAsync(@NotNull Supplier<T> action) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        getScheduler().runAsync(() -> future.complete(action.get()));
+        return future;
+    }
+
+    /**
      * 在主线程唤起一个事件，并支持获取事件的结果。
      *
      * @param event 同步事件 (isAsync=false)
@@ -153,12 +178,10 @@ public abstract class EasyPlugin extends JavaPlugin {
      * @return CompletableFuture
      */
     public @NotNull <T extends Event> CompletableFuture<T> callSync(T event) {
-        CompletableFuture<T> future = new CompletableFuture<>();
-        getScheduler().run(() -> {
+        return supplySync(() -> {
             Bukkit.getPluginManager().callEvent(event);
-            future.complete(event);
+            return event;
         });
-        return future;
     }
 
     /**
@@ -169,12 +192,10 @@ public abstract class EasyPlugin extends JavaPlugin {
      * @return CompletableFuture
      */
     public @NotNull <T extends Event> CompletableFuture<T> callAsync(T event) {
-        CompletableFuture<T> future = new CompletableFuture<>();
-        getScheduler().runAsync(() -> {
+        return supplyAsync(() -> {
             Bukkit.getPluginManager().callEvent(event);
-            future.complete(event);
+            return event;
         });
-        return future;
     }
 
     protected void setMessageProvider(@NotNull EasyPluginMessageProvider provider) {
