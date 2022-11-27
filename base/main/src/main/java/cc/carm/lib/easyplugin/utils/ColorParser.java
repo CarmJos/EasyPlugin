@@ -99,20 +99,19 @@ public class ColorParser {
         String[] characters = text.split("");
         int step = characters.length; // 变换次数
 
-        int[] directions = new int[]{
-                startColor.getRed() < endColor.getRed() ? 1 : -1,
-                startColor.getGreen() < endColor.getGreen() ? 1 : -1,
-                startColor.getBlue() < endColor.getBlue() ? 1 : -1
-        }; // 决定每种颜色变换的方向
+        // 决定每种颜色变换的方向
+        int rDirection = startColor.getRed() < endColor.getRed() ? 1 : -1;
+        int gDirection = startColor.getGreen() < endColor.getGreen() ? 1 : -1;
+        int bDirection = startColor.getBlue() < endColor.getBlue() ? 1 : -1;
 
         int rStep = Math.abs(startColor.getRed() - endColor.getRed()) / (step - 1);
         int gStep = Math.abs(startColor.getGreen() - endColor.getGreen()) / (step - 1);
         int bStep = Math.abs(startColor.getBlue() - endColor.getBlue()) / (step - 1);
 
         String[] hexes = IntStream.range(0, step).mapToObj(i -> colorToHex(
-                startColor.getRed() + rStep * i * directions[0],
-                startColor.getGreen() + gStep * i * directions[1],
-                startColor.getBlue() + bStep * i * directions[2]
+                startColor.getRed() + rStep * i * rDirection,
+                startColor.getGreen() + gStep * i * gDirection,
+                startColor.getBlue() + bStep * i * bDirection
         )).toArray(String[]::new);
 
         return IntStream.range(0, characters.length)
