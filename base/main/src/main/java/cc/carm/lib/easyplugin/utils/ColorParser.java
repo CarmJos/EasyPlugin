@@ -25,13 +25,13 @@ public class ColorParser {
     public static final Pattern GRADIENT_PATTERN = Pattern.compile("&<&?#([\\da-fA-F]{6})>");
 
     public static String parse(String text) {
-        return parseBaseColor(parseHexColor(text));
+        return parseBaseColor(parseHexColor(parseGradientColor(text)));
     }
 
     public static String[] parse(String... texts) {
         return parse(Arrays.asList(texts)).toArray(new String[0]);
     }
-    
+
     public static List<String> parse(List<String> texts) {
         return texts.stream().map(ColorParser::parse).collect(Collectors.toList());
     }
