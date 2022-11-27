@@ -31,15 +31,28 @@ public class ColorParser {
     public static String[] parse(String... texts) {
         return parse(Arrays.asList(texts)).toArray(new String[0]);
     }
-
+    
     public static List<String> parse(List<String> texts) {
         return texts.stream().map(ColorParser::parse).collect(Collectors.toList());
     }
 
+    /**
+     * 解析消息中的基本颜色代码格式 {@code &+颜色代码 }，如 {@literal &c} 、{@literal &a}
+     *
+     * @param text 消息内容
+     * @return RGB处理后的消息
+     * @see net.md_5.bungee.api.ChatColor
+     */
     public static String parseBaseColor(final String text) {
         return text.replaceAll("&", "§").replace("§§", "&");
     }
 
+    /**
+     * 解析消息中的RGB颜色代码(版本需要≥1.14) 格式 {@code &(#XXXXXX) }，如 {@literal &(#aaaaaa)}
+     *
+     * @param text 消息内容
+     * @return RGB处理后的消息
+     */
     public static String parseHexColor(String text) {
         Matcher matcher = HEX_PATTERN.matcher(text);
         while (matcher.find()) {
@@ -49,6 +62,12 @@ public class ColorParser {
         return text;
     }
 
+    /**
+     * 对一条消息进行RGB渐变处理(版本需要≥1.14)，格式 {@code &<#XXXXXX>FOOBAR&<#XXXXXX> }。
+     *
+     * @param text 消息内容
+     * @return RGB渐变处理后的消息
+     */
     public static String parseGradientColor(String text) {
         List<String> colors = new ArrayList<>();
 
