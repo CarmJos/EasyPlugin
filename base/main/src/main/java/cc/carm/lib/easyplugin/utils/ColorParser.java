@@ -25,15 +25,46 @@ public class ColorParser {
     public static final Pattern COLOR_PATTERN = Pattern.compile("([&§][0-9a-fA-FrRxX])+"); // 会影响颜色的代码
     public static final Pattern FORMAT_PATTERN = Pattern.compile("([&§][0-9a-fA-Fk-oK-OrRxX])+"); // MC可用的格式化代码
 
-    public static String parse(String text) {
+    /**
+     * 清除一条消息中的全部颜色代码 (包括RGB颜色代码与渐变颜色代码)
+     *
+     * @param text 源消息内容
+     * @return 清理颜色后的消息
+     */
+    public static @NotNull String clear(@NotNull String text) {
+        text = HEX_PATTERN.matcher(text).replaceAll("");
+        text = GRADIENT_PATTERN.matcher(text).replaceAll("");
+        text = COLOR_PATTERN.matcher(text).replaceAll("");
+        return text;
+    }
+
+    /**
+     * 对一条消息进行颜色解析，包括普通颜色代码、RGB颜色代码与RBG渐变代码。
+     *
+     * @param text 源消息内容
+     * @return 解析后的消息
+     */
+    public static @NotNull String parse(@NotNull String text) {
         return parseBaseColor(parseGradientColor(parseHexColor(text)));
     }
 
-    public static String[] parse(String... texts) {
+    /**
+     * 对多条消息进行颜色解析，包括普通颜色代码、RGB颜色代码与RBG渐变代码。
+     *
+     * @param texts 源消息内容
+     * @return 解析后的消息
+     */
+    public static @NotNull String[] parse(@NotNull String... texts) {
         return parse(Arrays.asList(texts)).toArray(new String[0]);
     }
 
-    public static List<String> parse(List<String> texts) {
+    /**
+     * 对多条消息进行颜色解析，包括普通颜色代码、RGB颜色代码与RBG渐变代码。
+     *
+     * @param texts 源消息内容
+     * @return 解析后的消息
+     */
+    public static @NotNull List<String> parse(@NotNull Collection<String> texts) {
         return texts.stream().map(ColorParser::parse).collect(Collectors.toList());
     }
 

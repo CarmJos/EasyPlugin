@@ -4,10 +4,9 @@ import org.junit.Test;
 import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 
-import static cc.carm.lib.easyplugin.utils.ColorParser.parse;
-import static cc.carm.lib.easyplugin.utils.ColorParser.parseGradientColor;
+import static cc.carm.lib.easyplugin.utils.ColorParser.*;
 
-public class GradientTest {
+public class ColorTest {
 
 
     @Test
@@ -20,6 +19,7 @@ public class GradientTest {
         System.out.println(parse("&<#AAAAAA>&l我&r真&(#666666)的&<#BBBBBB>&o爱死&<#111111>你&<#FFFFFF>了&r！"));
         System.out.println(parse("&r正常的颜色理应&c&l不受影响&r。"));
 
+        System.out.println(clear("&f测试&<#AAAAAA>清理颜色代码&<#111111> &&这样应该&(#666666)不被影响 &f。"));
     }
 
     @Test
