@@ -4,9 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -23,9 +22,11 @@ public class ColorParser {
 
     public static final Pattern HEX_PATTERN = Pattern.compile("&\\(&?#([\\da-fA-F]{6})\\)");
     public static final Pattern GRADIENT_PATTERN = Pattern.compile("&<&?#([\\da-fA-F]{6})>");
+    public static final Pattern COLOR_PATTERN = Pattern.compile("([&§][0-9a-fA-FrRxX])+"); // 会影响颜色的代码
+    public static final Pattern FORMAT_PATTERN = Pattern.compile("([&§][0-9a-fA-Fk-oK-OrRxX])+"); // MC可用的格式化代码
 
     public static String parse(String text) {
-        return parseBaseColor(parseHexColor(parseGradientColor(text)));
+        return parseBaseColor(parseGradientColor(parseHexColor(text)));
     }
 
     public static String[] parse(String... texts) {
@@ -68,7 +69,7 @@ public class ColorParser {
      * @param text 消息内容
      * @return RGB渐变处理后的消息
      */
-    public static String parseGradientColor(String text) {
+    public static @NotNull String parseGradientColor(@NotNull String text) {
         List<String> colors = new ArrayList<>();
 
         Matcher matcher = ColorParser.GRADIENT_PATTERN.matcher(text);
@@ -87,14 +88,29 @@ public class ColorParser {
         return builder.toString();
     }
 
-    public static String gradientText(@NotNull String text, @Nullable String startHex, @Nullable String endHex) {
-        if (startHex == null || endHex == null) return gradientText(text, (Color) null, null);
-        return gradientText(text, Color.decode("0x" + startHex), Color.decode("0x" + endHex));
-    }
+    public static @NotNull String gradientText(@NotNull String text,
+                                               @Nullable Color startColor, @Nullable Color endColor) {
+        Objects.requireNonNull(text, "Text to be gradient should not be null!");
+        if (startColor == null || endColor == null || text.isEmpty()) {
+            // 起始颜色有任一为空，则不进行渐变上色。
+            // 若有起始颜色，则代表其跟在某个渐变之后，应当添加"&r"阻断前面的渐变。
+            return (startColor != null ? "&r" : "") + text;
+        }
 
-    public static String gradientText(@NotNull String text, @Nullable Color startColor, @Nullable Color endColor) {
-        if (startColor == null || endColor == null || text.isEmpty()) return text; // 有任一为空，则不进行渐变上色
-        if (text.length() == 1) return buildHexColor(colorToHex(startColor)) + text;// 只有一个字符，无需渐变
+        // 用于记录消息中特殊格式的位置
+        // 在渐变中，允许使用格式字符与颜色字符来改变其中某个字的颜色/格式，以支持更多形式内容。
+        LinkedHashMap<Integer, String> extraFormats = new LinkedHashMap<>();
+        Matcher matcher = ColorParser.FORMAT_PATTERN.matcher(text);
+        while (matcher.find()) {
+            extraFormats.put(matcher.start(), matcher.group());
+            text = matcher.replaceFirst("");
+            matcher.reset(text);
+        }
+
+        if (text.length() == 1) {
+            // 当只有一个实际字符时，无需进行渐变计算，直接返回 中间颜色+起始格式(如果有)+消息 即可。
+            return colorText(text, extraFormats.get(0), buildHexColor(mediumHex(startColor, endColor)));
+        }
 
         String[] characters = text.split("");
         int step = characters.length; // 变换次数
@@ -104,6 +120,7 @@ public class ColorParser {
         int gDirection = startColor.getGreen() < endColor.getGreen() ? 1 : -1;
         int bDirection = startColor.getBlue() < endColor.getBlue() ? 1 : -1;
 
+        // 决定每种颜色每次变换的度
         int rStep = Math.abs(startColor.getRed() - endColor.getRed()) / (step - 1);
         int gStep = Math.abs(startColor.getGreen() - endColor.getGreen()) / (step - 1);
         int bStep = Math.abs(startColor.getBlue() - endColor.getBlue()) / (step - 1);
@@ -115,8 +132,32 @@ public class ColorParser {
         )).toArray(String[]::new);
 
         return IntStream.range(0, characters.length)
-                .mapToObj(i -> buildHexColor(hexes[i]) + characters[i])
+                .mapToObj(i -> colorText(characters[i], extraFormats.get(i), buildHexColor(hexes[i])))
                 .collect(Collectors.joining());
+    }
+
+    protected static String gradientText(@NotNull String text, @Nullable String startHex, @Nullable String endHex) {
+        return gradientText(text,
+                startHex == null ? null : Color.decode("0x" + startHex),
+                endHex == null ? null : Color.decode("0x" + endHex)
+        );
+    }
+
+    private static String mediumHex(@NotNull Color start, @NotNull Color end) {
+        return colorToHex(
+                Math.abs(start.getRed() - end.getRed()) / 2,
+                Math.abs(start.getGreen() - end.getGreen()) / 2,
+                Math.abs(start.getBlue() - end.getBlue()) / 2
+        );
+    }
+
+    private static String colorText(String message, @Nullable String format, @Nullable String color) {
+        if (format != null && COLOR_PATTERN.matcher(format).find()) {
+            // format中存在影响颜色的内容，则当前消息的颜色会被覆盖。
+            // 为了减少最终消息的长度，故直接返回键入的FORMAT和对应消息的内容。
+            return format + message;
+        }
+        return (color == null ? "" : color) + (format == null ? "" : parseBaseColor(format)) + message;
     }
 
     protected static String colorToHex(Color color) {
