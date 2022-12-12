@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easyplugin-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>1.4.17</version>
+        <version>1.4.18</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -22,7 +22,7 @@
     <packaging>jar</packaging>
 
     <name>EasyPlugin-Main</name>
-    <description>轻松插件主要接口模块，包含方便的插件入口类与相关工具类。</description>
+    <description>轻松插件主要接口模块，包含便捷的插件入口类与相关工具类。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 
     <developers>
@@ -52,6 +52,13 @@
     </ciManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>easyplugin-utils</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>me.clip</groupId>

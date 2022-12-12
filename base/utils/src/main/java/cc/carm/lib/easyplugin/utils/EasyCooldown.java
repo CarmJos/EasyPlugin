@@ -1,12 +1,10 @@
 package cc.carm.lib.easyplugin.utils;
 
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -82,7 +80,7 @@ public class EasyCooldown<P, K> {
         return numberFormatter.format((double) cooldownMillis / 1000D);
     }
 
-    public static NumberFormat createFormatter(Consumer<NumberFormat> consumer) {
+    public static NumberFormat createFormatter(@NotNull Consumer<NumberFormat> consumer) {
         NumberFormat format = NumberFormat.getInstance();
         consumer.accept(format);
         return format;
@@ -90,15 +88,6 @@ public class EasyCooldown<P, K> {
 
     public static NumberFormat defaultFormatter() {
         return createFormatter((f) -> f.setMaximumFractionDigits(2));
-    }
-
-    public static EasyCooldown<Player, UUID> playerCooldown(Function<Player, Long> durationProvider) {
-        return new EasyCooldown<Player, UUID>(Player::getUniqueId) {
-            @Override
-            public long getDuration(@NotNull Player provider) {
-                return durationProvider.apply(provider);
-            }
-        };
     }
 
 }

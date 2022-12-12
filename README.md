@@ -36,8 +36,14 @@
 
 ### 主要部分 (`/base`)
 
+- Utils  [`easyplugin-utils`](base/utils)
+  - 通用工具类模块，该模块中的内容支持在Bungee、Bukkit使用。
+  - 本模块提供 
+    - `ColorParser` 支持RGB颜色与RGB渐变色的颜色解析器。
+    - `EasyCooldown` 快速创造一个冷却时间的管理器。
+    - `JarResourceUtils` 快速读取Jar包内容的工具类。
 - Main [`easyplugin-main`](base/main)
-  -  主要接口模块，提供了方便的插件入口类与相关工具类。
+  - 主要接口模块，提供了方便的插件入口类与相关工具类。
 - Command [`easyplugin-command`](base/command)
   - 指令接口模块，便于快速进行子指令的实现，并提供单独的TabComplete方法。
   - 随本项目提供了 `SimpleCompleter` 类，用于快速创建补全的内容列表。

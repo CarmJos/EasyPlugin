@@ -15,11 +15,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
-    <artifactId>easyplugin-command</artifactId>
-    <packaging>jar</packaging>
 
-    <name>EasyPlugin-Command</name>
-    <description>轻松插件指令接口模块，方便快捷的编写子指令。</description>
+    <artifactId>easyplugin-utils</artifactId>
+
+    <name>EasyPlugin-Utils</name>
+    <description>轻松插件工具类模块，该模块中的内容支持在Bungee、Bukkit使用。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 
     <developers>

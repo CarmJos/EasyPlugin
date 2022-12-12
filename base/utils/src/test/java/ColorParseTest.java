@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 
 import static cc.carm.lib.easyplugin.utils.ColorParser.*;
 
-public class ColorTest {
+public class ColorParseTest {
 
 
     @Test
