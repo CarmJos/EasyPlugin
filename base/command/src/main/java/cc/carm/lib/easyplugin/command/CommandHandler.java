@@ -74,36 +74,42 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!this.hasPermission(sender)) {
+            noPermission(sender);
+            return true;
+        }
+
         if (args.length == 0) {
             this.noArgs(sender);
-        } else {
-            String input = args[0].toLowerCase();
+            return true;
+        }
 
-            CommandHandler handler = getHandler(input);
-            if (handler != null) {
-                if (!handler.hasPermission(sender)) {
-                    this.noPermission(sender);
-                } else {
-                    handler.onCommand(sender, command, label, this.shortenArgs(args));
-                }
-            }
+        String input = args[0].toLowerCase();
 
-            SubCommand<?> sub = getSubCommand(input);
-            if (sub == null) {
-                this.unknownCommand(sender, args);
-            } else if (!sub.hasPermission(sender)) {
+        CommandHandler handler = getHandler(input);
+        if (handler != null) {
+            if (!handler.hasPermission(sender)) {
                 this.noPermission(sender);
             } else {
-                try {
-                    sub.execute(this.plugin, sender, this.shortenArgs(args));
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    this.unknownCommand(sender, args);
-                } catch (Exception ex) {
-                    this.onException(sender, sub, ex);
-                }
+                handler.onCommand(sender, command, label, this.shortenArgs(args));
             }
-
+            return true;
         }
+
+        SubCommand<?> sub = getSubCommand(input);
+        if (sub == null) {
+            this.unknownCommand(sender, args);
+        } else if (!sub.hasPermission(sender)) {
+            this.noPermission(sender);
+        } else {
+            try {
+                sub.execute(this.plugin, sender, this.shortenArgs(args));
+            } catch (Exception ex) {
+                this.onException(sender, sub, ex);
+                ex.printStackTrace();
+            }
+        }
+
         return true;
     }
 
