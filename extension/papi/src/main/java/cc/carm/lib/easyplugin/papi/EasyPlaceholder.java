@@ -9,8 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class EasyPlaceholder extends PlaceholderExpansion {
 
@@ -108,12 +110,58 @@ public class EasyPlaceholder extends PlaceholderExpansion {
      * 处理变量并返回对应内容。
      *
      * @param identifier 该变量的标识符
-     * @param handler    该组变量的处理器，返回值将会被转换为字符串。
+     * @param handler    该变量的处理器，返回值将会被转换为字符串。
      * @param aliases    该变量的别称
      * @return {@link  EasyPlaceholder}
      */
-    public final EasyPlaceholder handle(String identifier, @NotNull PlaceholderHandler handler, @NotNull String... aliases) {
+    public final EasyPlaceholder handle(@NotNull String identifier, @NotNull PlaceholderHandler handler,
+                                        @NotNull String... aliases) {
         this.rootExpansion.handle(identifier, handler, aliases);
+        return this;
+    }
+
+    /**
+     * 处理变量并返回对应内容。
+     *
+     * @param identifier     该变量的标识符
+     * @param handler        该变量的处理器，返回值将会被转换为字符串。
+     * @param paramsConsumer 用于提供该变量的可用参数
+     * @param aliases        该变量的别称
+     * @return {@link  EasyPlaceholder}
+     */
+    public final EasyPlaceholder handle(@NotNull String identifier, @NotNull PlaceholderHandler handler,
+                                        @NotNull Consumer<ArrayList<String>> paramsConsumer, @NotNull String... aliases) {
+        this.rootExpansion.handle(identifier, handler, paramsConsumer, aliases);
+        return this;
+    }
+
+    /**
+     * 处理变量并返回对应内容。
+     *
+     * @param identifier      该变量的标识符
+     * @param handler         该变量的处理器，返回值将会被转换为字符串。
+     * @param availableParams 该变量的可用参数
+     * @param aliases         该变量的别称
+     * @return {@link  EasyPlaceholder}
+     */
+    public final EasyPlaceholder handle(@NotNull String identifier, @NotNull PlaceholderHandler handler,
+                                        @NotNull List<String> availableParams, @NotNull String... aliases) {
+        this.rootExpansion.handle(identifier, handler, availableParams, aliases);
+        return this;
+    }
+
+    /**
+     * 处理变量并返回对应内容。
+     *
+     * @param identifier      该变量的标识符
+     * @param handler         该变量的处理器，返回值将会被转换为字符串。
+     * @param availableParams 该变量的可用参数
+     * @param aliases         该变量的别称
+     * @return {@link  EasyPlaceholder}
+     */
+    public final EasyPlaceholder handle(String identifier, @NotNull PlaceholderHandler handler,
+                                        @NotNull Supplier<List<String>> availableParams, @NotNull String... aliases) {
+        this.rootExpansion.handle(identifier, handler, availableParams, aliases);
         return this;
     }
 
@@ -121,7 +169,7 @@ public class EasyPlaceholder extends PlaceholderExpansion {
      * 处理一组变量。
      *
      * @param section  该组变量的标识符
-     * @param consumer 该组变量的处理器
+     * @param consumer 该组变量的处理器操作方法
      *                 <br> 在其中可调用 {@link SectionExpansion#handle(String, PlaceholderHandler, String...)} 方法处理子变量,
      *                 <br> 或者调用 {@link SectionExpansion#handleSection(String, Consumer, String...)} 方法处理下一层组变量
      * @param aliases  该变量的别称

@@ -61,11 +61,26 @@ public class SectionExpansion implements EasyExpansion {
         placeholder.getAliases().forEach(alias -> this.aliasesMap.put(alias.toLowerCase(), name));
     }
 
+    /**
+     * 处理变量并返回对应内容。
+     *
+     * @param identifier 该变量的标识符
+     * @param handler    该变量的处理器，返回值将会被转换为字符串。
+     * @param aliases    该变量的别称
+     */
     public final void handle(@NotNull String identifier, @NotNull PlaceholderHandler handler,
                              @NotNull String... aliases) {
         handle(identifier, handler, Collections.emptyList(), aliases);
     }
 
+    /**
+     * 处理变量并返回对应内容。
+     *
+     * @param identifier     该变量的标识符
+     * @param handler        该变量的处理器，返回值将会被转换为字符串。
+     * @param paramsConsumer 用于提供该变量的可用参数
+     * @param aliases        该变量的别称
+     */
     public final void handle(@NotNull String identifier, @NotNull PlaceholderHandler handler,
                              @NotNull Consumer<ArrayList<String>> paramsConsumer, @NotNull String... aliases) {
         handle(identifier, handler, () -> {
@@ -75,11 +90,27 @@ public class SectionExpansion implements EasyExpansion {
         }, aliases);
     }
 
+    /**
+     * 处理变量并返回对应内容。
+     *
+     * @param identifier      该变量的标识符
+     * @param handler         该变量的处理器，返回值将会被转换为字符串。
+     * @param availableParams 该变量的可用参数
+     * @param aliases         该变量的别称
+     */
     public final void handle(@NotNull String identifier, @NotNull PlaceholderHandler handler,
                              @NotNull List<String> availableParams, @NotNull String... aliases) {
         handle(identifier, handler, () -> availableParams, aliases);
     }
 
+    /**
+     * 处理变量并返回对应内容。
+     *
+     * @param identifier      该变量的标识符
+     * @param handler         该变量的处理器，返回值将会被转换为字符串。
+     * @param availableParams 该变量的可用参数
+     * @param aliases         该变量的别称
+     */
     public final void handle(@NotNull String identifier, @NotNull PlaceholderHandler handler,
                              @NotNull Supplier<List<String>> availableParams, @NotNull String... aliases) {
         register(new SubExpansion<SectionExpansion>(this, identifier, aliases) {
@@ -95,6 +126,15 @@ public class SectionExpansion implements EasyExpansion {
         });
     }
 
+    /**
+     * 处理一组变量。
+     *
+     * @param section  该组变量的标识符
+     * @param consumer 该组变量的处理器操作方法
+     *                 <br> 在其中可调用 {@link SectionExpansion#handle(String, PlaceholderHandler, String...)} 方法处理子变量,
+     *                 <br> 或者调用 {@link SectionExpansion#handleSection(String, Consumer, String...)} 方法处理下一层组变量
+     * @param aliases  该变量的别称
+     */
     public final void handleSection(@NotNull String section, @NotNull Consumer<SectionExpansion> consumer,
                                     @NotNull String... aliases) {
         SectionExpansion sectionExpansion = new SectionExpansion(getRoot(), section, aliases);
