@@ -6,7 +6,7 @@
     <parent>
         <groupId>cc.carm.lib</groupId>
         <artifactId>easyplugin-parent</artifactId>
-        <version>1.5.0</version>
+        <version>1.5.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <properties>
@@ -46,5 +46,14 @@
         <system>GitHub Actions</system>
         <url>https://github.com/CarmJos/EasyPlugin/actions/workflows/maven.yml</url>
     </ciManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

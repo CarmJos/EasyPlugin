@@ -15,19 +15,16 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easyplugin-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
     <modules>
         <module>base/color</module>
         <module>base/utils</module>
 
         <module>base/main</module>
-        <module>base/conf</module>
         <module>base/messages</module>
         <module>base/gui</module>
         <module>base/command</module>
         <module>base/storage</module>
-        <module>base/listener</module>
-        <module>base/database</module>
 
         <module>extension/papi</module>
         <module>extension/vault</module>

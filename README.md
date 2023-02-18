@@ -58,14 +58,13 @@
     - 支持多种消息配置，包括文本消息、ActionBar消息、Title消息、声音、粒子效果播放等。
     - 支持消息间的延迟发送。
 
-> 以下项目均已独立出单独项目，仅仅是按照包名规则打包到EasyPlugin的子项目中。
->
-> 如需使用，**强烈建议自行引用对应的项目**，以支持完整的Javadoc并获取源码内容！
+### 独立项目部分
 
-- _Listener_ [`easyplugin-listener`](base/listener) (打包自 [**EasyListener**](https://github.com/CarmJos/EasyListener))
-- _Configuration_ [`easyplugin-conf`](base/conf) (打包自 [**MineConfiguration
-  **](https://github.com/CarmJos/MineConfiguration))
-- _Database_ [`easyplugin-database`](base/database)  (打包自 [**EasySQL**](https://github.com/CarmJos/EasySQL))
+> 以下项目均已独立出单独项目,如需使用，**强烈建议自行引用对应的项目**，以支持完整的Javadoc并获取源码内容！
+
+- _Listener_ -> [**EasyListener**](https://github.com/CarmJos/EasyListener)
+- _Configuration_ -> [**MineConfiguration**](https://github.com/CarmJos/MineConfiguration)
+- _Database_ -> [**EasySQL**](https://github.com/CarmJos/EasySQL)
 
 ### 附属部分 (`/extension`)
 
