@@ -2,24 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>easyplugin-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
+        <artifactId>easyplugin-parent</artifactId>
         <version>1.4.20</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
     <properties>
         <maven.compiler.source>${project.jdk.version}</maven.compiler.source>
         <maven.compiler.target>${project.jdk.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
-    <artifactId>easyplugin-command</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>easyplugin-color</artifactId>
 
-    <name>EasyPlugin-Command</name>
-    <description>轻松插件指令接口模块，方便快捷的编写子指令。</description>
+    <name>EasyPlugin-Color</name>
+    <description>轻松插件颜色模块，支持简单便捷的颜色解析器，包括基本颜色、RGB颜色与RGB渐变颜色。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 
     <developers>
