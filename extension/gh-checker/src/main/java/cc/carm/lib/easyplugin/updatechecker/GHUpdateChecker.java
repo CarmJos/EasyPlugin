@@ -24,11 +24,11 @@ public class GHUpdateChecker {
     public static @NotNull Runnable runner(@NotNull Logger logger,
                                            @NotNull String owner, @NotNull String repo,
                                            @NotNull String currentVersion) {
-        return of(logger, owner, repo).runner(currentVersion);
+        return of(logger, owner, repo).createRunner(currentVersion);
     }
 
     public static @NotNull Runnable runner(@NotNull Plugin plugin) {
-        return of(plugin).runner(plugin.getDescription().getVersion());
+        return of(plugin).createRunner(plugin.getDescription().getVersion());
     }
 
     protected final @NotNull Logger logger;
@@ -59,7 +59,7 @@ public class GHUpdateChecker {
         }
     }
 
-    public Runnable runner(@NotNull String currentVersion) {
+    public Runnable createRunner(@NotNull String currentVersion) {
         return () -> checkUpdate(currentVersion);
     }
 
