@@ -21,6 +21,7 @@
     <packaging>jar</packaging>
 
     <name>EasyPlugin-PlaceholderAPI</name>
+    <description>EasyPlugin的 PlaceholderAPI 扩展模块，提供了方便的 PlaceholderAPI 变量注册方法。</description>
 
     <dependencies>
 

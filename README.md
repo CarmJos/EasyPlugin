@@ -36,6 +36,9 @@
 
 ### 主要部分 (`/base`)
 
+- Color  [`easyplugin-color`](base/color)
+    - 颜色工具类模块，提供功能全面的MC颜色解析转换工具。
+    - 支持 `&+颜色代码`(原版颜色)、`§(#XXXXXX)`(RGB颜色) 与 `&<#XXXXXX>`(前后标注RGB颜色渐变)。
 - Utils  [`easyplugin-utils`](base/utils)
     - 通用工具类模块，该模块中的内容支持在Bungee、Bukkit使用。
     - 本模块提供
@@ -69,6 +72,7 @@
 ### 附属部分 (`/extension`)
 
 - [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) [`easyplugin-placeholderapi`](extension/papi)
+  - PlaceholderAPI 扩展模块，提供了方便的 PlaceholderAPI 变量注册方法。
 - [Vault](https://github.com/MilkBowl/VaultAPI)* [`easyplugin-vault`](extension/vault)
 
 ## 开发
