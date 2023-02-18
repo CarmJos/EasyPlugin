@@ -24,6 +24,8 @@ jobs:
           server-id: github
           server-username: MAVEN_USERNAME
           server-password: MAVEN_TOKEN
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
       - name: "Maven Deploy"
         run: mvn -B -Pgithub deploy --file pom.xml -DskipTests
@@ -42,6 +44,8 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
           cache: maven
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
       - name: "Maven Deploy"
         run: mvn -B -Plocal deploy --file pom.xml -DskipTests
