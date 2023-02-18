@@ -11,16 +11,16 @@ import java.util.function.Function;
 
 public interface NamedExecutor {
 
-    String getName();
+    @NotNull String getIdentifier();
 
-    List<String> getAliases();
+    @NotNull List<String> getAliases();
 
-    default boolean hasPermission(CommandSender sender) {
+    default boolean hasPermission(@NotNull CommandSender sender) {
         return true;
     }
 
     default Void sendMessage(@NotNull CommandSender sender, @NotNull String... messages) {
-        return sendMessage(sender, (Function<String, String>) null, messages);
+        return sendMessage(sender, Function.identity(), messages);
     }
 
     default Void sendMessage(@NotNull CommandSender sender,

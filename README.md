@@ -37,44 +37,50 @@
 ### 主要部分 (`/base`)
 
 - Utils  [`easyplugin-utils`](base/utils)
-  - 通用工具类模块，该模块中的内容支持在Bungee、Bukkit使用。
-  - 本模块提供 
-    - `ColorParser` 支持RGB颜色与RGB渐变色的颜色解析器。
-    - `EasyCooldown` 快速创造一个冷却时间的管理器。
-    - `JarResourceUtils` 快速读取Jar包内容的工具类。
+    - 通用工具类模块，该模块中的内容支持在Bungee、Bukkit使用。
+    - 本模块提供
+        - `ColorParser` 支持RGB颜色与RGB渐变色的颜色解析器。
+        - `EasyCooldown` 快速创造一个冷却时间的管理器。
+        - `JarResourceUtils` 快速读取Jar包内容的工具类。
 - Main [`easyplugin-main`](base/main)
-  - 主要接口模块，提供了方便的插件入口类与相关工具类。
+    - 主要接口模块，提供了方便的插件入口类与相关工具类。
 - Command [`easyplugin-command`](base/command)
-  - 指令接口模块，便于快速进行子指令的实现，并提供单独的TabComplete方法。
-  - 随本项目提供了 `SimpleCompleter` 类，用于快速创建补全的内容列表。
+    - 指令接口模块，便于快速进行子指令的实现，并提供单独的TabComplete方法。
+    - 随本项目提供了 `SimpleCompleter` 类，用于快速创建补全的内容列表。
 - GUI [`easyplugin-gui`](base/main)
-  - 简单便捷的箱子GUI接口，可以快速实现GUI中不同图标的点击功能。
-  - 随本项目提供了 `AutoPagedGUI` 等翻页GUI抽象类。
+    - 简单便捷的箱子GUI接口，可以快速实现GUI中不同图标的点击功能。
+    - 随本项目提供了 `AutoPagedGUI` 等翻页GUI抽象类。
 - Storage [`easyplugin-storage`](base/storage)
-  - 抽象存储管理器，便于实现不同的存储类型。 
-  - 随本项目提供了 `FileBasedStorage`、`FolderBasedStorage` 等常用存储抽象方法。
+    - 抽象存储管理器，便于实现不同的存储类型。
+    - 随本项目提供了 `FileBasedStorage`、`FolderBasedStorage` 等常用存储抽象方法。
+- Messages [`easyplugin-message`](base/messages)
+    - 随本项目提供了基于 MineConfiguration 实现的 `EasyMessages` 类。
+    - 支持多种消息配置，包括文本消息、ActionBar消息、Title消息、声音、粒子效果播放等。
+    - 支持消息间的延迟发送。
 
 > 以下项目均已独立出单独项目，仅仅是按照包名规则打包到EasyPlugin的子项目中。
-> 
+>
 > 如需使用，**强烈建议自行引用对应的项目**，以支持完整的Javadoc并获取源码内容！
 
 - _Listener_ [`easyplugin-listener`](base/listener) (打包自 [**EasyListener**](https://github.com/CarmJos/EasyListener))
-- _Configuration_ [`easyplugin-conf`](base/conf) (打包自 [**MineConfiguration**](https://github.com/CarmJos/MineConfiguration))
+- _Configuration_ [`easyplugin-conf`](base/conf) (打包自 [**MineConfiguration
+  **](https://github.com/CarmJos/MineConfiguration))
 - _Database_ [`easyplugin-database`](base/database)  (打包自 [**EasySQL**](https://github.com/CarmJos/EasySQL))
-- _Messages*_ [`easyplugin-message`](base/message) (打包自 [**EasyMessages**](https://github.com/CarmJos/EasyMessages))
 
 ### 附属部分 (`/extension`)
 
-- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/)* [`easyplugin-placeholderapi`](extension/papi)
+- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) [`easyplugin-placeholderapi`](extension/papi)
 - [Vault](https://github.com/MilkBowl/VaultAPI)* [`easyplugin-vault`](extension/vault)
 
 ## 开发
 
-详细开发介绍请 [点击这里](.documentation/README.md) , JavaDoc(最新Release) 请 [点击这里](https://carmjos.github.io/EasyPlugin) 。
+详细开发介绍请 [点击这里](.documentation/README.md) , JavaDoc(最新Release)
+请 [点击这里](https://carmjos.github.io/EasyPlugin) 。
 
 ### 示例代码
 
-您可以 [点击这里](https://github.com/CarmJos/UltraDepository) 查看实例项目演示，更多演示详见 [开发介绍](.documentation/README.md) 。
+您可以 [点击这里](https://github.com/CarmJos/UltraDepository)
+查看实例项目演示，更多演示详见 [开发介绍](.documentation/README.md) 。
 
 ### 依赖方式
 
@@ -181,7 +187,8 @@ dependencies {
 
 > MIT 协议可能是几大开源协议中最宽松的一个，核心条款是：
 >
-> 该软件及其相关文档对所有人免费，可以任意处置，包括使用，复制，修改，合并，发表，分发，再授权，或者销售。唯一的限制是，软件中必须包含上述版 权和许可提示。
+> 该软件及其相关文档对所有人免费，可以任意处置，包括使用，复制，修改，合并，发表，分发，再授权，或者销售。唯一的限制是，软件中必须包含上述版
+> 权和许可提示。
 >
 > 这意味着：
 > - 你可以自由使用，复制，修改，可以用于自己的项目。

@@ -46,7 +46,8 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     public abstract Void noPermission(CommandSender sender);
 
     public Void onException(CommandSender sender, SubCommand<?> cmd, Exception ex) {
-        sender.sendMessage("Error occurred when executing " + cmd.getName() + ": " + ex.getLocalizedMessage());
+        sender.sendMessage("Error occurred when executing " + cmd.getIdentifier() + ": " + ex.getLocalizedMessage());
+        ex.printStackTrace();
         return null;
     }
 
@@ -56,18 +57,18 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getIdentifier() {
         return this.cmd;
     }
 
     public void registerSubCommand(SubCommand<?> command) {
-        String name = command.getName().toLowerCase();
+        String name = command.getIdentifier().toLowerCase();
         this.registeredCommands.put(name, command);
         command.getAliases().forEach(alias -> this.aliasesMap.put(alias.toLowerCase(), name));
     }
 
     public void registerHandler(CommandHandler handler) {
-        String name = handler.getName().toLowerCase();
+        String name = handler.getIdentifier().toLowerCase();
         this.registeredHandlers.put(name, handler);
         handler.getAliases().forEach(alias -> this.aliasesMap.put(alias.toLowerCase(), name));
     }
@@ -106,7 +107,6 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
                 sub.execute(this.plugin, sender, this.shortenArgs(args));
             } catch (Exception ex) {
                 this.onException(sender, sub, ex);
-                ex.printStackTrace();
             }
         }
 
@@ -121,7 +121,7 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         if (args.length == 1) {
             return getExecutors().stream()
                     .filter(e -> e.hasPermission(sender))
-                    .map(NamedExecutor::getName)
+                    .map(NamedExecutor::getIdentifier)
                     .filter(s -> StringUtil.startsWithIgnoreCase(s, input))
                     .collect(Collectors.toList());
         } else {
@@ -145,7 +145,7 @@ public abstract class CommandHandler implements TabExecutor, NamedExecutor {
         executors.addAll(this.registeredHandlers.values());
         executors.addAll(this.registeredCommands.values());
         List<NamedExecutor> sortedExecutors = new ArrayList<>(executors);
-        sortedExecutors.sort(Comparator.comparing(NamedExecutor::getName));
+        sortedExecutors.sort(Comparator.comparing(NamedExecutor::getIdentifier));
         return sortedExecutors;
     }
 

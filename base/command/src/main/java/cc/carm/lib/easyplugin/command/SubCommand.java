@@ -14,12 +14,12 @@ public abstract class SubCommand<C extends CommandHandler> implements NamedExecu
 
     private final @NotNull C parent;
 
-    private final String name;
+    private final String identifier;
     private final List<String> aliases;
 
-    public SubCommand(@NotNull C parent, String name, String... aliases) {
+    public SubCommand(@NotNull C parent, String identifier, String... aliases) {
         this.parent = parent;
-        this.name = name;
+        this.identifier = identifier;
         this.aliases = Arrays.asList(aliases);
     }
 
@@ -28,13 +28,13 @@ public abstract class SubCommand<C extends CommandHandler> implements NamedExecu
     }
 
     @Override
-    public String getName() {
-        return this.name;
+    public @NotNull String getIdentifier() {
+        return this.identifier;
     }
 
     @Override
     @Unmodifiable
-    public List<String> getAliases() {
+    public @NotNull List<String> getAliases() {
         return this.aliases;
     }
 
