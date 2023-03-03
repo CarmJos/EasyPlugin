@@ -1,7 +1,9 @@
 package cc.carm.lib.easyplugin.updatechecker;
 
 import cc.carm.lib.githubreleases4j.GithubReleases4J;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -29,6 +31,10 @@ public class GHUpdateChecker {
 
     public static @NotNull Runnable runner(@NotNull Plugin plugin) {
         return of(plugin).createRunner(plugin.getDescription().getVersion());
+    }
+
+    public static @NotNull BukkitTask run(@NotNull Plugin plugin) {
+        return Bukkit.getScheduler().runTaskAsynchronously(plugin, runner(plugin));
     }
 
     protected final @NotNull Logger logger;
