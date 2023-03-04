@@ -117,7 +117,7 @@ public class CommonPagedGUI extends PagedGUI {
      * @return 最后一页的页码
      */
     public int getLastPageNumber() {
-        return (this.container.size() / range.length) + 1;
+        return (this.container.size() / range.length) + ((this.container.size() % range.length) == 0 ? 0 : 1);
     }
 
     /**
