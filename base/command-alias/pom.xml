@@ -2,26 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>easyplugin-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
+        <artifactId>easyplugin-parent</artifactId>
         <version>1.5.5</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-
     <properties>
         <maven.compiler.source>${project.jdk.version}</maven.compiler.source>
         <maven.compiler.target>${project.jdk.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
-
-    <artifactId>easyplugin-common</artifactId>
+    <artifactId>easyplugin-command-alias</artifactId>
     <packaging>jar</packaging>
 
-    <name>EasyPlugin-Common</name>
-    <description>轻松插件常用接口集，包含除附属插件模块外的所有模块。</description>
+    <name>EasyPlugin-Command-Alias</name>
+    <description>轻松插件指令别名映射模块，支持将插件内复杂的子指令简化为一个单独的指令，方便玩家使用。</description>
     <url>https://github.com/CarmJos/EasyPlugin</url>
 
     <developers>
@@ -50,33 +48,6 @@
         <url>https://github.com/CarmJos/EasyPlugin/actions/workflows/maven.yml</url>
     </ciManagement>
 
-    <dependencies>
-
-        <!--通过 bom 快捷导入所有相关模块-->
-        <dependency>
-            <groupId>${project.parent.groupId}</groupId>
-            <artifactId>easyplugin-bom</artifactId>
-            <version>${project.parent.version}</version>
-            <type>pom</type>
-
-            <exclusions>
-                <exclusion>
-                    <groupId>cc.carm.lib</groupId>
-                    <artifactId>easyplugin-placeholderapi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cc.carm.lib</groupId>
-                    <artifactId>easyplugin-vault</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cc.carm.lib</groupId>
-                    <artifactId>easyplugin-storage</artifactId>
-                </exclusion>
-            </exclusions>
-
-        </dependency>
-
-    </dependencies>
 
     <build>
         <plugins>
