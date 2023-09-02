@@ -63,7 +63,11 @@ public abstract class UserDataManager<K, U extends UserData<K>> {
         return key.toString();
     }
 
-    public abstract @NotNull U empty(@NotNull K key);
+    public abstract @NotNull U emptyUser(@NotNull K key);
+
+    public @NotNull U errorUser(@NotNull K key) {
+        return emptyUser(key);
+    }
 
     protected abstract @Nullable U loadData(@NotNull K key) throws Exception;
 
@@ -108,7 +112,7 @@ public abstract class UserDataManager<K, U extends UserData<K>> {
                 U data = loadData(key);
                 if (data == null) {
                     getPlugin().debug("数据库内不存在用户 " + identifier + " 的数据，视作新档案。");
-                    return empty(key);
+                    return emptyUser(key);
                 } else {
                     getPlugin().debug("加载用户 " + identifier + " 的数据完成，耗时 " + (System.currentTimeMillis() - s1) + " ms.");
                     return data;
@@ -116,7 +120,7 @@ public abstract class UserDataManager<K, U extends UserData<K>> {
             } catch (Exception ex) {
                 getPlugin().error("加载用户 " + serializeKey(key) + " 数据失败，请检查相关配置！");
                 ex.printStackTrace();
-                return empty(key);
+                return errorUser(key);
             }
 
         }, executor).thenApply((data) -> {
@@ -223,22 +227,23 @@ public abstract class UserDataManager<K, U extends UserData<K>> {
         return loadGroup(allKeys, (v) -> false);
     }
 
-    public @NotNull CompletableFuture<Integer> saveAll() {
-        CompletableFuture<Integer> future = CompletableFuture.completedFuture(0);
-        if (getDataCache().isEmpty()) return future;
-
-        for (U value : getDataCache().values()) {
-            future = future.thenCombine(save(value), (before, result) -> before + (result ? 1 : 0));
+    public void saveAll() {
+        if (getDataCache().isEmpty()) return;
+        for (U u : getDataCache().values()) {
+            try {
+                saveData(u);
+            } catch (Exception e) {
+                getPlugin().error("保存用户 " + serializeKey(u.getKey()) + " 数据失败，请检查相关配置！");
+                e.printStackTrace();
+            }
         }
-
-        return future;
     }
 
-    public @NotNull CompletableFuture<Integer> unloadAll() {
-        return saveAll().thenApply(result -> {
-            getDataCache().clear();
-            return result;
-        });
+    public int unloadAll(boolean save) {
+        if (save) saveAll();
+        int size = getDataCache().size();
+        getDataCache().clear();
+        return size;
     }
 
 
