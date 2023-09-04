@@ -162,9 +162,14 @@ public class ColorParser {
                 startColor.getBlue() + bStep * i * bDirection
         )).toArray(String[]::new);
 
-        return IntStream.range(0, characters.length)
-                .mapToObj(i -> colorText(characters[i], extraFormats.get(i), buildHexColor(hexes[i])))
-                .collect(Collectors.joining());
+        StringBuilder sb = new StringBuilder();
+        String extra = null;
+        for (int i = 0; i < characters.length; i++) {
+            extra = buildExtraFormat(extra, extraFormats.get(i));
+            String s = colorText(characters[i], extra, buildHexColor(hexes[i]));
+            sb.append(s);
+        }
+        return sb.toString();
     }
 
     protected static String gradientText(@NotNull String text, @Nullable String startHex, @Nullable String endHex) {
@@ -203,6 +208,15 @@ public class ColorParser {
     protected static String buildHexColor(String hexCode) {
         return Arrays.stream(hexCode.split("")).map(s -> '§' + s)
                 .collect(Collectors.joining("", '§' + "x", ""));
+    }
+
+    protected static String buildExtraFormat(String current, String extra) {
+        if (extra != null) current = (current == null ? "" : current) + extra;
+        return isResetCode(current) ? null : current;
+    }
+
+    protected static boolean isResetCode(String input) {
+        return input != null && (input.toLowerCase().endsWith("&r") || input.toLowerCase().endsWith("§r"));
     }
 
 }

@@ -15,7 +15,7 @@ public class ColorParseTest {
         System.out.println(parseGradientColor("&<#AAAAAA>我真的&<#BBBBBB>爱死&<#111111>你&<#FFFFFF>！"));
 
         // 测试穿插
-        System.out.println(parse("&<#AAAAAA>&l我&r真&b的&<#BBBBBB>&o爱死&<#111111>你&<#FFFFFF>了&r！"));
+        System.out.println(parse("&<#AAAAAA>&l&m我真的&o尊的&r真的&<#BBBBBB>&o爱死&<#111111>你&<#FFFFFF>了&r！"));
         System.out.println(parse("&<#AAAAAA>&l我&r真&(#666666)的&<#BBBBBB>&o爱死&<#111111>你&<#FFFFFF>了&r！"));
         System.out.println(parse("&r正常的颜色理应&c&l不受影响&r。"));
 
