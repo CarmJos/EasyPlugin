@@ -93,10 +93,8 @@ public class CommonPagedGUI extends PagedGUI {
      * 前往第一页
      */
     public void goFirstPage() {
-        if (hasPreviousPage())
-            this.page = 1;
-        else
-            throw new IndexOutOfBoundsException();
+        this.page = 1;
+        onPageChange(this.page);
     }
 
 
@@ -104,10 +102,8 @@ public class CommonPagedGUI extends PagedGUI {
      * 前往最后一页
      */
     public void goLastPage() {
-        if (hasNextPage())
-            this.page = getLastPageNumber();
-        else
-            throw new IndexOutOfBoundsException();
+        this.page = getLastPageNumber();
+        onPageChange(this.page);
     }
 
 

@@ -88,7 +88,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>minebench-repo</id>
             <url>https://repo.minebench.de/</url>

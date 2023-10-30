@@ -34,7 +34,7 @@ public class GUI {
     }
 
     protected GUIType type;
-    protected String name;
+    protected String title;
     public HashMap<Integer, GUIItem> items;
     public Inventory inv;
 
@@ -57,14 +57,13 @@ public class GUI {
 
     protected GUIListener listener;
 
-    public GUI(GUIType type, String name) {
+    public GUI(GUIType type, String title) {
         this.type = type;
-        this.name = ColorParser.parse(name);
+        this.title = ColorParser.parse(title);
         this.items = new HashMap<>();
     }
 
-
-    public HashMap<@NotNull Integer, @NotNull GUIItem> getItems() {
+    public Map<@NotNull Integer, @NotNull GUIItem> getItems() {
         return new HashMap<>(items);
     }
 
@@ -90,6 +89,7 @@ public class GUI {
      * 更新玩家箱子的视图
      */
     public void updateView() {
+        this.onUpdate();
         if (this.inv != null) {
             List<HumanEntity> viewers = this.inv.getViewers();
             IntStream.range(0, this.inv.getSize()).forEach(index -> inv.setItem(index, new ItemStack(Material.AIR)));
@@ -148,7 +148,7 @@ public class GUI {
             throw new IllegalStateException("被取消或不存在的GUI");
         }
 
-        Inventory inv = Bukkit.createInventory(null, this.type.getSize(), this.name);
+        Inventory inv = Bukkit.createInventory(null, this.type.getSize(), this.title);
         IntStream.range(0, inv.getSize()).forEach(index -> inv.setItem(index, new ItemStack(Material.AIR)));
         getItems().forEach((index, item) -> inv.setItem(index, item.getDisplay()));
 
@@ -181,12 +181,18 @@ public class GUI {
     public void onClose() {
     }
 
+    /**
+     * 当GUI更新时执行的代码
+     */
+    public void onUpdate() {
+    }
+
     public GUIType getGUIType() {
         return type;
     }
 
     public String getGUIName() {
-        return name;
+        return title;
     }
 
     public static void setOpenedGUI(Player player, GUI gui) {

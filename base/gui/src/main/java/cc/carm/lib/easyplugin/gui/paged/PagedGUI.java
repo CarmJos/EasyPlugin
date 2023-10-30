@@ -45,13 +45,19 @@ public abstract class PagedGUI extends GUI {
     }
 
     /**
+     * 当GUI改变页码时执行的代码
+     */
+    public void onPageChange(int pageNum) {
+    }
+
+    /**
      * 前往上一页
      */
     public void goPreviousPage() {
-        if (hasPreviousPage())
+        if (hasPreviousPage()) {
             page--;
-        else
-            throw new IndexOutOfBoundsException();
+            this.onPageChange(this.page);
+        } else throw new IndexOutOfBoundsException();
     }
 
 
@@ -59,10 +65,10 @@ public abstract class PagedGUI extends GUI {
      * 前往下一页
      */
     public void goNextPage() {
-        if (hasNextPage())
+        if (hasNextPage()) {
             page++;
-        else
-            throw new IndexOutOfBoundsException();
+            this.onPageChange(this.page);
+        } else throw new IndexOutOfBoundsException();
     }
 
 
