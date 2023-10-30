@@ -15,7 +15,7 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easyplugin-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.5.8</version>
+    <version>1.5.9</version>
     <modules>
         <module>base/color</module>
         <module>base/utils</module>
