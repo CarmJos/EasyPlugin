@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GUIListener implements Listener {
 
-    GUI currentGUI;
+    protected final GUI currentGUI;
 
     public GUIListener(GUI gui) {
         this.currentGUI = gui;

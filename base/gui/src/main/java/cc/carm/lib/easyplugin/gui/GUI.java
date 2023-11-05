@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 public class GUI {
 
     private static JavaPlugin plugin;
-    private static final HashMap<UUID, GUI> openedGUIs = new HashMap<>();
+    private static final Map<UUID, GUI> openedGUIs = new HashMap<>();
 
     public static void initialize(JavaPlugin plugin) {
         GUI.plugin = plugin;
@@ -29,42 +29,32 @@ public class GUI {
         return plugin;
     }
 
-    public static HashMap<UUID, GUI> getOpenedGUIs() {
+    public static Map<UUID, GUI> getOpenedGUIs() {
         return openedGUIs;
     }
 
-    protected GUIType type;
-    protected String title;
-    public HashMap<Integer, GUIItem> items;
-    public Inventory inv;
+    protected final @NotNull GUIType type;
+    protected @NotNull String title;
+    protected Inventory inv;
 
-    /**
-     * 当玩家点击目标GUI时是否取消
-     */
-    boolean cancelOnTarget = true;
+    protected final SortedMap<Integer, GUIItem> items = new TreeMap<>();
+    protected ItemStack emptyItem = null;
 
-    /**
-     * 当玩家点击自己背包时是否取消
-     */
-    boolean cancelOnSelf = true;
-
-    /**
-     * 当玩家点击界面外时是否取消
-     */
-    boolean cancelOnOuter = true;
+    protected boolean cancelOnTarget = true; // 当玩家点击GUI时是否取消对应事件
+    protected boolean cancelOnSelf = true; // 当玩家点击自己背包时是否取消对应事件
+    protected boolean cancelOnOuter = true; //  当玩家点击界面外时是否取消对应事件
 
     protected final Map<String, Object> flags = new LinkedHashMap<>();
 
     protected GUIListener listener;
 
-    public GUI(GUIType type, String title) {
+    public GUI(@NotNull GUIType type, @NotNull String title) {
         this.type = type;
         this.title = ColorParser.parse(title);
-        this.items = new HashMap<>();
     }
 
-    public Map<@NotNull Integer, @NotNull GUIItem> getItems() {
-        return new HashMap<>(items);
+    public SortedMap<@NotNull Integer, @NotNull GUIItem> getItems() {
+        return items;
     }
 
     public final void setItem(int index, @Nullable GUIItem item) {
@@ -75,14 +65,49 @@ public class GUI {
         }
     }
 
+    public void setItemStack(int index, @Nullable ItemStack item) {
+        setItem(index, item == null ? null : new GUIItem(item));
+    }
+
     public void setItem(GUIItem item, int... index) {
         for (int i : index) {
             setItem(i, item);
         }
     }
 
+    public void setItemStack(ItemStack item, int... index) {
+        for (int i : index) {
+            setItemStack(i, item);
+        }
+    }
+
     public GUIItem getItem(int index) {
         return this.items.get(index);
+    }
+
+    public void setEmptyItem(ItemStack item) {
+        this.emptyItem = item;
+    }
+
+    protected void fillEmptySlots(@NotNull Inventory inventory) {
+        if (emptyItem == null) return;
+        IntStream.range(0, inventory.getSize())
+                .filter(i -> inventory.getItem(i) == null)
+                .forEach(index -> inventory.setItem(index, emptyItem));
+    }
+
+    protected void applyToInventory(Inventory inventory) {
+        IntStream.range(0, inventory.getSize()).forEach(index -> inventory.setItem(index, new ItemStack(Material.AIR)));
+        getItems().forEach((index, item) -> inventory.setItem(index, item.getDisplay()));
+        fillEmptySlots(inventory);
+    }
+
+    public void updateTitle(@NotNull String title) {
+        this.title = ColorParser.parse(title);
+        if (this.inv != null) {
+            this.inv = Bukkit.createInventory(null, this.type.getSize(), this.title);
+            applyToInventory(this.inv);
+        }
     }
 
     /**
@@ -92,8 +117,7 @@ public class GUI {
         this.onUpdate();
         if (this.inv != null) {
             List<HumanEntity> viewers = this.inv.getViewers();
-            IntStream.range(0, this.inv.getSize()).forEach(index -> inv.setItem(index, new ItemStack(Material.AIR)));
-            getItems().forEach((index, item) -> inv.setItem(index, item.getDisplay()));
+            applyToInventory(this.inv);
             viewers.forEach(p -> ((Player) p).updateInventory());
         }
     }
@@ -148,22 +172,22 @@ public class GUI {
             throw new IllegalStateException("被取消或不存在的GUI");
         }
 
-        Inventory inv = Bukkit.createInventory(null, this.type.getSize(), this.title);
-        IntStream.range(0, inv.getSize()).forEach(index -> inv.setItem(index, new ItemStack(Material.AIR)));
-        getItems().forEach((index, item) -> inv.setItem(index, item.getDisplay()));
+        Inventory ui = Bukkit.createInventory(null, this.type.getSize(), this.title);
+        applyToInventory(ui);
 
         GUI previous = getOpenedGUI(player);
-        if (previous != null) {
+        if (previous != null && previous.listener != null) {
             previous.listener.close(player);
         }
 
         setOpenedGUI(player, this);
 
-        this.inv = inv;
-        player.openInventory(inv);
+        this.inv = ui;
+        player.openInventory(ui);
 
         if (listener == null) {
-            Bukkit.getPluginManager().registerEvents(listener = new GUIListener(this), getPlugin());
+            this.listener = new GUIListener(this);
+            Bukkit.getPluginManager().registerEvents(this.listener, getPlugin());
         }
     }
 
@@ -209,6 +233,13 @@ public class GUI {
 
     public static void removeOpenedGUI(Player player) {
         getOpenedGUIs().remove(player.getUniqueId());
+    }
+
+    public static void closeAll() {
+        Set<HumanEntity> viewers = new HashSet<>();
+        getOpenedGUIs().values().stream().flatMap(gui -> gui.inv.getViewers().stream()).forEach(viewers::add);
+        viewers.forEach(HumanEntity::closeInventory);
+        getOpenedGUIs().clear();
     }
 
 }

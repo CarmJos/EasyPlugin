@@ -10,11 +10,11 @@ import java.util.Set;
 
 public class GUIItem {
 
-    ItemStack display;
-    boolean actionActive = true;
+    protected ItemStack display;
+    protected boolean actionActive = true;
 
-    public Set<GUIClickAction> actions = new HashSet<>();
-    public Set<GUIClickAction> actionsIgnoreActive = new HashSet<>();
+    protected final Set<GUIClickAction> actions = new HashSet<>();
+    protected final Set<GUIClickAction> actionsIgnoreActive = new HashSet<>();
 
     public GUIItem(ItemStack display) {
         this.display = display;

@@ -4,34 +4,52 @@ import cc.carm.lib.easyplugin.gui.GUIItem;
 import cc.carm.lib.easyplugin.gui.GUIType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AutoPagedGUI extends CommonPagedGUI {
 
     public static Function<Player, ItemStack> defaultPreviousPage = null;
     public static Function<Player, ItemStack> defaultNextPage = null;
 
-    ItemStack previousPageUI;
-    ItemStack nextPageUI;
-    int previousPageSlot = -1;
-    int nextPageSlot = -1;
+    protected ItemStack previousPageUI;
+    protected ItemStack nextPageUI;
+    protected ItemStack noPreviousPageUI;
+    protected ItemStack noNextPageUI;
+    protected int previousPageSlot = -1;
+    protected int nextPageSlot = -1;
 
-    public AutoPagedGUI(GUIType type, String name, int[] range) {
-        super(type, name, range);
+    public AutoPagedGUI(@NotNull GUIType type, @NotNull String title, int[] range) {
+        super(type, title, range);
     }
 
-    public AutoPagedGUI(GUIType type, String name, int a, int b) {
-        super(type, name, a, b);
+    public AutoPagedGUI(@NotNull GUIType type, @NotNull String title, int a, int b) {
+        super(type, title, a, b);
     }
 
-    public void setPreviousPageUI(ItemStack lastPageUI) {
+    public void setPreviousPageUI(@Nullable ItemStack lastPageUI) {
         this.previousPageUI = lastPageUI;
     }
 
-    public void setNextPageUI(ItemStack nextPageUI) {
+    public void setNoPreviousPageUI(@Nullable ItemStack noPreviousPageUI) {
+        this.noPreviousPageUI = noPreviousPageUI;
+    }
+
+    public void setNextPageUI(@Nullable ItemStack nextPageUI) {
         this.nextPageUI = nextPageUI;
+    }
+
+    public void setNoNextPageUI(@Nullable ItemStack noNextPageUI) {
+        this.noNextPageUI = noNextPageUI;
     }
 
     public void setPreviousPageSlot(int slot) {
@@ -43,11 +61,23 @@ public class AutoPagedGUI extends CommonPagedGUI {
     }
 
     @Override
+    protected void fillEmptySlots(@NotNull Inventory inventory) {
+        if (emptyItem == null) return;
+        Set<Integer> rangeSet = Arrays.stream(this.range).boxed().collect(Collectors.toSet());
+        if (previousPageSlot >= 0) rangeSet.add(previousPageSlot);
+        if (nextPageSlot >= 0) rangeSet.add(nextPageSlot);
+        IntStream.range(0, inventory.getSize())
+                .filter(i -> inventory.getItem(i) == null)
+                .filter(i -> !rangeSet.contains(i))
+                .forEach(index -> inventory.setItem(index, emptyItem));
+    }
+
+
+    @Override
     public void openGUI(Player user) {
         if (previousPageSlot >= 0) {
             if (hasPreviousPage()) {
-                setItem(previousPageSlot, new GUIItem(
-                        previousPageUI == null ? getDefaultPreviousPage(user) : previousPageUI) {
+                setItem(previousPageSlot, new GUIItem(Optional.ofNullable(defaultPreviousPage).map(d -> d.apply(user)).orElse(previousPageUI)) {
                     @Override
                     public void onClick(Player clicker, ClickType type) {
                         if (type == ClickType.RIGHT) {
@@ -59,14 +89,13 @@ public class AutoPagedGUI extends CommonPagedGUI {
                     }
                 });
             } else {
-                setItem(previousPageSlot, null);
+                setItem(previousPageSlot, this.noPreviousPageUI == null ? null : new GUIItem(noPreviousPageUI));
             }
         }
 
         if (nextPageSlot >= 0) {
             if (hasNextPage()) {
-                setItem(nextPageSlot, new GUIItem(
-                        nextPageUI == null ? getDefaultNextPage(user) : nextPageUI) {
+                setItem(nextPageSlot, new GUIItem(Optional.ofNullable(defaultNextPage).map(d -> d.apply(user)).orElse(nextPageUI)) {
                     @Override
                     public void onClick(Player clicker, ClickType type) {
                         if (type == ClickType.RIGHT) {
@@ -78,19 +107,12 @@ public class AutoPagedGUI extends CommonPagedGUI {
                     }
                 });
             } else {
-                setItem(nextPageSlot, null);
+                setItem(nextPageSlot, this.noNextPageUI == null ? null : new GUIItem(noNextPageUI));
             }
         }
-
 
         super.openGUI(user);
     }
 
-    private static ItemStack getDefaultNextPage(Player player) {
-        return defaultNextPage != null ? defaultNextPage.apply(player) : null;
-    }
 
-    private static ItemStack getDefaultPreviousPage(Player player) {
-        return defaultPreviousPage != null ? defaultPreviousPage.apply(player) : null;
-    }
 }

@@ -4,22 +4,33 @@ package cc.carm.lib.easyplugin.gui.paged;
 import cc.carm.lib.easyplugin.gui.GUI;
 import cc.carm.lib.easyplugin.gui.GUIItem;
 import cc.carm.lib.easyplugin.gui.GUIType;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PagedGUI extends GUI {
 
-    List<GUIItem> container = new ArrayList<>();
-    public int page = 1;
+    protected List<GUIItem> container = new ArrayList<>();
+    protected int page = 1;
 
-    public PagedGUI(GUIType type, String name) {
-        super(type, name);
+    protected PagedGUI(@NotNull GUIType type, @NotNull String title) {
+        super(type, title);
     }
 
-    public int addItem(GUIItem i) {
+    public int addItem(@NotNull GUIItem i) {
         container.add(i);
         return container.size() - 1;
+    }
+
+    public int addItem(int index, @NotNull GUIItem i) {
+        container.add(index, i);
+        return container.size() - 1;
+    }
+
+    public int addItemStack(@NotNull ItemStack itemStack) {
+        return addItem(new GUIItem(itemStack));
     }
 
     /**
@@ -27,21 +38,21 @@ public abstract class PagedGUI extends GUI {
      *
      * @param item 物品
      */
-    public void removeItem(GUIItem item) {
+    public void removeItem(@NotNull GUIItem item) {
         container.remove(item);
     }
 
     /**
      * 从GUI中移除一个物品
      *
-     * @param slot 物品格子数
+     * @param index 物品格子数
      */
-    public void removeItem(int slot) {
-        container.remove(slot);
+    public void removeItem(int index) {
+        container.remove(index);
     }
 
-    public List<GUIItem> getItemsContainer() {
-        return new ArrayList<>(container);
+    public @NotNull List<GUIItem> getPagedContainer() {
+        return this.container;
     }
 
     /**

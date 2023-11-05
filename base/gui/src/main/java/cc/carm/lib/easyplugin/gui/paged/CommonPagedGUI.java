@@ -4,70 +4,38 @@ package cc.carm.lib.easyplugin.gui.paged;
 import cc.carm.lib.easyplugin.gui.GUIItem;
 import cc.carm.lib.easyplugin.gui.GUIType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CommonPagedGUI extends PagedGUI {
 
-    private int[] range;
+    protected final int[] range;
 
-    private CommonPagedGUI(GUIType type, String name) {
-        super(type, name);
+    public CommonPagedGUI(@NotNull GUIType type, @NotNull String title, int a, int b) {
+        this(type, title, toRange(type, a, b));
     }
 
-    public CommonPagedGUI(GUIType type, String Name, int a, int b) {
-        this(type, Name, toRange(type, a, b));
-    }
-
-    public CommonPagedGUI(GUIType type, String Name, int[] range) {
-        super(type, Name);
+    public CommonPagedGUI(@NotNull GUIType type, @NotNull String title, int[] range) {
+        super(type, title);
         Arrays.sort(range);
         this.range = range;
-
     }
 
-
-	
-	/*
-	int[] matrix = new int[]{
-	0,	1,	2,	3,	4,	5,	6,	7,	8,
-	9,	10,	11,	12,	13,	14,	15,	16,	17,
-	18,	19,	20,	21,	22,	23,	24,	25,	26,
-	27,	28,	29,	30,	31,	32,	33,	34,	35,
-	36,	37,	38,	39,	40,	41,	42,	43,	44,
-	45,	46,	47,	48,	49,	50,	51,	52,	53
-	}
-	*/
-
-    private static int[] toRange(GUIType type, int a, int b) {
-        if (a > b) {
-            a = a ^ b;
-            b = a ^ b;
-            a = a ^ b;
-        }
-
-        int lineA = getLine(a);
-        int columnA = getColumn(a);
-        int lineB = getLine(b);
-        int columnB = getColumn(b);
-
-        if (lineB > type.getLines())
-            throw new IndexOutOfBoundsException("页面内容范围超过了GUI的大小");
-
-        int[] range = new int[(lineB - lineA + 1) * (columnB - columnA + 1)];
-
-        for (int i = 0, l = 0; i < type.getSize(); i++) {
-            int li = getLine(i);
-            int ci = getColumn(i);
-            if (li >= lineA && li <= lineB && ci >= columnA && ci <= columnB) {
-                range[l] = i;
-                l++;
-            }
-        }
-
-        return range;
+    @Override
+    protected void fillEmptySlots(@NotNull Inventory inventory) {
+        if (emptyItem == null) return;
+        Set<Integer> rangeSet = Arrays.stream(this.range).boxed().collect(Collectors.toSet());
+        IntStream.range(0, inventory.getSize())
+                .filter(i -> inventory.getItem(i) == null)
+                .filter(i -> !rangeSet.contains(i))
+                .forEach(index -> inventory.setItem(index, emptyItem));
     }
 
     private static int getLine(int i) {
@@ -155,4 +123,44 @@ public class CommonPagedGUI extends PagedGUI {
         super.openGUI(player);
     }
 
+
+    /*
+    int[] matrix = new int[]{
+    0,	1,	2,	3,	4,	5,	6,	7,	8,
+    9,	10,	11,	12,	13,	14,	15,	16,	17,
+    18,	19,	20,	21,	22,	23,	24,	25,	26,
+    27,	28,	29,	30,	31,	32,	33,	34,	35,
+    36,	37,	38,	39,	40,	41,	42,	43,	44,
+    45,	46,	47,	48,	49,	50,	51,	52,	53
+    }
+    */
+    private static int[] toRange(GUIType type, int a, int b) {
+        if (a > b) {
+            a = a ^ b;
+            b = a ^ b;
+            a = a ^ b;
+        }
+
+        int lineA = getLine(a);
+        int columnA = getColumn(a);
+        int lineB = getLine(b);
+        int columnB = getColumn(b);
+
+        if (lineB > type.getLines())
+            throw new IndexOutOfBoundsException("页面内容范围超过了GUI的大小");
+
+        int[] range = new int[(lineB - lineA + 1) * (columnB - columnA + 1)];
+
+        int l = 0;
+        for (int i = 0; i < type.getSize(); i++) {
+            int li = getLine(i);
+            int ci = getColumn(i);
+            if (li >= lineA && li <= lineB && ci >= columnA && ci <= columnB) {
+                range[l] = i;
+                l++;
+            }
+        }
+
+        return range;
+    }
 }

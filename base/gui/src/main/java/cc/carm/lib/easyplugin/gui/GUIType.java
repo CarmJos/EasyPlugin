@@ -12,6 +12,7 @@ public enum GUIType {
     FOUR_BY_NINE(4, 36),
     FIVE_BY_NINE(5, 45),
     SIX_BY_NINE(6, 54),
+
     CANCEL(0, 0);
 
     private final int lines;
