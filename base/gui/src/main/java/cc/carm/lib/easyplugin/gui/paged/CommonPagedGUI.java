@@ -80,8 +80,9 @@ public class CommonPagedGUI extends PagedGUI {
      *
      * @return 最后一页的页码
      */
+    @Override
     public int getLastPageNumber() {
-        return (this.container.size() / range.length) + ((this.container.size() % range.length) == 0 ? 0 : 1);
+        return getLastPageNumber(range.length);
     }
 
     /**

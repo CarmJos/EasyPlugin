@@ -78,6 +78,14 @@ public class GUIItem {
 
     }
 
+    public Set<GUIClickAction> getActions() {
+        return actions;
+    }
+
+    public Set<GUIClickAction> getActionsIgnoreActive() {
+        return actionsIgnoreActive;
+    }
+
     public abstract static class GUIClickAction {
         public abstract void run(ClickType type, Player player);
     }

@@ -19,6 +19,29 @@ public abstract class PagedGUI extends GUI {
         super(type, title);
     }
 
+    public int setCurrentPage(int page) {
+        this.page = Math.max(1, Math.min(page, getLastPageNumber()));
+        return this.page;
+    }
+
+    public int getCurrentPage() {
+        return page;
+    }
+
+
+    public int getLastPageNumber() {
+        return getLastPageNumber(getGUIType().getSize());
+    }
+
+    /**
+     * 得到最后一页的页码
+     *
+     * @return 最后一页的页码
+     */
+    public int getLastPageNumber(int size) {
+        return (this.container.size() / size) + ((this.container.size() % size) == 0 ? 0 : 1);
+    }
+
     public int addItem(@NotNull GUIItem i) {
         container.add(i);
         return container.size() - 1;
@@ -66,7 +89,7 @@ public abstract class PagedGUI extends GUI {
      */
     public void goPreviousPage() {
         if (hasPreviousPage()) {
-            page--;
+            this.page--;
             this.onPageChange(this.page);
         } else throw new IndexOutOfBoundsException();
     }
@@ -77,7 +100,7 @@ public abstract class PagedGUI extends GUI {
      */
     public void goNextPage() {
         if (hasNextPage()) {
-            page++;
+            this.page++;
             this.onPageChange(this.page);
         } else throw new IndexOutOfBoundsException();
     }
