@@ -20,7 +20,7 @@ public abstract class PagedGUI extends GUI {
     }
 
     public int setCurrentPage(int page) {
-        this.page = Math.max(1, Math.min(page, getLastPageNumber()));
+        this.page = Math.max(1, page);
         return this.page;
     }
 

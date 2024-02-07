@@ -101,6 +101,8 @@ public class CommonPagedGUI extends PagedGUI {
             super.openGUI(player);
             return;
         }
+        if(page > getLastPageNumber())
+            page = getLastPageNumber();
         List<GUIItem> list = new ArrayList<>();
         int start = (page - 1) * range.length;
         for (int i = start; i < start + range.length; i++) {
