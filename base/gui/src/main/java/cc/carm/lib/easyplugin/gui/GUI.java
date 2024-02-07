@@ -81,6 +81,19 @@ public class GUI {
         }
     }
 
+    /**
+     * 设置GUI上方(箱子部分)
+     * @param row 行数，1为第1行
+     * @param column 列数，1为第1列
+     * @param item GUIItem
+     */
+    public void setItem(int row, int column, @NotNull GUIItem item){
+        if(row <= 0 || column <= 0) throw new IllegalArgumentException("行数和列数都不能小于等于零");
+        if(row > type.getLines()) throw new IllegalArgumentException("行数("+row+")大于GUI大小限制("+type.getLines()+")");
+        if(column > 9) throw new IllegalArgumentException("列数("+column+")不能大于9");
+        setItem(9*(row-1)+column-1, item);
+    }
+
     public GUIItem getItem(int index) {
         return this.items.get(index);
     }
