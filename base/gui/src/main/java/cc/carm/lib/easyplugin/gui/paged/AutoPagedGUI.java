@@ -77,7 +77,14 @@ public class AutoPagedGUI extends CommonPagedGUI {
     public void openGUI(Player user) {
         if (previousPageSlot >= 0) {
             if (hasPreviousPage()) {
-                setItem(previousPageSlot, new GUIItem(Optional.ofNullable(defaultPreviousPage).map(d -> d.apply(user)).orElse(previousPageUI)) {
+                ItemStack finalPreviousPageUI;
+                if(previousPageUI != null)
+                    finalPreviousPageUI = previousPageUI;
+                else if (defaultPreviousPage != null)
+                    finalPreviousPageUI = defaultPreviousPage.apply(user);
+                else
+                    finalPreviousPageUI = null;
+                setItem(previousPageSlot, new GUIItem(finalPreviousPageUI) {
                     @Override
                     public void onClick(Player clicker, ClickType type) {
                         if (type == ClickType.RIGHT) {
@@ -95,7 +102,14 @@ public class AutoPagedGUI extends CommonPagedGUI {
 
         if (nextPageSlot >= 0) {
             if (hasNextPage()) {
-                setItem(nextPageSlot, new GUIItem(Optional.ofNullable(defaultNextPage).map(d -> d.apply(user)).orElse(nextPageUI)) {
+                ItemStack finalNextPageUI;
+                if(previousPageUI != null)
+                    finalNextPageUI = nextPageUI;
+                else if (defaultNextPage != null)
+                    finalNextPageUI = defaultNextPage.apply(user);
+                else
+                    finalNextPageUI = null;
+                setItem(nextPageSlot, new GUIItem(finalNextPageUI) {
                     @Override
                     public void onClick(Player clicker, ClickType type) {
                         if (type == ClickType.RIGHT) {
