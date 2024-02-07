@@ -22,29 +22,4 @@ public class ColorParseTest {
         System.out.println(clear("&f测试&<#AAAAAA>清理颜色代码&<#111111> &&这样应该&(#666666)不被影响 &f。"));
     }
 
-    @Test
-    public void formatReadTest() {
-        LinkedHashMap<Integer, String> formats = new LinkedHashMap<>();
-        String text = "&k&l &m&1我&k爱你爱你爱你&o吗？";
-        Matcher matcher = ColorParser.FORMAT_PATTERN.matcher(text);
-        while (matcher.find()) {
-            String code = matcher.group();
-            formats.put(matcher.start(), code);
-            text = matcher.replaceFirst("");
-            matcher.reset(text);
-        }
-
-        formats.forEach((index, code) -> System.out.println(index + " -> " + code));
-
-        String[] parts = text.split("");
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < parts.length; i++) {
-            String format = formats.get(i);
-            if (format != null) builder.append(ColorParser.parseBaseColor(format));
-            builder.append(parts[i]);
-        }
-
-        System.out.println(builder);
-    }
-
 }
