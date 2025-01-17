@@ -19,7 +19,7 @@ public class ColorParseTest {
         System.out.println(parse("&<#AAAAAA>&l我&r真&(#666666)的&<#BBBBBB>&o爱死&<#111111>你&<#FFFFFF>了&r！"));
         System.out.println(parse("&r正常的颜色理应&c&l不受影响&r。"));
 
-        System.out.println(clear("&f测试&<#AAAAAA>清理颜色代码&<#111111> &&这样应该&(#666666)不被影响 &f。"));
+        System.out.println(clear("&f&l测试&<#AAAAAA>清理颜色代码&<#111111> &&这样应该&(#666666)不被影响 &f。"));
     }
 
 }

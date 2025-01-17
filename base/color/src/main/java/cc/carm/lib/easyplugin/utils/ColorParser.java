@@ -34,7 +34,7 @@ public class ColorParser {
     public static @NotNull String clear(@NotNull String text) {
         text = HEX_PATTERN.matcher(text).replaceAll("");
         text = GRADIENT_PATTERN.matcher(text).replaceAll("");
-        text = COLOR_PATTERN.matcher(text).replaceAll("");
+        text = FORMAT_PATTERN.matcher(text).replaceAll("");
         return text;
     }
 
