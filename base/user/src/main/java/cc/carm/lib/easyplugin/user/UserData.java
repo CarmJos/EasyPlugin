@@ -2,31 +2,22 @@ package cc.carm.lib.easyplugin.user;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+public interface UserData<K> {
 
-public abstract class UserData<K> {
+    @NotNull K key();
 
-    protected final @NotNull K key;
-
-    protected UserData(@NotNull K key) {
-        this.key = key;
+    @Deprecated
+    default @NotNull K getKey() {
+        return key();
     }
 
-    public @NotNull K getKey() {
-        return key;
-    }
+    /**
+     * @param dropping true if the data is dropping, false otherwise
+     */
+    void setDropping(boolean dropping);
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserData<?> userData = (UserData<?>) o;
-        return key.equals(userData.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key);
-    }
-
+    /**
+     * @return true if the data is dropping, false otherwise
+     */
+    boolean isDropping();
 }
