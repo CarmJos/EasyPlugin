@@ -59,7 +59,7 @@ jobs:
         run: |
           rm -rf docs
           mkdir -vp docs
-          cp -vrf target/site/apidocs/* docs/
+          cp -vrf target/reports/apidocs/* docs/
           cp -vrf .documentation/javadoc/JAVADOC-README.md docs/README.md
 
       - name: "Generate Javadoc sitemap"
@@ -116,17 +116,17 @@ jobs:
       - name: "Set up JDK"
         uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          java-version: '8'
           distribution: 'adopt'
           cache: maven
-          server-id: ossrh
+          server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
           gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
       - name: "Central Deploy"
-        run: mvn -B -Possrh deploy --file pom.xml -DskipTests
+        run: mvn -B -Pcentral deploy --file pom.xml -DskipTests
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USER }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASS }}
