@@ -1,0 +1,17 @@
+cc.carm.lib.easyplugin
+cc.carm.lib.easyplugin.command
+cc.carm.lib.easyplugin.command.alias
+cc.carm.lib.easyplugin.gui
+cc.carm.lib.easyplugin.gui.configuration
+cc.carm.lib.easyplugin.gui.paged
+cc.carm.lib.easyplugin.i18n
+cc.carm.lib.easyplugin.papi
+cc.carm.lib.easyplugin.papi.expansion
+cc.carm.lib.easyplugin.papi.handler
+cc.carm.lib.easyplugin.storage
+cc.carm.lib.easyplugin.storage.file
+cc.carm.lib.easyplugin.storage.plugin
+cc.carm.lib.easyplugin.updatechecker
+cc.carm.lib.easyplugin.user
+cc.carm.lib.easyplugin.utils
+cc.carm.lib.easyplugin.vault
