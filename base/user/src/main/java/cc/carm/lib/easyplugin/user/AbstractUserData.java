@@ -17,6 +17,11 @@ public abstract class AbstractUserData<K> implements UserData<K> {
         this.key = key;
     }
 
+    @Override
+    public @NotNull K key() {
+        return key;
+    }
+
     /**
      * @param dropping true if the data is dropping, false otherwise
      */

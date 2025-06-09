@@ -6,11 +6,6 @@ public interface UserData<K> {
 
     @NotNull K key();
 
-    @Deprecated
-    default @NotNull K getKey() {
-        return key();
-    }
-
     /**
      * @param dropping true if the data is dropping, false otherwise
      */

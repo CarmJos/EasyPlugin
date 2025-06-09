@@ -68,7 +68,8 @@ public abstract class UserDataManager<K, U extends AbstractUserData<K>> implemen
 
     protected abstract void saveData(@NotNull U data) throws Exception;
 
-    public @NotNull Map<K, U> getDataCache() {
+    @Override
+    public @NotNull Map<K, U> cache() {
         return dataCache;
     }
 
@@ -107,7 +108,7 @@ public abstract class UserDataManager<K, U extends AbstractUserData<K>> implemen
     @Override
     public @NotNull CompletableFuture<Boolean> save(@NotNull U user) {
         return CompletableFuture.supplyAsync(() -> {
-            String identifier = serializeKey(user.getKey());
+            String identifier = serializeKey(user.key());
 
             try {
                 long s1 = System.currentTimeMillis();
@@ -195,12 +196,12 @@ public abstract class UserDataManager<K, U extends AbstractUserData<K>> implemen
 
     @Override
     public void saveAll() {
-        if (getDataCache().isEmpty()) return;
-        for (U u : getDataCache().values()) {
+        if (cache().isEmpty()) return;
+        for (U u : cache().values()) {
             try {
                 saveData(u);
             } catch (Exception e) {
-                getPlugin().error("保存用户 " + serializeKey(u.getKey()) + " 数据失败，请检查相关配置！");
+                getPlugin().error("保存用户 " + serializeKey(u.key()) + " 数据失败，请检查相关配置！");
                 e.printStackTrace();
             }
         }
@@ -209,8 +210,8 @@ public abstract class UserDataManager<K, U extends AbstractUserData<K>> implemen
     @Override
     public int unloadAll(boolean save) {
         if (save) saveAll();
-        int size = getDataCache().size();
-        getDataCache().clear();
+        int size = cache().size();
+        cache().clear();
         return size;
     }
 

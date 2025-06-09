@@ -25,7 +25,6 @@ public interface UserDataRegistry<K, U extends UserData<K>> {
 
     @NotNull Logger getLogger();
 
-
     @NotNull Map<K, U> cache();
 
     default String serializeKey(@NotNull K key) {
@@ -39,7 +38,6 @@ public interface UserDataRegistry<K, U extends UserData<K>> {
     default @NotNull CompletableFuture<U> load(@NotNull K key, boolean cache) {
         return load(key, () -> cache);
     }
-
 
     @Unmodifiable
     default @NotNull Set<U> list() {
