@@ -179,9 +179,6 @@ dependencies {
 若您觉得本插件做的不错，您可以通过捐赠支持我！
 
 感谢您对开源项目的支持！
-
-<img height=25% width=25% src="https://raw.githubusercontent.com/CarmJos/CarmJos/main/img/donate-code.jpg"  alt=""/>
-
 ## 开源协议
 
 本项目源码采用 [The MIT License](https://opensource.org/licenses/MIT) 开源协议。
