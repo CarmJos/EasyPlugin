@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v6
         with:
           cache: maven
-          java-version: '8'
+          java-version: '25'
           distribution: 'adopt'
           server-id: github
           server-username: MAVEN_USERNAME
